@@ -1,3 +1,6 @@
+# Visual Studio Code Configuration
+.vscode/
+
 # direnv
 .envrc
 
