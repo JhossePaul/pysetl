@@ -1,3 +1,1 @@
-# pysetl
-
-Python Simple ETL framework
+# pysetl  - Python Simple|Super|Scalable|Spark ETL framework
