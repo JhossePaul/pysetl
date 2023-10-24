@@ -1,5 +1,6 @@
 """CsvConnector module."""
-from typing_extensions import Self, Union
+from typing import Union
+from typing_extensions import Self
 from pysetl.config import CsvConfig, FileConfig
 from pysetl.utils.exceptions import BadConfiguration
 from pysetl.enums import FileStorage

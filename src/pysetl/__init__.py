@@ -1,4 +1,4 @@
-"""PySetl module."""
+"""PySetl: Python Spark ETL Framework."""
 from __future__ import annotations
 from abc import ABCMeta
 from uuid import UUID
@@ -13,6 +13,9 @@ from pysetl.storage import SparkRepositoryBuilder
 from pysetl.storage.repository import SparkRepository
 from pysetl.utils.exceptions import InvalidConfigException
 from pysetl.workflow import Deliverable, Pipeline, Factory
+
+
+__version__ = "0.1.0-b"
 
 
 C = TypeVar("C", bound=Config)
