@@ -10,6 +10,12 @@ from .config import Config, BaseConfigModel
 class FileConfigModel(BaseConfigModel):
     """Validator for file configurations."""
 
+    class Config:
+        extra="allow"
+        frozen=True
+        strict=True
+        arbitrary_types_allowed=True
+
     storage: FileStorage
     path: str
     partition_by: list[str] = []
