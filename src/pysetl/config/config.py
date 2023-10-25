@@ -13,12 +13,11 @@ from pysetl.enums import (
 class BaseConfigModel(BaseModel):
     """BaseConfig validation."""
 
-    model_config = ConfigDict(
-        extra="allow",
-        frozen=True,
-        strict=True,
+    class Config:
+        extra="allow"
+        frozen=True
+        strict=True
         arbitrary_types_allowed=True
-    )
 
     storage: FileStorage
 

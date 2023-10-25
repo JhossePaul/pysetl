@@ -1,7 +1,6 @@
 """FileConnectorConfig module."""
 from typing import Optional
 from typing_extensions import Self
-from pydantic import ConfigDict
 from pyspark.sql.types import StructType
 from pysetl.enums import SaveMode, FileStorage
 from .aws_credentials import AwsCredentials
@@ -10,12 +9,6 @@ from .config import Config, BaseConfigModel
 
 class FileConfigModel(BaseConfigModel):
     """Validator for file configurations."""
-    model_config = ConfigDict(
-        extra="allow",
-        frozen=True,
-        strict=True,
-        arbitrary_types_allowed=True
-    )
 
     storage: FileStorage
     path: str
