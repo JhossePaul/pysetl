@@ -1,0 +1,4 @@
+
+Configuration
+=============================================
+Typesafe configuration

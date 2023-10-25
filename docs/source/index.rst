@@ -1,6 +1,12 @@
-.. toctree::
-   :hidden:
+PySetl's documentation
+==================================
 
-   README
-   contributing
-   api
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents:
+
+   configuration
+   storage
+   workflow
+
+.. mdinclude:: ../../README.md
