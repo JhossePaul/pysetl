@@ -11,7 +11,7 @@ team. We just adapted things to work in Python.
 
 PySetl is designed with Python typing syntax at its core. Hence, we strongly
 suggest [typedspark](https://typedspark.readthedocs.io/en/latest/) and
-[pydantic](https://docs.pydantic.dev/latest/) development.
+[pydantic](https://docs.pydantic.dev/latest/) for development.
 
 
 Overview
@@ -36,8 +36,8 @@ PySetl is available in PyPI:
 $ pip install pysetl
 ```
 
-PySetl doesn't list pyspark as dependency since most environments have their own
-Spark environment. Nevertheless, you can install pyspark runnin:
+PySetl doesn't list `pyspark` as dependency since most environments have their own
+Spark environment. Nevertheless, you can install pyspark running:
 
 ```
 $ pip install pysetl[pyspark]

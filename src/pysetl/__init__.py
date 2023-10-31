@@ -15,7 +15,7 @@ from pysetl.utils.exceptions import InvalidConfigException
 from pysetl.workflow import Deliverable, Pipeline, Factory
 
 
-__version__ = "0.1.2-b"
+__version__ = "0.1.3-b"
 
 
 C = TypeVar("C", bound=Config)
