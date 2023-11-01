@@ -53,7 +53,7 @@ suggest [typedspark](https://typedspark.readthedocs.io/en/latest/) and
 
 [pypi-image]: https://img.shields.io/pypi/v/pysetl
 [pypi-url]: https://pypi.org/project/pysetl
-[build-image]: https://github.com/JhossePaul/pysetl/actions/workflows/python-package.yml/badge.svg
-[build-url]: https://github.com/JhossePaul/pysetl/actions/workflows/python-package.yml
+[build-image]: https://github.com/JhossePaul/pysetl/actions/workflows/build.yml/badge.svg
+[build-url]: https://github.com/JhossePaul/pysetl/actions/workflows/build.yml
 [coverage-image]: https://codecov.io/gh/JhossePaul/pysetl/branch/main/graph/badge.svg
 [coverage-url]: https://codecov.io/gh/JhossePaul/pysetl
