@@ -3,12 +3,11 @@ requires = ["flit_core >=3.2,<4", "setuptools"]
 
 [project]
 name="pysetl"
-url=""
 license={text="Apache-2.0"}
 readme="README.md"
 requires-python = ">=3.9"
 authors=[
-    {name = "Jhosse Paul Marquez Ruiz"}
+    {name = "Jhosse Paul Marquez Ruiz", email="jpaul.marquez.ruiz@gmail.com"}
 ]
 dynamic=["version", "description"]
 keywords=["spark", "aws", "etl"]
@@ -22,6 +21,10 @@ classifiers=[
     "Operating System :: OS Independent",
     "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
+
+[project.urls]
+Home = "https://github.com/JhossePaul/pysetl"
+Source = "https://github.com/JhossePaul/pysetl"
 
 [project.optional-dependencies]
 pyspark = [ "pyspark" ]
