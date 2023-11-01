@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType
 from pyarrow.fs import LocalFileSystem, S3FileSystem, FileType
 from pysetl.enums import FileStorage
-from pysetl.utils.exceptions import BadConfiguration, InvalidConnectorException
+from pysetl.utils.exceptions import InvalidConfigException, BuilderException
 from pysetl.storage.connector import (
     FileConnector, CsvConnector, ParquetConnector, JsonConnector,
     ConnectorBuilder
@@ -38,7 +38,7 @@ def test_file_connector_s3_bad_aws_config():
     )
     s3_file_connector = FileConnector(file_config)
 
-    with pytest.raises(BadConfiguration) as error:
+    with pytest.raises(InvalidConfigException) as error:
         _ = s3_file_connector.filesystem
 
     assert str(error.value) == "No S3 credentials provided"
@@ -72,7 +72,7 @@ def test_file_connector_write_on_wildcard():
     )
     connector = FileConnector(config)
 
-    with pytest.raises(BadConfiguration) as error:
+    with pytest.raises(InvalidConfigException) as error:
         connector.write(dataframe)
 
     assert str(error.value) == "Can't write to wildcard path"
@@ -210,7 +210,7 @@ def test_file_connector_bad_partition_config():
     assert isinstance(local_fs, LocalFileSystem)
 
     # Write dataframe
-    with pytest.raises(BadConfiguration) as error:
+    with pytest.raises(InvalidConfigException) as error:
         file_connector.write(dataframe)
 
     assert str(error.value) == "Partition columns in configuration not in data"
@@ -225,7 +225,7 @@ def test_csv_connector():
 def test_csv_connector_bad_config():
     config = ParquetConfig(path="/ruta/al/archivo")
 
-    with pytest.raises(BadConfiguration) as error:
+    with pytest.raises(InvalidConfigException) as error:
         _ = CsvConnector(config)
 
     assert str(error.value) == "Not a CsvConfig for a CsvConnector"
@@ -240,7 +240,7 @@ def test_json_connector():
 def test_json_connector_bad_config():
     config = ParquetConfig(path="/ruta/al/archivo")
 
-    with pytest.raises(BadConfiguration) as error:
+    with pytest.raises(InvalidConfigException) as error:
         _ = JsonConnector(config)
 
     assert str(error.value) == "Not a JsonConfig for a JsonConnector"
@@ -255,7 +255,7 @@ def test_parquet_connector():
 def test_parquet_connector_bad_config():
     config = CsvConfig(path="/ruta/al/archivo")
 
-    with pytest.raises(BadConfiguration) as error:
+    with pytest.raises(InvalidConfigException) as error:
         _ = ParquetConnector(config)
 
     assert str(error.value) == "Not a ParquetConfig for a ParquetConnector"
@@ -301,7 +301,7 @@ def test_connector_builder_not_built():
         path="/ruta/al/archivo"
     )
 
-    with pytest.raises(InvalidConnectorException) as error:
+    with pytest.raises(BuilderException) as error:
         _ = ConnectorBuilder(config).get()
 
     assert str(error.value) == "Connector is not defined"

@@ -2,7 +2,10 @@
 from __future__ import annotations
 from importlib import import_module
 from dataclasses import dataclass, is_dataclass, fields
-from typing import TYPE_CHECKING, get_origin, get_args, _GenericAlias, TypeVar
+from typing import (  # type: ignore
+    TYPE_CHECKING, get_origin, get_args, TypeVar,
+    _GenericAlias
+)
 from typing_extensions import Self
 from typedspark import DataSet
 from pydantic import BaseModel
@@ -54,7 +57,8 @@ class NodeOutput(HasDiagram):
                 for field
                 in real_targ.get_structtype().fields
             ]
-        elif (
+
+        if (
             isinstance(self.delivery_type, _GenericAlias) and
             is_dataclass(origin)
         ):
@@ -65,20 +69,22 @@ class NodeOutput(HasDiagram):
                 for field
                 in fields(origin)
             ]
+
         if is_dataclass(self.delivery_type):
             return [
                 f"    >{field.name}: {pretty(field.type)}"
                 for field
                 in fields(self.delivery_type)
             ]
-        elif issubclass(self.delivery_type, BaseModel):
+
+        if issubclass(self.delivery_type, BaseModel):
             return [
                 f"    >{key}: {pretty(value.annotation)}"
                 for key, value
                 in self.delivery_type.model_fields.items()
             ]
-        else:
-            return []
+
+        return []
 
     def to_diagram(self) -> str:
         """Create mermaid diagram for a NodeOutput."""

@@ -2,7 +2,7 @@
 from typing import Union
 from typing_extensions import Self
 from pysetl.config import ParquetConfig, FileConfig
-from pysetl.utils.exceptions import BadConfiguration
+from pysetl.utils.exceptions import InvalidConfigException
 from pysetl.enums import FileStorage
 from .file_connector import FileConnector
 
@@ -15,7 +15,7 @@ class ParquetConnector(FileConnector):
             options: Union[FileConfig, ParquetConfig]) -> None:
         """Initialize ParquetConnector."""
         if options.config.storage != FileStorage.PARQUET:
-            raise BadConfiguration(
+            raise InvalidConfigException(
                 "Not a ParquetConfig for a ParquetConnector"
             )
 

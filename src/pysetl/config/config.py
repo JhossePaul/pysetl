@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import abstractmethod
 from functools import reduce
 from typing import Any, TypeVar, Generic
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 from typing_extensions import Self
 from pysetl.enums import (
     FileStorage,
@@ -12,12 +12,6 @@ from pysetl.enums import (
 
 class BaseConfigModel(BaseModel):
     """BaseConfig validation."""
-
-    class Config:
-        extra="allow"
-        frozen=True
-        strict=True
-        arbitrary_types_allowed=True
 
     storage: FileStorage
 
@@ -58,13 +52,13 @@ class Config(Generic[T]):
         return ConfigBuilder(cls)
 
     def __init__(self, **kwargs) -> None:
-        self._config: dict = kwargs
+        self.params: dict = kwargs
 
     def __str__(self) -> str:
         settings_string: str = "\n".join([
             f"  {k}: {v}"
             for k, v
-            in self._config.items()
+            in self.params.items()
         ])
 
         return f"PySetl {self.__class__.__name__}:\n{settings_string}"
@@ -76,24 +70,24 @@ class Config(Generic[T]):
         if not isinstance(other, Config):
             return NotImplemented
 
-        return self.builder().from_dict(self._config | other._config)
+        return self.builder().from_dict(self.params | other.params)
 
     def __contains__(self, __value) -> bool:
-        return __value in self._config
+        return __value in self.params
 
     def set(self: Self, key: str, value: Any) -> Self:
         """Set a value to a key in the settings."""
-        self._config[key] = value
+        self.params[key] = value
 
         return self
 
     def get(self: Self, key: str) -> Any:
         """Return the value of the key in the settings."""
-        return self._config[key]
+        return self.params[key]
 
     def has(self: Self, key: str) -> bool:
         """Check if settings contains a specific value."""
-        return key in self._config
+        return key in self.params
 
     @property
     def config_dict(self: Self) -> dict:

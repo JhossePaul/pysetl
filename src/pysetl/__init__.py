@@ -1,6 +1,5 @@
 """PySetl: Python Spark ETL Framework."""
 from __future__ import annotations
-from abc import ABCMeta
 from uuid import UUID
 from typing import Optional, TypeVar
 from typing_extensions import Self
@@ -11,7 +10,7 @@ from pysetl.utils.mixins import HasRegistry
 from pysetl.utils import Builder
 from pysetl.storage import SparkRepositoryBuilder
 from pysetl.storage.repository import SparkRepository
-from pysetl.utils.exceptions import InvalidConfigException
+from pysetl.utils.exceptions import InvalidConfigException, BuilderException
 from pysetl.workflow import Deliverable, Pipeline, Factory
 
 
@@ -22,13 +21,13 @@ C = TypeVar("C", bound=Config)
 ConfigDict = dict[str, C]
 
 
-class PySetl(HasRegistry[Pipeline], metaclass=ABCMeta):
+class PySetl(HasRegistry[Pipeline]):
     """PySetl is a Spark ETL framework for Python."""
 
     def __init__(
             self: Self,
             spark: SparkSession,
-            config_dict: dict[str, C],
+            config_dict: ConfigDict,
             benchmark: bool = False) -> None:
         """Pysetl Constructor."""
         super().__init__()
@@ -72,12 +71,15 @@ class PySetl(HasRegistry[Pipeline], metaclass=ABCMeta):
                 f"No config found with key: {config_key}"
             )
 
-        repository = SparkRepositoryBuilder[repository_type](
+        repository = SparkRepositoryBuilder[repository_type](  # type: ignore
             config,
             cache=cache
         ).getOrCreate()
+
         repository_deliverable = (
-            Deliverable[SparkRepository[repository_type]](repository)
+            Deliverable[SparkRepository[repository_type]](  # type: ignore
+                repository
+            )
             .set_consumers(_consumers)
             .set_delivery_id(delivery_id)
         )
@@ -113,7 +115,8 @@ class PySetl(HasRegistry[Pipeline], metaclass=ABCMeta):
             delivery_id: str = "") -> Self:
         """Register SparkRepository in Pipeline Dispatcher."""
         _consumers = consumers if consumers else set()
-        repository_deliverable = Deliverable[repository.type_annotation](
+        __type = repository.type_annotation
+        repository_deliverable = Deliverable[__type](  # type: ignore
             repository,
             consumers=_consumers,
             delivery_id=delivery_id
@@ -183,7 +186,7 @@ class PySetlBuilder(Builder[PySetl]):
         self.shuffle_partitions = shuffle_partitions
         self.spark_master = spark_master
         self.spark_session = spark_session
-        self.__pysetl = None
+        self.__pysetl: Optional[PySetl] = None
 
     def set_config(self: Self, config: ConfigDict) -> Self:
         """Set PySetl SparkRepository configurations."""
@@ -230,12 +233,12 @@ class PySetlBuilder(Builder[PySetl]):
             if self.config
             else None
         )
-        spark_app_name = config_from_dict._config.get(
+        spark_app_name = config_from_dict.params.get(
             "app_name",
             "default_app_name"
         ) if config_from_dict else "default"
         spark_config_dict = list(
-            config_from_dict._config.items()
+            config_from_dict.params.items()
         ) if config_from_dict else []
         spark_config_from_builder = (
             self.spark_config.getAll()
@@ -270,6 +273,9 @@ class PySetlBuilder(Builder[PySetl]):
 
         return self
 
-    def get(self: Self) -> Optional[PySetl]:
+    def get(self: Self) -> PySetl:
         """Return PySetl."""
+        if not self.__pysetl:
+            raise BuilderException("No PySetl object built")
+
         return self.__pysetl

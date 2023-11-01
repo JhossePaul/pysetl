@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Callable, Any, Optional, Union
 from typing_extensions import Self
 from pysetl.utils.mixins import HasRegistry, HasLogger
 from pysetl.utils.exceptions import (
-    InvalidDeliveryException, NoDeliverableException
+    InvalidDeliveryException
 )
 from .deliverable import Deliverable
 from .stage import Stage
@@ -52,7 +52,8 @@ class Dispatcher(HasRegistry[Deliverable], HasLogger):
         if len(available_deliverables) == 0:
             self.log_debug("Can't find a deliverable")
             return None
-        elif len(available_deliverables) == 1:
+
+        if len(available_deliverables) == 1:
             deliverable = available_deliverables[0]
             if (
                 deliverable.consumers and
@@ -64,48 +65,49 @@ class Dispatcher(HasRegistry[Deliverable], HasLogger):
             self.log_debug("Find deliverable")
 
             return deliverable
-        else:
-            matched_by_producer = [
-                d
-                for d
-                in available_deliverables
-                if d.producer == producer
-            ]
 
-            if len(matched_by_producer) == 0:
-                self.log_warning(
-                    "Can't find any deliverable that matches the producer"
-                )
-                return None
-            elif len(matched_by_producer) == 1:
-                self.log_debug("Find deiliverable")
-                return matched_by_producer[0]
-            else:
-                self.log_info(
-                    "Multiple deliverables with same type and same producer"
-                )
-                self.log_info("Matching by consumer")
-                matched_by_consumer = [
-                    d
-                    for d
-                    in matched_by_producer
-                    if len(d.consumers) != 0 and
-                    consumer in d.consumers
-                ]
+        matched_by_producer = [
+            d
+            for d
+            in available_deliverables
+            if d.producer == producer
+        ]
 
-                if len(matched_by_consumer) == 0:
-                    self.log_warning(
-                        "Can't find any deliverable that matches consumer"
-                    )
-                    return None
-                elif len(matched_by_consumer) == 1:
-                    self.log_debug("Find deliverable")
-                    return matched_by_consumer[0]
-                else:
-                    raise InvalidDeliveryException("".join([
-                        "Find multiple deliveries having the same"
-                        "type, producer and consumer"
-                    ]))
+        if len(matched_by_producer) == 0:
+            self.log_warning(
+                "Can't find any deliverable that matches the producer"
+            )
+            return None
+
+        if len(matched_by_producer) == 1:
+            self.log_debug("Find deiliverable")
+            return matched_by_producer[0]
+        self.log_info(
+            "Multiple deliverables with same type and same producer"
+        )
+        self.log_info("Matching by consumer")
+        matched_by_consumer = [
+            d
+            for d
+            in matched_by_producer
+            if len(d.consumers) != 0 and
+            consumer in d.consumers
+        ]
+
+        if len(matched_by_consumer) == 0:
+            self.log_warning(
+                "Can't find any deliverable that matches consumer"
+            )
+            return None
+
+        if len(matched_by_consumer) == 1:
+            self.log_debug("Find deliverable")
+            return matched_by_consumer[0]
+
+        raise InvalidDeliveryException("".join([
+            "Find multiple deliveries having the same"
+            "type, producer and consumer"
+        ]))
 
     def find_deliverable_by(
             self: Self,
@@ -176,11 +178,11 @@ class Dispatcher(HasRegistry[Deliverable], HasLogger):
         )
 
         if deliverable is None:
-            raise NoDeliverableException(
+            raise InvalidDeliveryException(
                 f"Cannot find type {delivery.payload_type}"
             )
-        else:
-            delivery.set(deliverable.payload)
+
+        delivery.set(deliverable.payload)
 
     def dispatch(self: Self, consumer: Factory) -> Self:
         """

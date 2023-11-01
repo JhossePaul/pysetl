@@ -1,3 +1,4 @@
+"""A collection of utilities."""
 from .benchmark_result import BenchmarkResult
 from .benchmark_modifier import BenchmarkModifier
 from .builder import Builder

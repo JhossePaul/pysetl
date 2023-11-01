@@ -20,13 +20,13 @@ PotentialDeliverables = list[tuple[ExpectedDeliverable, ExpectedDeliverable]]
 
 
 class Pipeline(
-    HasLogger, HasRegistry[Stage], IsIdentifiable,
-    HasBenchmark, HasDiagram
+    HasRegistry[Stage], IsIdentifiable,
+    HasBenchmark, HasDiagram, HasLogger
 ):
     """Pipeline is a complete data transformation workflow."""
 
-    def __init__(self: Self, benchmark: bool = False) -> None:
-        HasRegistry.__init__(self)
+    def __init__(self, benchmark: bool = False) -> None:
+        super().__init__()
         IsIdentifiable.__init__(self)
         self.benchmarked = benchmark
         self.inspector = Inspector(self)
@@ -101,7 +101,7 @@ class Pipeline(
 
     def get_pipeline_deliverables(self: Self) -> set[ExpectedDeliverable]:
         """Retrive deliverables set directly on pipeline."""
-        consumer_deliverables = set([
+        consumer_deliverables = {
             ExpectedDeliverable(
                 deliverable_type=pretty(deliverable.payload_type),
                 delivery_id=deliverable.delivery_id,
@@ -112,9 +112,9 @@ class Pipeline(
             in self.dispatcher.get_registry().values()
             for consumer
             in deliverable.consumers
-        ])
+        }
 
-        producer_deliverables = set([
+        producer_deliverables = {
             ExpectedDeliverable(
                 deliverable_type=pretty(deliverable.payload_type),
                 delivery_id=deliverable.delivery_id,
@@ -124,13 +124,13 @@ class Pipeline(
             for deliverable
             in self.dispatcher.get_registry().values()
             if len(deliverable.consumers) == 0
-        ])
+        }
 
         return consumer_deliverables.union(producer_deliverables)
 
     def get_stages_deliverables(self: Self) -> set[ExpectedDeliverable]:
         """Retrive deliverables available from stages."""
-        consumer_deliverables = set([
+        consumer_deliverables = {
             ExpectedDeliverable(
                 deliverable_type=pretty(factory.delivery_type()),
                 delivery_id=factory.delivery_id,
@@ -143,8 +143,8 @@ class Pipeline(
             in stage.factories
             for consumer
             in factory.consumers
-        ])
-        producer_deliverables = set([
+        }
+        producer_deliverables = {
             ExpectedDeliverable(
                 deliverable_type=pretty(factory.delivery_type()),
                 delivery_id=factory.delivery_id,
@@ -155,14 +155,13 @@ class Pipeline(
             in self.stages[:-1]
             for factory
             in stage.factories
-            if len(factory.consumers) == 0
-        ])
+        }
 
         return consumer_deliverables.union(producer_deliverables)
 
     def get_needed_deliverables(self: Self) -> set[ExpectedDeliverable]:
         """Retrive expected deliverables from each Pipeline node."""
-        return set([
+        return {
             ExpectedDeliverable(
                 deliverable_type=pretty(delivery.payload_type),
                 delivery_id=delivery.delivery_id,
@@ -175,7 +174,7 @@ class Pipeline(
             in stage.create_nodes()
             for delivery
             in node.input
-        ])
+        }
 
     def __compare_deliverables(
             self: Self,
@@ -279,8 +278,8 @@ class Pipeline(
         """Return last output from pipeline."""
         if self.last_registered_item:
             return self.last_registered_item.factories[-1].get()
-        else:
-            return None
+
+        return None
 
     def get_output(self: Self, factory_type: type[Factory]) -> Any:
         """Return output from a given factory."""
@@ -293,12 +292,12 @@ class Pipeline(
             if isinstance(factory, factory_type)
         ]
 
-        if len(factory) != 0:
-            return factory[0].get()
-        else:
+        if len(factory) == 0:
             raise PipelineException(
                 f"There isn't any class {pretty(factory_type)}"
             )
+
+        return factory[0].get()
 
     def get_deliverable(
             self: Self,

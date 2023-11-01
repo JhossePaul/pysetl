@@ -32,7 +32,7 @@ class Stage(
     """
 
     def __init__(self, benckmark: bool = False) -> None:
-        HasRegistry.__init__(self)
+        super().__init__()
         IsIdentifiable.__init__(self)
         self.benchmarked = benckmark
         self.__end: bool = True
@@ -121,8 +121,8 @@ class Stage(
             self.log_debug(f"Persist output of {factory.__class__.__name__}")
 
             return factory.read().process().write()
-        else:
-            return factory.read().process()
+
+        return factory.read().process()
 
     def handle_benchmark(self, factory: Factory) -> BenchmarkResult:
         """Execute and benchmarks a given Factory."""
@@ -150,9 +150,9 @@ class Stage(
         spark: Optional[SparkSession] = SparkSession.getActiveSession()
 
         if spark:
-            fun(spark)
-        else:
-            return None
+            return fun(spark)
+
+        return None
 
     def run_factory(self: Self, factory: Factory) -> Deliverable:
         """Run a factory and collects its deliverable."""

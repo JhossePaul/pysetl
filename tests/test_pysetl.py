@@ -18,7 +18,7 @@ from pysetl.enums import SaveMode
 from pysetl.config import CsvConfig, ParquetConfig
 from pysetl.config.config import Config
 from pysetl.storage.repository import SparkRepository, SparkRepositoryBuilder
-from pysetl.utils.exceptions import InvalidConfigException
+from pysetl.utils.exceptions import InvalidConfigException, BuilderException
 from pysetl.utils.mixins import HasSparkSession
 from pysetl.workflow import Delivery, Factory
 
@@ -286,6 +286,11 @@ def test_pysetl_set_sparkconf():
 
 def test_pysetl_exceptions():
     """Throw InvalidConfigException if no config found."""
+    with pytest.raises(BuilderException) as error:
+        _ = PySetl.builder().get()
+    
+    assert str(error.value) == "No PySetl object built"
+
     pysetl = PySetl.builder().getOrCreate()
 
     with pytest.raises(InvalidConfigException) as error:

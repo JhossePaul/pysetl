@@ -8,8 +8,7 @@ from typedspark import DataSet, Schema, Column
 from pysetl.workflow.dispatcher import Dispatcher
 from pysetl.workflow import Factory, Delivery, Deliverable, Stage
 from pysetl.utils.exceptions import (
-    AlreadyExistsException, InvalidDeliveryException,
-    NoDeliverableException
+    AlreadyExistsException, InvalidDeliveryException
 )
 
 
@@ -384,7 +383,7 @@ def test_dispatcher_no_matched_producer():
     factory = MultipleInputFactory()
     dispatcher = Dispatcher().add_deliverable(deliverable)
 
-    with pytest.raises(NoDeliverableException) as error:
+    with pytest.raises(InvalidDeliveryException) as error:
         dispatcher.dispatch(factory)
 
     assert str(error.value) == "Cannot find type list[str]"
@@ -464,7 +463,7 @@ def test_dispatcher_delivery_id_exception():
         .add_deliverable(array4)
     )
 
-    with pytest.raises(NoDeliverableException) as error:
+    with pytest.raises(InvalidDeliveryException) as error:
         dispatcher.dispatch(factory)
 
     assert str(error.value) == "Cannot find type list[str]"
@@ -516,7 +515,7 @@ def test_dispatcher_multiple_matches_no_producer_matches():
         .add_deliverable(array4)
     )
 
-    with pytest.raises(NoDeliverableException) as error:
+    with pytest.raises(InvalidDeliveryException) as error:
         dispatcher.dispatch(factory)
 
     assert str(error.value)

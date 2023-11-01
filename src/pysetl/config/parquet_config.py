@@ -18,6 +18,6 @@ class ParquetConfig(FileConfig):
     """
     @property
     def config(self: Self) -> ParquetConfigModel:
-        _config: dict = self._config | {"storage": FileStorage.PARQUET}
+        _config: dict = self.params | {"storage": FileStorage.PARQUET}
 
         return ParquetConfigModel(**_config)

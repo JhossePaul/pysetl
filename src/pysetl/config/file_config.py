@@ -2,6 +2,7 @@
 from typing import Optional
 from typing_extensions import Self
 from pyspark.sql.types import StructType
+from pydantic import ConfigDict
 from pysetl.enums import SaveMode, FileStorage
 from .aws_credentials import AwsCredentials
 from .config import Config, BaseConfigModel
@@ -10,11 +11,12 @@ from .config import Config, BaseConfigModel
 class FileConfigModel(BaseConfigModel):
     """Validator for file configurations."""
 
-    class Config:
-        extra="allow"
-        frozen=True
-        strict=True
+    model_config = ConfigDict(
+        extra="allow",
+        frozen=True,
+        strict=True,
         arbitrary_types_allowed=True
+    )
 
     storage: FileStorage
     path: str
@@ -30,7 +32,7 @@ class FileConfig(Config[FileConfigModel]):
     @property
     def config(self: Self) -> FileConfigModel:
         """Returns validated configuration."""
-        return FileConfigModel(**self._config)
+        return FileConfigModel(**self.params)
 
     @property
     def reader_config(self: Self) -> dict:

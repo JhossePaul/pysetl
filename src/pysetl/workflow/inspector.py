@@ -34,22 +34,27 @@ class Inspector(HasLogger):
 
     @property
     def graph(self: Self) -> DAG:
+        """Return a DAG from a Pipeline."""
         return DAG(self.nodes, self.flows)
 
     def find_node(self: Self, factory: Factory) -> Optional[Node]:
+        """Find a node by Factory."""
         found_nodes = [n for n in self.nodes if n.factory_uuid == factory.uuid]
 
         if len(found_nodes) == 0:
             return None
-        elif len(found_nodes) == 1:
+
+        if len(found_nodes) == 1:
             return found_nodes[0]
-        else:
-            raise PipelineException("Multiple factories found")
+
+        raise PipelineException("Multiple factories found")
 
     def create_nodes(self: Self) -> set[Node]:
-        return set([n for s in self.pipeline.stages for n in s.create_nodes()])
+        """Create a set of nodes from pipeline stages."""
+        return {n for s in self.pipeline.stages for n in s.create_nodes()}
 
     def find_internal_flows(self: Self, factory: Factory) -> list[Flow]:
+        """Find internal flows between stages."""
         parent_node = self.find_node(factory=factory)
 
         return [
@@ -62,7 +67,8 @@ class Inspector(HasLogger):
         ]
 
     def create_internal_flows(self: Self) -> set[Flow]:
-        return set([
+        """Create internal flows from a set of stages."""
+        return {
             flow
             for stage
             in self.pipeline.stages
@@ -71,7 +77,7 @@ class Inspector(HasLogger):
             for flow
             in self.find_internal_flows(factory)
             if not stage.end
-        ])
+        }
 
     def possible_internal(
             self: Self,
@@ -79,6 +85,7 @@ class Inspector(HasLogger):
             delivery: Delivery,
             factory_uuid: UUID
             ) -> int:
+        """Return length potential internal flows for a given delivery."""
         return len([
             f
             for f
@@ -92,12 +99,14 @@ class Inspector(HasLogger):
             self: Self,
             deliveries: list[Delivery],
             delivery_id: str) -> int:
+        """Find deliveries with the same id."""
         return len([d for d in deliveries if d.delivery_id == delivery_id])
 
     def find_external_flows(
             self: Self,
             node: Node,
             internal_flows: set[Flow]) -> list[Flow]:
+        """Find flows from external sources."""
         grouped_deliveries = [
             list(deliveries)
             for _, deliveries
@@ -133,21 +142,24 @@ class Inspector(HasLogger):
     def create_external_flows(
             self: Self,
             internal_flows: set[Flow]) -> set[Flow]:
-        return set([
+        """Create flows from external sources."""
+        return {
             flow
             for node
             in self.nodes
             for flow
             in self.find_external_flows(node, internal_flows)
-        ])
+        }
 
     def create_flows(self: Self) -> set[Flow]:
+        """Create internal and external flows."""
         internal_flows = self.create_internal_flows()
         external_flows = self.create_external_flows(internal_flows)
 
         return internal_flows.union(external_flows)
 
     def inspect(self: Self) -> Self:
+        """Inspect a Pipeline and create nodes and flow for the DAG."""
         self.nodes = self.create_nodes()
         self.flows = self.create_flows()
 

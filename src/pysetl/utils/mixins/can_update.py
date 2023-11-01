@@ -1,9 +1,9 @@
 """CanUpdateMixin module."""
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from pyspark.sql import DataFrame
 
 
-class CanUpdate:
+class CanUpdate(ABC):
     """Abstract mixin to add update functionality to a connector."""
 
     @abstractmethod

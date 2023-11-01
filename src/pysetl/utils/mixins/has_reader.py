@@ -1,9 +1,9 @@
 """HasReader module."""
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from pyspark.sql import DataFrameReader
 
 
-class HasReader:
+class HasReader(ABC):
     """HasReader mixin."""
 
     @property

@@ -1,12 +1,12 @@
 """
 IsConfigurable Module
 """
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import Any
 from typing_extensions import Self
 
 
-class IsConfigurable(metaclass=ABCMeta):
+class IsConfigurable(ABC):
     """
     IsConfigurable mixin
     """

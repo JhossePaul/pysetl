@@ -5,13 +5,13 @@ from typing_extensions import Self
 from pyarrow.fs import S3FileSystem, FileSystem, LocalFileSystem, FileSelector
 from pyspark.sql import DataFrame, DataFrameReader, DataFrameWriter
 from pyspark.sql.types import StructType
-from pysetl.config import FileConfig
-from pysetl.utils.mixins import HasReaderWriter, CanDrop, CanPartition
-from pysetl.utils.exceptions import BadConfiguration
+from pysetl.config.file_config import FileConfig, FileConfigModel
+from pysetl.utils.mixins import HasReader, HasWriter, CanDrop, CanPartition
+from pysetl.utils.exceptions import InvalidConfigException
 from .connector import Connector
 
 
-class FileConnector(Connector, HasReaderWriter, CanDrop, CanPartition):
+class FileConnector(Connector, HasReader, HasWriter, CanDrop, CanPartition):
     """
     Connector to data files.
 
@@ -24,7 +24,7 @@ class FileConnector(Connector, HasReaderWriter, CanDrop, CanPartition):
 
         A file connector requieres a FileConfig
         """
-        self.config = options.config
+        self.config: FileConfigModel = options.config
         self.reader_config = options.reader_config
         self.writer_config = options.writer_config
 
@@ -33,13 +33,13 @@ class FileConnector(Connector, HasReaderWriter, CanDrop, CanPartition):
         return self.spark.read.options(**self.reader_config)
 
     def __check_partitions(self: Self, data: DataFrame) -> bool:
-        return all([x in data.columns for x in self.config.partition_by]) \
+        return all(x in data.columns for x in self.config.partition_by) \
             if self.config.partition_by \
             else True
 
     def _writer(self: Self, data: DataFrame) -> DataFrameWriter:
         if not self.__check_partitions(data):
-            raise BadConfiguration(
+            raise InvalidConfigException(
                 "Partition columns in configuration not in data"
             )
 
@@ -70,7 +70,7 @@ class FileConnector(Connector, HasReaderWriter, CanDrop, CanPartition):
         """Get current FS based on URI and configuration."""
         if self.uri.scheme == "s3":
             if not self.config.aws_credentials:
-                raise BadConfiguration("No S3 credentials provided")
+                raise InvalidConfigException("No S3 credentials provided")
 
             return S3FileSystem(
                 access_key=self.config.aws_credentials.access_key,
@@ -79,10 +79,10 @@ class FileConnector(Connector, HasReaderWriter, CanDrop, CanPartition):
                 allow_bucket_creation=True,
                 allow_bucket_deletion=True
             )
-        else:
-            fs, _ = FileSystem.from_uri(self.uri.geturl())
 
-            return fs
+        fs, _ = FileSystem.from_uri(uri=self.uri.geturl())  # type: ignore
+
+        return fs
 
     @property
     def absolute_path(self) -> str:
@@ -115,7 +115,7 @@ class FileConnector(Connector, HasReaderWriter, CanDrop, CanPartition):
     def write(self: Self, data: DataFrame) -> None:
         """Write data into FileSystem."""
         if self.has_wildcard:
-            raise BadConfiguration("Can't write to wildcard path")
+            raise InvalidConfigException("Can't write to wildcard path")
 
         self._writer(data).save(self.absolute_path)
 

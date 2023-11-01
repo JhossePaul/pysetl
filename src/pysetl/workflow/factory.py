@@ -37,7 +37,9 @@ class Factory(
         """Initialize UUID from IsIdentifiable."""
         IsIdentifiable.__init__(self)  # pragma: no cover
 
-    def not_aliased_delivery_type(self: Self) -> tuple[type, Optional[type]]:
+    def not_aliased_delivery_type(
+            self: Self
+            ) -> tuple[Optional[type], Optional[type]]:
         """
         Not aliased delivery type.
 
@@ -46,12 +48,12 @@ class Factory(
         """
         if isinstance(self.delivery_type(), type):
             return self.delivery_type(), None
-        else:
-            origin = get_origin(self.delivery_type())
-            args = get_args(self.delivery_type())
-            arg = None if len(args) == 0 else args[0]
 
-            return origin, arg
+        origin = get_origin(self.delivery_type())
+        args = get_args(self.delivery_type())
+        arg = None if len(args) == 0 else args[0]
+
+        return origin, arg
 
     def __str__(self: Self) -> str:
         """Customize str method."""
@@ -108,7 +110,7 @@ class Factory(
         __type = self.delivery_type()
 
         return (
-            Deliverable[__type](
+            Deliverable[__type](  # type: ignore
                 payload=self.get(),
                 producer=type(self),
                 consumers=self.consumers,

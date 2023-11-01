@@ -9,7 +9,7 @@ from pysetl.storage.repository import SparkRepository, SparkRepositoryBuilder
 from pysetl.storage.connector import ParquetConnector, Connector
 from pysetl.enums import FileStorage
 from pysetl.config import FileConfig
-from pysetl.utils.exceptions import InvalidConnectorException
+from pysetl.utils.exceptions import InvalidConnectorException, BuilderException
 
 
 def get_data():
@@ -230,3 +230,16 @@ def test_sparkrepository_load_fails_with_no_type():
         str(error.value) ==
         "'SparkRepositoryBuilder' object has no attribute '__orig_class__'"
     )
+
+
+def test_builder_exception():
+    """Throw a Builder exception if get before built."""
+    config = FileConfig(
+        storage=FileStorage.PARQUET,
+        path="/ruta/al/archivo"
+    )
+    builder = SparkRepositoryBuilder(config)
+    with pytest.raises(BuilderException) as error:
+        _ = builder.get()
+
+    assert str(error.value) == "No SparkRepository built"

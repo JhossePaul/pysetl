@@ -14,6 +14,6 @@ class JsonConfig(FileConfig):
     @property
     def config(self: Self) -> JsonConfigModel:
         """Returns validated JSON configuration."""
-        _config: dict = self._config | {"storage": FileStorage.JSON}
+        _config: dict = self.params | {"storage": FileStorage.JSON}
 
         return JsonConfigModel(**_config)

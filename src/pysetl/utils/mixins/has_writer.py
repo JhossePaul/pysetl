@@ -1,9 +1,9 @@
 """HasWriter module."""
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from pyspark.sql import DataFrame, DataFrameWriter
 
 
-class HasWriter:
+class HasWriter(ABC):
     """HasWrite Mixin."""
 
     @abstractmethod

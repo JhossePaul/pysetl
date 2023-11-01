@@ -1,8 +1,10 @@
+"""BanchmarkResult module."""
 from dataclasses import dataclass
 
 
 @dataclass
 class BenchmarkResult:
+    """A simple formmatter for factories execution benchmark."""
     cls: str
     read: float
     process: float

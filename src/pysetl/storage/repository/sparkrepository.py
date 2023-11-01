@@ -14,7 +14,7 @@ def create(self: Self, data: T) -> Self:
 def vaccum(self: Self, retention_days: int) -> Self:
     "Delete data/partitions older than retention days."
 """
-from typing import TypeVar, Generic, get_args, _GenericAlias
+from typing import TypeVar, Generic, get_args, _GenericAlias  # type: ignore
 from pyspark import StorageLevel
 from pyspark.sql import DataFrame
 from pyspark.sql.types import StructType
@@ -59,7 +59,7 @@ class SparkRepository(Generic[T], HasLogger, HasSparkSession):
     @property
     def type_annotation(self: Self) -> _GenericAlias:
         """Return type annotation."""
-        return self.__orig_class__
+        return getattr(self, "__orig_class__")
 
     def __str__(self: Self) -> str:
         """Customize str method."""
@@ -103,7 +103,7 @@ class SparkRepository(Generic[T], HasLogger, HasSparkSession):
 
         self.__flush = False
 
-        return DataSet[__type](data)
+        return DataSet[__type](data)  # type: ignore
 
     def save(self: Self, data: DataSet[T]) -> Self:
         """Save data."""
@@ -114,32 +114,32 @@ class SparkRepository(Generic[T], HasLogger, HasSparkSession):
 
     def list_partitions(self: Self) -> list[str]:
         """List current all current available partitions in the storage."""
-        if isinstance(self.connector, CanPartition):
-            return self.connector.list_partitions()
-        else:
+        if not isinstance(self.connector, CanPartition):
             raise InvalidConnectorException(
                 "Current connector doesn't support partitions"
             )
+
+        return self.connector.list_partitions()
 
     def load_partitions(self: Self, partitions: list[str]) -> DataSet[T]:
         """Retrive a subset of partitions from the data."""
-        if isinstance(self.connector, CanPartition):
-            dataframe = self.connector.read_partitions(partitions)
-            [__tpe, *_] = get_args(self.type_annotation)
-
-            return DataSet[__tpe](dataframe)
-        else:
+        if not isinstance(self.connector, CanPartition):
             raise InvalidConnectorException(
                 "Current connector doesn't support partitions"
             )
 
+        dataframe = self.connector.read_partitions(partitions)
+        [__tpe, *_] = get_args(self.type_annotation)
+
+        return DataSet[__tpe](dataframe)  # type: ignore
+
     def drop(self: Self) -> Self:
         """Drop the entire data. Drop table o remove FS directory."""
-        if isinstance(self.connector, CanDrop):
-            self.connector.drop()
-
-            return self
-        else:
+        if not isinstance(self.connector, CanDrop):
             raise InvalidConnectorException(
                 "Current connector doesn't support drop"
             )
+
+        self.connector.drop()
+
+        return self

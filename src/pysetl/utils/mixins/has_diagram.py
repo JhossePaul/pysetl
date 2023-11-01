@@ -1,11 +1,11 @@
 """HasDiagram module."""
 
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from inspect import signature
 from typing_extensions import Self
 
 
-class HasDiagram:
+class HasDiagram(ABC):
     """Mixin for objects that can be represented as a mermaid diagram."""
 
     @property
@@ -19,7 +19,7 @@ class HasDiagram:
 
     def get_signature(self):
         """Return constructor signature."""
-        return [x for x in signature(self.__init__).parameters]
+        return list(signature(self.__init__).parameters)
 
     def format_diagram_id(
             self: Self,

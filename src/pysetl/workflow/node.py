@@ -216,11 +216,11 @@ class Node(IsIdentifiable, HasDiagram, HasLogger):
             next_node.factory_class in self.output.consumer
         )
 
-        exact_produced_match = any([
+        exact_produced_match = any(
             delivery.producer == self.factory_class
             for delivery
             in deliveries
-        ])
+        )
         non_explicitly_defined_producers = [
             delivery
             for delivery

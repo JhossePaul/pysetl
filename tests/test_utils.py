@@ -100,8 +100,17 @@ def test_pretty():
 
 def test_has_diagram():
     """Test HasDiagram mixin."""
+    class WithDiagram(HasDiagram):
+        """Class for test purposes."""
+        def to_diagram(self) -> str:
+            return "A mermaid diagram"
+
+        @property
+        def diagram_id(self) -> str:
+            return "id"
+
     format_diagram_str = (
-        HasDiagram()
+        WithDiagram()
         .format_diagram_id(
             name="hola",
             diagram_id="adios",
@@ -109,7 +118,7 @@ def test_has_diagram():
         )
     )
 
-    assert HasDiagram().get_signature() == ["args", "kwargs"]
+    assert WithDiagram().get_signature() == ["args", "kwargs"]
     assert format_diagram_str == "holaAdios12g"
 
 

@@ -11,7 +11,7 @@ class HasSparkSession:
         """Returns current spark session."""
         spark = SparkSession.getActiveSession()
 
-        if spark:
-            return spark
-        else:
+        if not spark:
             raise PySparkException("No active Spark session")
+
+        return spark

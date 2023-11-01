@@ -1,8 +1,8 @@
 """CanCreateMixin module."""
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 
 
-class CanDelete:
+class CanDelete(ABC):
     """Delete rows from a table."""
 
     @abstractmethod

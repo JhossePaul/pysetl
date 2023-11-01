@@ -18,6 +18,6 @@ class CsvConfig(FileConfig):
     @property
     def config(self: Self) -> CsvConfigModel:
         """Return validated dataset."""
-        _config: dict = self._config | {"storage": FileStorage.CSV}
+        _config: dict = self.params | {"storage": FileStorage.CSV}
 
         return CsvConfigModel(**_config)

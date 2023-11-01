@@ -1,50 +1,42 @@
+"""PySetl expected exceptions."""
+
+
 class BasePySetlException(Exception):
-    pass
+    """Throw a PySetl Exception."""
 
 
 class AlreadyExistsException(BasePySetlException):
-    pass
+    """Throw an exception for an already registered object."""
 
 
 class PySparkException(BasePySetlException):
-    pass
-
-
-class BadConfiguration(BasePySetlException):
-    pass
-
-
-class S3ConnectionException(BasePySetlException):
-    pass
+    """Throw an exception if issue is related with PySpark."""
 
 
 class InvalidConnectorException(BasePySetlException):
-    pass
+    """Throw an exception if connector does not satisfies requirements."""
 
 
 class InvalidConfigException(BasePySetlException):
-    pass
+    """Throw an exception if configuration has an error."""
 
 
 class InvalidDeliveryException(BasePySetlException):
-    pass
-
-
-class NoDeliverableException(BasePySetlException):
-    pass
+    """Throw an exception if delivery is duplicated or not found."""
 
 
 class PipelineException(BasePySetlException):
-    pass
+    """Throw an exception if Pipeline fails."""
+
+
+class BuilderException(BaseException):
+    """Throw if builder fails."""
 
 
 __all__ = [
     "AlreadyExistsException",
     "PySparkException",
-    "BadConfiguration",
-    "S3ConnectionException",
     "InvalidConnectorException",
     "InvalidConfigException",
-    "NoDeliverableException",
     "PipelineException"
 ]

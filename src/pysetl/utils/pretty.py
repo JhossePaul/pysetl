@@ -1,6 +1,6 @@
 """Utility function to format multiple types for printing."""
 from functools import singledispatch
-from typing import _GenericAlias, get_args, get_origin
+from typing import _GenericAlias, get_args, get_origin  # type: ignore
 from types import GenericAlias
 
 
@@ -43,5 +43,5 @@ def _(tpe: type) -> str:
         arg_str = f"[{pretty(arg)}]"
 
         return f"{origin_str}{arg_str}"
-    else:
-        return tpe.__name__
+
+    return tpe.__name__

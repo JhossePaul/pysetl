@@ -1,9 +1,9 @@
 """CanWait module."""
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import Optional
 
 
-class CanWait:
+class CanWait(ABC):
     """
     CanWait mixin.
 
