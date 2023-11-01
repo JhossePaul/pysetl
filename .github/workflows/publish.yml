@@ -2,10 +2,11 @@ name: publish
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
-  build:
+  test-publish:
+    if: github.event.release.prerelease
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,3 +19,16 @@ jobs:
           repository_url: "https://test.pypi.org/legacy/"
           plugins: "poetry-dynamic-versioning[plugin]"
           pypi_token: ${{ secrets.TESTPYPI_TOKEN }}
+
+  publish:
+    runs-on: ubuntu-latest
+    if: !github.event.release.prerelease
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and publish to PyPI
+        uses: JRubics/poetry-publish@v1.16
+        with:
+          python_version: "3.9"
+          plugins: "poetry-dynamic-versioning[plugin]"
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
