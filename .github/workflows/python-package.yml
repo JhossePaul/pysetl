@@ -56,7 +56,7 @@ jobs:
 
     - name: Run tox
       run: |
-        python -m tox
+        poetry run python -m tox
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
