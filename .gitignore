@@ -140,3 +140,4 @@ cython_debug/
 spark-warehouse/
 
 .DS_Store
+poetry.lock
