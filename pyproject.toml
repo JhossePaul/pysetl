@@ -61,7 +61,6 @@ enable = true
 vcs="git"
 style="pep440"
 format="{base}{stage}{distance}"
-latest-tag=true
 
 [tool.pytest.ini_options]
 addopts="--cov --cov-report lcov --cov-report term --cov-append"
