@@ -2,7 +2,7 @@
 name = "pysetl"
 version = "0.0.0"
 description = ""
-readme = "README.md"
+readme = "README.rst"
 license="Apache-2.0"
 authors=[ "Jhosse Paul Marquez Ruiz <jpaul.marquez.ruiz@gmail.com>" ]
 keywords=["spark", "aws", "etl"]
