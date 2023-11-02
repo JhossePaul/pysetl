@@ -28,7 +28,7 @@ pyarrow = "13.0.0"
 pydantic = "2.4.2"
 typing-extensions = "^4.7.1"
 typedspark = "1.0.13"
-pyspark = {version = "3.1.1", extras = ["pyspark"]}
+pyspark = {version = "^3.1.1", extras = ["pyspark"]}
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"
