@@ -1,4 +1,4 @@
-PySetl's documentation
+Documentation
 ==================================
 
 .. toctree::
@@ -9,4 +9,4 @@ PySetl's documentation
    storage
    workflow
 
-.. mdinclude:: ../../README.md
+.. include:: ../../README.rst

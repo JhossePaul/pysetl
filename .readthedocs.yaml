@@ -1,0 +1,23 @@
+# .readthedocs.yaml
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.9"
+  pre_create_environment:
+    - asdf plugin add poetry
+    - asdf install poetry latest
+    - asdf global poetry latest
+    - poetry config virtualenvs.create false
+  post_create_environment:
+    - poetry install --no-dev -E docs
+
+# Build documentation in the "docs/" directory with Sphinx
+sphinx:
+   configuration: 'pysetl/docs/conf.py'

@@ -1,4 +1,3 @@
-
 Configuration
 =============================================
 Typesafe configuration
