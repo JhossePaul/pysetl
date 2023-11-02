@@ -21,4 +21,4 @@ build:
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
-   configuration: 'pysetl/docs/conf.py'
+   configuration: 'pysetl/docs/source/conf.py'
