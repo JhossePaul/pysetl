@@ -15,8 +15,7 @@ author = 'Paul Marquez'
 
 extensions = [
     "sphinx_rtd_theme",
-    "numpydoc",
-    "m2r"
+    "numpydoc"
 ]
 
 templates_path = ['_templates']
