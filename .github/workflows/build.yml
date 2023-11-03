@@ -46,8 +46,7 @@ jobs:
         path: .venv
 
     - name: Install Dependencies
-      run: |
-        make deps
+      run: make deps
       if: steps.cache-deps.outputs.cache-hit != 'true'
 
     - name: Install package
@@ -56,26 +55,8 @@ jobs:
     - name: Run tox
       run: make tox
 
-    - name: Upload coverage artifact
-      uses: actions/upload-artifact@master
-      with:
-        name: coverage-artifact
-        path: .coverage
-
-  upload:
-    name: upload coverage to codecov
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Download coverage from previous job
-        uses: actions/download-artifact@master
-        with:
-          name: coverage-artifact
-          path: .coverage
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      if: contains(env.USING_COVERAGE, matrix.python-version)
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
