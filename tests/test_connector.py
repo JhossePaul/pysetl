@@ -6,12 +6,12 @@ from pyspark.sql.types import StructType, StructField, StringType
 from pyarrow.fs import LocalFileSystem, S3FileSystem, FileType
 from pysetl.enums import FileStorage
 from pysetl.utils.exceptions import InvalidConfigException, BuilderException
+from pysetl.config import (
+    FileConfig, AwsCredentials, CsvConfig, JsonConfig, ParquetConfig
+)
 from pysetl.storage.connector import (
     FileConnector, CsvConnector, ParquetConnector, JsonConnector,
     ConnectorBuilder
-)
-from pysetl.config import (
-    FileConfig, AwsCredentials, CsvConfig, JsonConfig, ParquetConfig
 )
 
 

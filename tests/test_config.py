@@ -128,7 +128,7 @@ def test_csv_config_str():
       path: ruta/al/archivo.csv
       partition_by: ['column1', 'column2']
       savemode: SaveMode.ERRORIFEXISTS
-      data_schema: StructType(List())
+      data_schema: StructType([])
       inferSchema: false
       header: true
       delimiter: ,""")

@@ -6,7 +6,9 @@ default: help
 coverage:  ## Run tests with coverage
 	poetry run coverage erase
 	poetry run coverage run -m pytest -ra
+	poetry run coverage combine
 	poetry run coverage report -m
+	poetry run coverage lcov
 
 lint:  ## Lint and static-check
 	poetry run flake8 src/

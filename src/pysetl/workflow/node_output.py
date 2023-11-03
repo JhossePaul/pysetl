@@ -4,7 +4,7 @@ from importlib import import_module
 from dataclasses import dataclass, is_dataclass, fields
 from typing import (  # type: ignore
     TYPE_CHECKING, get_origin, get_args, TypeVar,
-    _GenericAlias
+    _GenericAlias  # type: ignore
 )
 from typing_extensions import Self
 from typedspark import DataSet
@@ -91,8 +91,8 @@ class NodeOutput(HasDiagram):
         fields_str: str = "\n".join(self.get_fields())
 
         return "\n".join([
-            f"class { self.diagram_id } {{",
-            f"    <<{ pretty(self.delivery_type) }>>",
+            f"class {self.diagram_id} {{",
+            f"    <<{pretty(self.delivery_type)}>>",
             fields_str,
             "}"
         ])

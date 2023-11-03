@@ -2,7 +2,10 @@
 from urllib.parse import urlparse, ParseResult
 from pathlib import Path
 from typing_extensions import Self
-from pyarrow.fs import S3FileSystem, FileSystem, LocalFileSystem, FileSelector
+from pyarrow.fs import (  # type: ignore
+    S3FileSystem, FileSystem,  # type: ignore
+    LocalFileSystem, FileSelector  # type: ignore
+)
 from pyspark.sql import DataFrame, DataFrameReader, DataFrameWriter
 from pyspark.sql.types import StructType
 from pysetl.config.file_config import FileConfig, FileConfigModel
