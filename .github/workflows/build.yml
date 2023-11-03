@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -55,10 +54,28 @@ jobs:
       run: poetry install --no-interaction
 
     - name: Run tox
-      run: |
-        make tox
+      run: make tox
 
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: coverage-artifact
+        path: .coverage
+
+  upload:
+    name: upload coverage to codecov
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download coverage from previous job
+        uses: actions/download-artifact@master
+        with:
+          name: coverage-artifact
+          path: .coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
