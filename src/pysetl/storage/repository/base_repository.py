@@ -16,5 +16,5 @@ class BaseRepository(Generic[T], ABC):
         """Read all data from data storage"""
 
     @abstractmethod
-    def save(self: Self, data: DataSet[T]) -> None:
+    def save(self: Self, data: DataSet[T]) -> Self:
         """Save data."""

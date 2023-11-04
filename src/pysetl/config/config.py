@@ -1,6 +1,6 @@
 """Base Config module."""
 from __future__ import annotations
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from functools import reduce
 from typing import Any, TypeVar, Generic
 from pydantic import BaseModel
