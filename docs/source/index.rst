@@ -6,7 +6,9 @@ Documentation
    :caption: Contents:
 
    configuration
-   storage
+   dal
    workflow
+   pysetl_context
+   api
 
 .. include:: ../../README.rst

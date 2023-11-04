@@ -1,5 +1,6 @@
 PySetl - A PySpark ETL Framework
 ============================================
+
 |PyPI Badge|
 |Build Status|
 |Code Coverage|
@@ -14,9 +15,9 @@ Thus, effectively enhacing stability for large ETL pipelines.
 
 In order to accomplish this task we provide some tools:
 
-- :code:`pysetl.config`: Type-safe configuration.
-- :code:`pysetl.storage`: Agnostic and extensible data sources connections.
-- :code:`pysetl.workflow`: Pipeline management and dependency injection.
+- :class:`pysetl.config`: Type-safe configuration.
+- :class:`pysetl.storage`: Agnostic and extensible data sources connections.
+- :class:`pysetl.workflow`: Pipeline management and dependency injection.
 
 PySetl is designed with Python typing syntax at its core. Hence, we strongly
 suggest `typedspark`_ and `pydantic`_ for development.

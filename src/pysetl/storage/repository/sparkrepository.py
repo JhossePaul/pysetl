@@ -1,20 +1,5 @@
-"""
-SparkRepository module.
-
-Yet to be implemented
-def update(self: Self) -> Self:
-    "Update/Insert data. Needs a data parameter when implemented."
-
-def delete(self: Self, query: str) -> Self:
-    "Delete registers according to a query."
-
-def create(self: Self, data: T) -> Self:
-    "Create empty data storage (table/folder in FS)."
-
-def vaccum(self: Self, retention_days: int) -> Self:
-    "Delete data/partitions older than retention days."
-"""
-from typing import TypeVar, Generic, get_args, _GenericAlias  # type: ignore
+"""SparkRepository module."""
+from typing import TypeVar, get_args, _GenericAlias  # type: ignore
 from pyspark import StorageLevel
 from pyspark.sql import DataFrame
 from pyspark.sql.types import StructType
@@ -26,17 +11,18 @@ from pysetl.utils.mixins import (
 )
 from pysetl.storage.connector import Connector
 from pysetl.utils.exceptions import InvalidConnectorException
+from .base_repository import BaseRepository
 
 
 T = TypeVar("T", bound=Schema)
 
 
-class SparkRepository(Generic[T], HasLogger, HasSparkSession):
+class SparkRepository(BaseRepository[T], HasLogger, HasSparkSession):
     """
     SparkRepository class.
 
     A SparkRepository garantees read-after-write consistency and
-    links a output type T to its connetor and config
+    links a output type T to its connector and config
     """
 
     def __init__(
