@@ -8,16 +8,16 @@ PySetl - A PySpark ETL Framework
 
 Overview
 --------------------------------------------
-PySetl is a framework focused to improve readability and structure of PySpark
+PySetl is a framework to improve the readability and structure of PySpark
 ETL projects. Also, it is designed to take advantage of Python's typing syntax
 to reduce runtime errors through linting tools and verifying types at runtime.
-Thus, effectively enhacing stability for large ETL pipelines.
+Thus, effectively enhancing stability for large ETL pipelines.
 
-In order to accomplish this task we provide some tools:
+To accomplish this task we provide some tools:
 
-- :class:`pysetl.config`: Type-safe configuration.
-- :class:`pysetl.storage`: Agnostic and extensible data sources connections.
-- :class:`pysetl.workflow`: Pipeline management and dependency injection.
+- ``pysetl.config``: Type-safe configuration.
+- ``pysetl.storage``: Agnostic and extensible data sources connections.
+- ``pysetl.workflow``: Pipeline management and dependency injection.
 
 PySetl is designed with Python typing syntax at its core. Hence, we strongly
 suggest `typedspark`_ and `pydantic`_ for development.
@@ -36,7 +36,7 @@ PySetl is available in PyPI:
 
     pip install pysetl
 
-PySetl doesn't list `pyspark` as dependency since most environments have their own
+PySetl doesn't list `pyspark` as a dependency since most environments have their own
 Spark environment. Nevertheless, you can install pyspark running:
 
 .. code-block:: bash
@@ -47,7 +47,7 @@ Acknowledgments
 --------------------------------------------
 
 PySetl is a port from `SETL`_.  We want
-to fully recognise this package is heavily inspired by the work of the SETL
+to fully recognize this package is heavily inspired by the work of the SETL
 team. We just adapted things to work in Python. 
 
 .. _typedspark: https://typedspark.readthedocs.io/en/latest/

@@ -1,10 +1,13 @@
 """Unit tests for pysetl.utils module."""
 import inspect
 import logging
-import time
+
 from typing import Generic, TypeVar
+
 import pytest
+
 from pyspark.sql import SparkSession
+
 from pysetl.utils import BenchmarkModifier, BenchmarkResult, pretty
 from pysetl.utils.exceptions import PySparkException
 from pysetl.utils.get_signature import get_signature
@@ -13,33 +16,12 @@ from pysetl.utils.mixins import (
     HasSparkSession
 )
 
-
-class DummyFactory:
-    """Simple object to be benchmarked."""
-
-    def read(self):
-        """Wait."""
-        time.sleep(0.2)
-        return self
-
-    def process(self):
-        """Wait."""
-        time.sleep(0.3)
-        return self
-
-    def write(self):
-        """Wait and return string."""
-        time.sleep(0.1)
-        return self
-
-    def get(self):
-        """Return string."""
-        return "benchmarked"
+from tests.dummy_factories import FactoryToBenchmark
 
 
 def test_benchmark_modifier_get():
     """Test BenchmarkModifier."""
-    benchmarked = BenchmarkModifier[DummyFactory](DummyFactory()).get()
+    benchmarked = BenchmarkModifier[FactoryToBenchmark](FactoryToBenchmark()).get()
     methods = dict(inspect.getmembers(benchmarked, callable))
 
     assert benchmarked.read().process().write().get() == "benchmarked"
@@ -154,7 +136,10 @@ def test_has_registry():
 
 def test_has_spark_session_exceptions():
     """Throw PySparkException if no spark session found."""
-    SparkSession.builder.getOrCreate().stop()
+    spark = SparkSession.getActiveSession()
+
+    if spark:
+        spark.stop()
 
     with pytest.raises(PySparkException) as error:
         _ = HasSparkSession().spark

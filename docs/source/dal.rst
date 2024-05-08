@@ -3,9 +3,9 @@ Data Access Layers
 
 PySetl provides two Data Access Layers:
 
-- :mod:`pysetl.storage.connector`: low level non-typed DAL working with
+- :mod:`pysetl.storage.connector`: low-level non-typed DAL working with
   :class:`pyspark.sql.DataFrame`.
-- :mod:`pysetl.storage.repository`: high level DAL to work with
+- :mod:`pysetl.storage.repository`: high-level DAL to work with
   :class:`typedspark.DataSet`.
 
 Connector
@@ -14,7 +14,7 @@ Connector
 Extending Connector
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-:class:`pysetl.storage.connector.BaseConnector` is a abstract base class with
+:class:`pysetl.storage.connector.BaseConnector` is an abstract base class with
 the following structure:
 
 .. code-block:: python
@@ -28,7 +28,7 @@ the following structure:
 
 The class :class:`pysetl.storage.connector.Connector` assumes a standard
 :class:`pyspark.sql.SparkSession` to read and write data but this might not be
-neccesarily the case. If you want to implement your own custom SparkSession
+necessarily the case. If you want to implement your custom SparkSession
 implementation just inherit from BaseConnector.
 
 Implementations
@@ -59,10 +59,10 @@ Extending Repository
 ++++++++++++++++++++++++++++++++++++++++++++
 
 :class:`pysetl.storage.repository.BaseRepository` is a type-safe layer over a
-BaseConnector. Instead of returning a genric DataFrame it will return a 
+BaseConnector. Instead of returning a generic DataFrame, it will return a 
 :class:`typedspark.DataSet`. This will allow you column-wise type validation. 
-PySetl strongly support :mod:`typedspark` philosophy and encourage its use over 
-Connectors in order to reduce runtime errors and development time. 
+PySetl strongly supports :mod:`typedspark` philosophy and encourages its use over
+Connectors to reduce runtime errors and development time. 
 
 .. code-block:: python
 
@@ -76,9 +76,9 @@ Connectors in order to reduce runtime errors and development time.
 Repository inherits from :class:`typing.Generic` and expects a mandatory
 type parameter. It should fail if not given.
 
-SparkRepository implementation expects a standard Connector therefore expects a
-standard SparkSession too. You can instantiate it passing a Connector and the
-type parameter, or you can use the convenient
+SparkRepository implementation expects a standard Connector and a standard
+SparkSession too. You can instantiate it by passing a Connector and the type
+parameter, or you can use the convenient
 :class:`pysetl.storage.repository.SparkRepositoryBuilder` and simply pass a 
 configuration.
 

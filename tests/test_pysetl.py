@@ -1,32 +1,30 @@
 """Test PySetl main constructor."""
-from datetime import datetime, date
-from dataclasses import dataclass
 from tempfile import TemporaryDirectory
-from typing import Any
 
 import pytest
-from typedspark import DataSet, Schema, Column
 
 from pyspark import SparkConf
-from pyspark.sql import SparkSession, functions as F, Row
-from pyspark.sql.types import (
-  StringType, IntegerType, FloatType, TimestampType, DateType
-)
+from pyspark.sql import SparkSession, Row
+
+from typedspark import create_partially_filled_dataset
 
 from pysetl import PySetl
 from pysetl.enums import SaveMode
 from pysetl.config import CsvConfig, ParquetConfig
 from pysetl.config.config import Config
-from pysetl.storage.repository import SparkRepository, SparkRepositoryBuilder
+from pysetl.storage.repository import SparkRepositoryBuilder
 from pysetl.utils.exceptions import InvalidConfigException, BuilderException
-from pysetl.utils.mixins import HasSparkSession
-from pysetl.workflow import Delivery, Factory
+
+from tests.dummy_schemas import DSSchema, DUMMY_DATA, DS3Schema
+from tests.dummy_factories import RepositoryLoad, ProducerFactory, ConsumerFactory
 
 
 def test_pysetl_has_spark_session():
     """Test PySelt should have SparkSession."""
-    if SparkSession.getActiveSession():
-        SparkSession.getActiveSession().stop()
+    spark = SparkSession.getActiveSession()
+
+    if spark:
+        spark.stop()
 
     spark_conf = (
         SparkConf()
@@ -57,6 +55,7 @@ def test_pysetl_has_spark_session():
 
 def test_pysetl_sparkrepository():
     """Test if PySetl can create SparkRepository."""
+
     _dir = TemporaryDirectory()
 
     config = {
@@ -70,11 +69,7 @@ def test_pysetl_sparkrepository():
     }
 
     pysetl = PySetl.builder().set_config(config).getOrCreate()
-    ds = create_test_dataset(
-        pysetl.spark,
-        DSSchema,
-        [DSModel(1, "a", "a", 1), DSModel(2, "b", "b", 2)]
-    )
+    ds = create_partially_filled_dataset(pysetl.spark, DSSchema, DUMMY_DATA["DSSchema"])
 
     repo = pysetl.get_sparkrepository(DSSchema, "csv_config")
 
@@ -113,11 +108,7 @@ def test_pysetl_set_sparkrepository():
     assert pysetl.has_external_input("csv_config")
     assert not pysetl.has_external_input("bad_config")
 
-    ds = create_test_dataset(
-        pysetl.spark,
-        DSSchema,
-        [DSModel(1, "a", "A", 1), DSModel(2, "b", "B", 2)]
-    )
+    ds = create_partially_filled_dataset(pysetl.spark, DSSchema, DUMMY_DATA["DSSchema"])
     repo = pysetl.get_sparkrepository(DSSchema, "csv_config")
 
     assert repo
@@ -176,6 +167,7 @@ def test_pysetl_pipelines():
 
 def test_pysetl_sparkrepository_with_consumers():
     """Test PySetl differentiate between repositories by consumer list."""
+
     _dir_csv = TemporaryDirectory()
     _dir_parquet = TemporaryDirectory()
     config = {
@@ -249,8 +241,10 @@ def test_pysetl_set_repository():
 
 def test_pysetl_set_sparksession():
     """Test PySetl SparkSession can be configurated and passed."""
-    if SparkSession.getActiveSession():
-        SparkSession.getActiveSession().stop()
+    spark = SparkSession.getActiveSession()
+
+    if spark:
+        spark.stop()
 
     spark_config = (
         SparkConf()
@@ -258,7 +252,7 @@ def test_pysetl_set_sparksession():
         .setAppName("setl_test_app")
         .set("key", "value")
     )
-    session = SparkSession.builder.config(conf=spark_config).getOrCreate()
+    session = SparkSession.Builder().config(conf=spark_config).getOrCreate()
     pysetl = PySetl.builder().set_spark_session(session).getOrCreate()
 
     assert pysetl.spark.sparkContext.getConf().get("key") == "value"
@@ -267,8 +261,11 @@ def test_pysetl_set_sparksession():
 
 def test_pysetl_set_sparkconf():
     """Test PySetl SparkConf can be passed."""
-    if SparkSession.getActiveSession():
-        SparkSession.getActiveSession().stop()
+
+    spark = SparkSession.getActiveSession()
+
+    if spark:
+        spark.stop()
 
     spark_config = (
         SparkConf()
@@ -286,186 +283,15 @@ def test_pysetl_set_sparkconf():
 
 def test_pysetl_exceptions():
     """Throw InvalidConfigException if no config found."""
+
     with pytest.raises(BuilderException) as error:
         _ = PySetl.builder().get()
-    
+
     assert str(error.value) == "No PySetl object built"
 
     pysetl = PySetl.builder().getOrCreate()
 
     with pytest.raises(InvalidConfigException) as error:
-        pysetl.set_spark_repository_from_config(DSModel, "non_existent")
+        pysetl.set_spark_repository_from_config(DSSchema, "non_existent")
 
     assert str(error.value) == "No config found with key: non_existent"
-
-
-def create_test_dataset(
-        spark: SparkSession,
-        schema: type[Schema],
-        data: list[Any]) -> DataSet:
-    """Help to create DataSets."""
-    row_data = list(map(lambda _: Row(**_.__dict__), data))
-    dataframe = spark.createDataFrame(
-        row_data,
-        schema.get_structtype()
-    )
-    return DataSet[schema](dataframe)  # type: ignore
-
-
-@dataclass
-class DSModel:
-    """Class for testing purposes."""
-
-    partition1: int
-    partition2: str
-    clustering1: str
-    value: int
-
-
-class DSSchema(Schema):
-    """Class for testing purposes."""
-
-    partition1: Column[IntegerType]
-    partition2: Column[StringType]
-    clustering1: Column[StringType]
-    value: Column[IntegerType]
-
-
-@dataclass
-class DS3Model:
-    """Class for testing purposes."""
-
-    partition1: int
-    partition2: str
-    clustering1: str
-    value: int
-    value2: str
-
-
-class DS3Schema(Schema):
-    """Class for testing purposes."""
-
-    partition1: Column[IntegerType]
-    partition2: Column[StringType]
-    clustering1: Column[StringType]
-    value: Column[IntegerType]
-    value2: Column[StringType]
-
-
-@dataclass
-class DS2Model:
-    """Class for testing purposes."""
-
-    col1: str
-    col2: int
-    col3: float
-    col4: datetime
-    col5: date
-    col6: int
-
-
-class DS2Schema(Schema):
-    """Class for testing purposes."""
-
-    col1: Column[StringType]
-    col2: Column[IntegerType]
-    col3: Column[FloatType]
-    col4: Column[TimestampType]
-    col5: Column[DateType]
-    col6: Column[IntegerType]
-
-
-class RepositoryLoad(Factory[DataSet[DSSchema]]):
-    """Class for testing purposes."""
-
-    repo_delivery = Delivery[SparkRepository[DSSchema]](delivery_id="id")
-    repo: SparkRepository[DSSchema]
-
-    def read(self):
-        """Test Pysetl."""
-        self.repo = self.repo_delivery.get()
-
-        return self
-
-    def process(self):
-        """Test Pysetl."""
-        self.repo.load().show()
-
-        return self
-
-    def write(self):
-        """Test Pysetl."""
-        return self
-
-    def get(self):
-        """Test Pysetl."""
-        return self.repo.load()
-
-
-class ProducerFactory(Factory[DataSet[DSSchema]], HasSparkSession):
-    """Class for testing purposes."""
-
-    repo_delivery = Delivery[SparkRepository[DSSchema]]()
-    repo: SparkRepository[DSSchema]
-    output: DataSet[DSSchema]
-
-    def read(self):
-        """Test Pysetl."""
-        self.repo = self.repo_delivery.get()
-        self.output = create_test_dataset(
-            self.spark,
-            DSSchema,
-            [DSModel(1, "a", "A", 1), DSModel(2, "b", "B", 2)]
-        )
-        return self
-
-    def process(self):
-        """Test Pysetl."""
-        return self
-
-    def write(self):
-        """Test Pysetl."""
-        self.repo.save(self.output)
-
-        return self
-
-    def get(self):
-        """Test Pysetl."""
-        return self.output
-
-
-class ConsumerFactory(Factory[DataSet[DS3Schema]]):
-    """Class for testing purposes."""
-
-    input_delivery = Delivery[DataSet[DSSchema]]()
-    input: DataSet[DSSchema]
-
-    repo_delivery = Delivery[SparkRepository[DS3Schema]]()
-    repo: SparkRepository[DS3Schema]
-
-    output: DataSet[DS3Schema]
-
-    def read(self):
-        """Test Pysetl."""
-        self.repo = self.repo_delivery.get()
-        self.input = self.input_delivery.get()
-        return self
-
-    def process(self):
-        """Test Pysetl."""
-        self.output = DataSet[DS3Schema](
-            self.input
-            .withColumn("value2", F.lit("haha"))
-        )
-
-        return self
-
-    def write(self):
-        """Test Pysetl."""
-        self.repo.save(self.output)
-
-        return self
-
-    def get(self):
-        """Test Pysetl."""
-        return self.output

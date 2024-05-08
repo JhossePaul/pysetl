@@ -1,14 +1,14 @@
 PySetl Context: Putting all together
 ============================================
 
-:class:`pysetl.PySetl` is a context to execute a Pipeline. It consists on a set
+:class:`pysetl.PySetl` is a context to execute a Pipeline. It consists of a set
 of Config, a set of SparkRepository and a SparkSession. The PySetl context links
 a configuration to its SparkRepository. It comes with a builder that will create
-a SparkSession if needed but you can pass a custom SparkSession if needed. Finally,
+a SparkSession if needed but you can pass a custom SparkSession. Finally,
 it can create a Pipeline and register the linked SparkRepository as deliverables.
 
 Here is an example including all the lingo learned in the previous sections. But
-of course you would prefer to see it in action in a full `structured example`_:
+of course, you would prefer to see it in action in a full `structured example`_:
 
 .. code-block:: python
 

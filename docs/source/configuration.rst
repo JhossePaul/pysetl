@@ -5,7 +5,7 @@ Configuration
 
 This configuration will be passed to a
 :class:`pysetl.storage.connector.Connector` and thus is relevant to avoid any
-unexpected behaviour restricting the available values passed to our arguments.
+unexpected behavior restricting the available values passed to our arguments.
 PySetl provides some default enums in :mod:`pysetl.enums` to achieve this.
 
 |config_diagram|
@@ -24,10 +24,10 @@ PySetl connector it is expected a :class:`pydantic.BaseModel`.
 
 :class:`pysetl.config.Config` comes with a handful of useful methods by default
 and a :class:`pysetl.config.ConfigBuilder`. You can pass any number of arguments
-regardless of the type but only those validated should by exposed in the
+regardless of the type but only those validated should be exposed in the
 :meth:`pysetl.config.Config.config`. If you are using pydantic to validate, this
-behaviour will depend on the model `configuration`_. In order to extend this
-class you have to implement three methods
+behavior will depend on the model `configuration`_. To extend this class you
+have to implement three methods
 
 - :meth:`pysetl.config.Config.config`: the whole validated configuration.
 - :meth:`pysetl.config.Config.reader_config`: a subset of configurations to

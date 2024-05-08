@@ -1,10 +1,13 @@
 """SparkRepository module."""
 from typing import TypeVar, get_args, _GenericAlias  # type: ignore
+
+
 from pyspark import StorageLevel
 from pyspark.sql import DataFrame
 from pyspark.sql.types import StructType
-from typing_extensions import Self
 from typedspark import DataSet, Schema
+from typing_extensions import Self
+
 from pysetl.utils import pretty
 from pysetl.utils.mixins import (
     HasLogger, HasSparkSession, CanPartition, CanDrop

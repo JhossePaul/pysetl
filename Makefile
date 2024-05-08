@@ -1,5 +1,5 @@
 .DEFAULT_GOAL: help
-.PHONY: coverage deps help lint push test
+.PHONY: coverage deps help lint push test tox
 
 default: help
 
