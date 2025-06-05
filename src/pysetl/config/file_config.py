@@ -41,7 +41,7 @@ class FileConfig(Config[FileConfigModel]):
             k: v
             for k, v
             in self.config
-            if k not in FileConfigModel.model_fields
+            if k not in FileConfigModel.model_fields.keys()
         }
 
     @property
@@ -51,5 +51,5 @@ class FileConfig(Config[FileConfigModel]):
             k: v
             for k, v
             in self.config
-            if k not in FileConfigModel.model_fields
+            if k not in FileConfigModel.model_fields.keys()
         }

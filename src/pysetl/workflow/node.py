@@ -54,7 +54,7 @@ class Node(IsIdentifiable, HasDiagram, HasLogger):
             stage=stage,
             expected_deliveries=factory.expected_deliveries(),
             output=NodeOutput(
-                delivery_type=factory.delivery_type(),
+                delivery_type=factory.delivery_type().tp,
                 consumer=factory.consumers,
                 delivery_id=factory.delivery_id,
                 final_output=final

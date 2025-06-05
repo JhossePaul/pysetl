@@ -12,7 +12,7 @@ T = TypeVar("T", bound=IsIdentifiable)
 class HasRegistry(Generic[T]):
     """Mixin class to give child a registry of unique objects."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._registry: dict[UUID, T] = {}
 
     def is_registered(self, item: T) -> bool:

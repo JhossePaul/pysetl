@@ -253,7 +253,7 @@ class PySetlBuilder(Builder[PySetl]):
         )
 
         session_builder: SparkSession.Builder = (
-            SparkSession.builder
+            SparkSession.Builder()
             .master(self.spark_master)
             .appName(spark_app_name)
             .config(conf=final_config)

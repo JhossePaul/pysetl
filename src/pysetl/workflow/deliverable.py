@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Generic, TypeVar, get_args, Union
 from typing_extensions import Self
 from pysetl.utils import pretty
 from pysetl.utils.mixins import IsIdentifiable
-from .external import External
+from pysetl.workflow.external import External
+from pysetl.workflow.delivery_type import DeliveryType
 
 
 if TYPE_CHECKING:
@@ -35,12 +36,12 @@ class Deliverable(Generic[T], IsIdentifiable):
         IsIdentifiable.__init__(self)
 
     @property
-    def payload_type(self: Self) -> type:
+    def payload_type(self: Self) -> DeliveryType:
         """Returns Deliverable payload type."""
         original_class = getattr(self, "__orig_class__")
-        (contained_type, *_) = get_args(original_class)
+        contained_type, *_ = get_args(original_class)
 
-        return contained_type
+        return DeliveryType(contained_type)
 
     def same_deliverable(self: Self, other: Deliverable) -> bool:
         """Compare two deliverables."""
@@ -57,7 +58,7 @@ class Deliverable(Generic[T], IsIdentifiable):
         """Pretty print for a deliverable."""
         consumers_string = ", ".join([pretty(x) for x in self.consumers])
         producer_str = pretty(self.producer)
-        payload_type_str = pretty(self.payload_type)
+        payload_type_str = pretty(self.payload_type.tp)
 
         return dedent(f"""
         Deliverable: {payload_type_str}
@@ -67,20 +68,23 @@ class Deliverable(Generic[T], IsIdentifiable):
 
     def __repr__(self: Self) -> str:
         """Customize repr method."""
-        payload_type_str = pretty(self.payload_type)
+        payload_type_str = pretty(self.payload_type.tp)
 
         return f"Deliverable[{payload_type_str}]"
 
     def has_same_payload_type(self: Self, that: Deliverable) -> bool:
         """Compare types bewteen deliverable payloads."""
-        return self.payload_type is that.payload_type
+        return self.payload_type == that.payload_type
 
     def has_same_payload_type_name(self: Self, name: str) -> bool:
         """Compare types bewteen deliverable payloads."""
-        return pretty(self.payload_type) == name
+        return pretty(self.payload_type.tp) == name
 
     def is_payload_type(self: Self, __payload_type: type) -> bool:
         """Check payload type of Deliverable."""
+        print("self", self.payload_type, type(self.payload_type))
+        print("other", __payload_type, type(__payload_type))
+
         return self.payload_type == __payload_type
 
     def set_producer(self: Self, producer: type) -> Self:

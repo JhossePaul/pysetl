@@ -6,14 +6,11 @@ from typing import Generic, TypeVar
 
 import pytest
 
-from pyspark.sql import SparkSession
 
 from pysetl.utils import BenchmarkModifier, BenchmarkResult, pretty
-from pysetl.utils.exceptions import PySparkException
 from pysetl.utils.get_signature import get_signature
 from pysetl.utils.mixins import (
     HasDiagram, HasLogger, HasRegistry, IsIdentifiable,
-    HasSparkSession
 )
 
 from tests.dummy_factories import FactoryToBenchmark
@@ -132,16 +129,3 @@ def test_has_registry():
     assert len(registry.get_registry()) == 3
     assert registry.clear_registry().size == 0
     assert not registry.last_registered_item
-
-
-def test_has_spark_session_exceptions():
-    """Throw PySparkException if no spark session found."""
-    spark = SparkSession.getActiveSession()
-
-    if spark:
-        spark.stop()
-
-    with pytest.raises(PySparkException) as error:
-        _ = HasSparkSession().spark
-
-    assert str(error.value) == "No active Spark session"

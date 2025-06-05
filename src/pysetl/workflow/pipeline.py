@@ -103,7 +103,7 @@ class Pipeline(
         """Retrive deliverables set directly on pipeline."""
         consumer_deliverables = {
             ExpectedDeliverable(
-                deliverable_type=pretty(deliverable.payload_type),
+                deliverable_type=pretty(deliverable.payload_type.tp),
                 delivery_id=deliverable.delivery_id,
                 producer=pretty(deliverable.producer),
                 consumer=pretty(consumer)
@@ -116,7 +116,7 @@ class Pipeline(
 
         producer_deliverables = {
             ExpectedDeliverable(
-                deliverable_type=pretty(deliverable.payload_type),
+                deliverable_type=pretty(deliverable.payload_type.tp),
                 delivery_id=deliverable.delivery_id,
                 producer=pretty(deliverable.producer),
                 consumer=None
@@ -146,7 +146,7 @@ class Pipeline(
         }
         producer_deliverables = {
             ExpectedDeliverable(
-                deliverable_type=pretty(factory.delivery_type()),
+                deliverable_type=pretty(factory.delivery_type().tp),
                 delivery_id=factory.delivery_id,
                 producer=pretty(type(factory)),
                 consumer=None
