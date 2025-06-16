@@ -1,4 +1,7 @@
-"""Connectors module."""
+"""
+The pysetl.connector package. Provides connectors for various data sources and
+formats.
+"""
 from .connector import Connector
 from .csv_connector import CsvConnector
 from .file_connector import FileConnector

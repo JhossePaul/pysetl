@@ -1,4 +1,7 @@
-"""Repository module."""
+"""
+Defines the abstract base class for repositories in the
+pysetl.storage.repository package.
+"""
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 from typedspark import DataSet, Schema

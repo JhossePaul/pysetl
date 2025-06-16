@@ -1,6 +1,8 @@
-"""SparkRepository module."""
+"""
+Provides the SparkRepository, a high-level, type-safe data access layer using a
+pysetl.connector.
+"""
 from typing import TypeVar, get_args, _GenericAlias  # type: ignore
-
 
 from pyspark import StorageLevel
 from pyspark.sql import DataFrame

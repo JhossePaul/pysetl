@@ -7,11 +7,13 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
 import sys
+from datetime import date
 sys.path.insert(0, os.path.abspath('../../src/'))
 
 
+current_year = date.today().year
 project = 'PySetl'
-copyright = '2023, Paul Marquez'
+copyright = f'{current_year}, Paul Marquez'
 author = 'Paul Marquez'
 
 # -- General configuration ---------------------------------------------------
@@ -33,6 +35,14 @@ exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_logo = "_static/logo_pysetl.png"
+html_theme_options = {
+    'logo_only': True,
+    'display_version': False,
+}
+html_css_files = [
+    'css/style.css',
+]
 
 # -- Extensions configuration ------------------------------------------------
 intersphinx_mapping = {
