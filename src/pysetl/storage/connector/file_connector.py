@@ -1,4 +1,7 @@
-"""Generic file connector module."""
+"""
+Provides the FileConnector for handling operations on various file-based data
+sources within the pysetl.connector package.
+"""
 from urllib.parse import urlparse, ParseResult
 from pathlib import Path
 from typing_extensions import Self

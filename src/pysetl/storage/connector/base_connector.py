@@ -1,4 +1,7 @@
-"""Abstract connector module."""
+"""
+Defines the abstract base class for all connectors in the pysetl.connector
+package.
+"""
 from abc import ABCMeta, abstractmethod
 from pyspark.sql import DataFrame
 from typing_extensions import Self

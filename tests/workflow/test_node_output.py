@@ -4,7 +4,10 @@ from typing import TypeVar, Generic
 from pyspark.sql.types import StringType, IntegerType
 from pydantic import BaseModel
 from typedspark import Schema, DataSet, Column
+import pytest
+
 from pysetl.workflow.node_output import NodeOutput
+from pysetl.utils.exceptions import BasePySetlException
 
 
 T = TypeVar("T")
@@ -71,6 +74,7 @@ def test_node_output():
     output_generic.to_diagram()
 
     assert output_base.delivery_type is int
+    assert repr(output_base.wrapped_delivery_type) == "<class 'int'>"
     assert output_base.delivery_id == "base"
     assert not output_base.final_output
     assert output_base.external
@@ -85,9 +89,22 @@ def test_node_output():
     assert output_dataclass.get_fields() == ["    >name: str", "    >age: int"]
     assert issubclass(output_pydantic.delivery_type, BaseModel)
     assert output_pydantic.get_fields() == ["    >name: str", "    >age: int"]
-    assert output_dataset.delivery_type is DataSet[CitizenSchema]
+    assert output_dataset.wrapped_delivery_type == DataSet[CitizenSchema]
     assert output_dataset.get_fields() == [
         "    >name: string",
         "    >age: int"
     ]
     assert ">content: str" in output_generic.to_diagram()
+
+def test_node_output_exceptions():
+    """Test NodeOutput exceptions."""
+    output_generic = NodeOutput(
+        delivery_type=DataSet,
+        consumer=set(),
+        delivery_id="error"
+    )
+
+    with pytest.raises(BasePySetlException) as error:
+        output_generic.get_fields()
+
+    assert "DataSet has no schema." == str(error.value)

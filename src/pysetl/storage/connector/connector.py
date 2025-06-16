@@ -1,4 +1,7 @@
-"""Connector Mixin Module."""
+"""
+Defines the abstract Connector class, integrating Spark and logging, for the
+pysetl.connector package.
+"""
 from abc import ABCMeta
 from pysetl.utils.mixins import HasSparkSession, HasLogger
 from pysetl.config.config import BaseConfigModel

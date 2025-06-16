@@ -1,6 +1,8 @@
-"""SparkRepository module."""
+"""
+Provides the SparkRepository, a high-level, type-safe data access layer using a
+pysetl.connector.
+"""
 from typing import TypeVar, get_args, _GenericAlias  # type: ignore
-
 
 from pyspark import StorageLevel
 from pyspark.sql import DataFrame
@@ -80,7 +82,7 @@ class SparkRepository(BaseRepository[T], HasLogger, HasSparkSession):
 
     def load(self: Self) -> DataSet[T]:
         """Read all data from data storage."""
-        [__type, *_] = get_args(self.type_annotation)
+        __type, *_ = get_args(self.type_annotation)
 
         if self.__cache and (self.__flush or not self.__cached.is_cached):
             self.__cached = self.connector.read().persist(self.__storage_level)

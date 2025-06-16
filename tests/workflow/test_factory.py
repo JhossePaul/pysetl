@@ -73,8 +73,6 @@ class SecondFactory(Factory[DataSet[Citizen]]):
             if isinstance(c, CitizenModel)
         ]
 
-        print(__data)
-
         return self
 
     def write(self: Self) -> Self:
@@ -91,12 +89,11 @@ def test_factory():
     first_factory = FirstFactory().read().process().write()
     second_factory = SecondFactory()
 
-    _t1, _ = first_factory.not_aliased_delivery_type()
-    _t2, _st2 = second_factory.not_aliased_delivery_type()
+    _t1 = first_factory.delivery_type()
+    _t2 = second_factory.delivery_type()
 
     assert _t1 == CitizenModel
-    assert _t2 == DataSet
-    assert _st2 == Citizen
+    assert _t2 == DataSet[Citizen]
     assert first_factory.uuid
     assert str(first_factory) == "FirstFactory -> CitizenModel"
     assert str(second_factory) == "SecondFactory -> DataSet[Citizen]"

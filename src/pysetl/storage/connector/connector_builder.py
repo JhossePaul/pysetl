@@ -1,4 +1,7 @@
-"""Connector builder module."""
+"""
+Provides the ConnectorBuilder for constructing specific connector instances
+within the pysetl.connector package.
+"""
 from typing import Optional
 from typing_extensions import Self
 from pysetl.utils import Builder

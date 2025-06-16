@@ -1,16 +1,26 @@
+"""
+Factory takes multiple deliveries and processes data.
+"""
 from typedspark import DataSet
 from typing_extensions import Self
-from pysetl.workflow import Factory, Delivery
+from etl.factories import CitiesFactory, CitizensFactory
 from etl.schemas import Citizen, City, CitizenCountry
-from .cities_factory import CitiesFactory
+from pysetl.workflow import Factory, Delivery
 
 
 class CitizenCountryFactory(Factory[DataSet[CitizenCountry]]):
-    citizens_delivery = Delivery[DataSet[Citizen]]()
+    """
+    CitizenCountryFactory produces a DataSet[CitizenCountry].
+
+    It expects two ambiguous deliveries. We provide the producer to resolve the
+    dependencies.
+    """
     citizens: DataSet[Citizen]
-    cities_delivery = Delivery[DataSet[City]]()
     cities: DataSet[City]
     output: DataSet[CitizenCountry]
+
+    citizens_delivery = Delivery[DataSet[Citizen]](producer=CitizensFactory)
+    cities_delivery = Delivery[DataSet[City]](producer=CitiesFactory)
 
     def read(self) -> Self:
         self.citizens = self.citizens_delivery.get()
