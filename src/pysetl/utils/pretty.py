@@ -23,25 +23,27 @@ def _(type_name: str) -> str:
 @pretty.register
 def _(alias: _GenericAlias):
     origin = get_origin(alias)
-    args = get_args(alias)
-    arg = None if len(args) == 0 else args[0]
-
     origin_str = pretty(origin)
-    arg_str = f"[{pretty(arg)}]" if arg else ""
+    args = get_args(alias)
+    args_str = ", ".join(pretty(a) for a in args)
+    return f"{origin_str}[{args_str}]"
 
-    return f"{origin_str}{arg_str}"
+
+@pretty.register
+def _(tpe: GenericAlias) -> str:  # pragma: py-gt-310
+    origin = get_origin(tpe)
+    args = get_args(tpe)
+    origin_str = pretty(origin)
+    args_str = ", ".join(pretty(a) for a in args)
+    return f"{origin_str}[{args_str}]"
 
 
 @pretty.register
 def _(tpe: type) -> str:
-    if isinstance(tpe, GenericAlias):
+    if isinstance(tpe, GenericAlias):  # pragma: py-gt-310
         origin = get_origin(tpe)
         args = get_args(tpe)
-        [arg, *_] = args
-
         origin_str = pretty(origin)
-        arg_str = f"[{pretty(arg)}]"
-
-        return f"{origin_str}{arg_str}"
-
+        args_str = ", ".join(pretty(a) for a in args)
+        return f"{origin_str}[{args_str}]"
     return tpe.__name__
