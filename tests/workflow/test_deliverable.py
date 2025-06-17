@@ -36,7 +36,7 @@ def test_deliverable():
         payload="string"
     ).set_delivery_id("a simple string")
 
-    assert deliverable.payload_type is Citizen
+    assert deliverable.payload_type == Citizen
     assert deliverable.same_deliverable(deliverable2)
     assert not deliverable.same_deliverable(deliverable3)
     assert deliverable.has_same_payload_type(deliverable2)

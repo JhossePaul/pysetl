@@ -86,7 +86,7 @@ def test_stage_exceptions():
 
 def test_no_spark_stage():
     """Simple stage with no spark session."""
-    spark = SparkSession.builder.getOrCreate()
+    spark = SparkSession.Builder().getOrCreate()
     spark.stop()
 
     factory = IntFactory()
@@ -99,7 +99,7 @@ def test_no_spark_stage():
 
 def test_stage():
     """Test Stage class."""
-    _ = SparkSession.builder.getOrCreate()
+    _ = SparkSession.Builder().getOrCreate()
 
     with TemporaryDirectory() as _dir:
         config = CsvConfig(
@@ -128,7 +128,7 @@ def test_stage():
 
     stage.run()
     assert fs.get_file_info(config.config.path).type == FileType.NotFound
-    assert stage.deliverable[0].payload_type is DataSet[Persisted]
+    assert stage.deliverable[0].payload_type == DataSet[Persisted]
 
     stage.writable(True).run()
     assert fs.get_file_info(config.config.path).type == FileType.Directory

@@ -1,4 +1,7 @@
-"""ParquetConnector module."""
+"""
+Provides the ParquetConnector for reading and writing Parquet files within the
+pysetl.connector package.
+"""
 from typing import Union
 from typing_extensions import Self
 from pysetl.config import ParquetConfig, FileConfig

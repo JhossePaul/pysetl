@@ -1,4 +1,7 @@
-"""SparkRepositoryBuilder module."""
+"""
+Provides the SparkRepositoryBuilder for constructing SparkRepository instances
+within the pysetl.storage.repository package.
+"""
 from typing import TypeVar, Generic, Optional, get_args
 from typing_extensions import Self
 from typedspark import Schema

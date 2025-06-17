@@ -1,6 +1,5 @@
 """HasSparkSession module."""
 from pyspark.sql import SparkSession
-from pysetl.utils.exceptions import PySparkException
 
 
 class HasSparkSession:
@@ -9,9 +8,4 @@ class HasSparkSession:
     @property
     def spark(self):
         """Returns current spark session."""
-        spark = SparkSession.getActiveSession()
-
-        if not spark:
-            raise PySparkException("No active Spark session")
-
-        return spark
+        return SparkSession.Builder().getOrCreate()

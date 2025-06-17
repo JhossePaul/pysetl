@@ -38,12 +38,14 @@ def test_sparkrepository(dataframe, parquet_config):
     # Write dataframe
     sparkrepository.save(dataset)
     output_type = fs.get_file_info(parquet_config.config.path).type
+
     assert output_type == FileType.Directory
 
     # Read dataframe
     data_from_fs = sparkrepository.load()
 
-    assert getattr(data_from_fs, "__orig_class__") == DataSet[DummyData]
+    assert isinstance(data_from_fs, DataSet)
+    assert data_from_fs.typedspark_schema is DummyData
 
     # Compare with original dataset
     assert dataset.exceptAll(data_from_fs).count() == 0
@@ -69,12 +71,14 @@ def test_sparkrepository_cached(dataframe, parquet_config):
     dataset = DataSet[DummyData](dataframe)
     sparkrepository.save(dataset)
     output_type = fs.get_file_info(parquet_config.config.path).type
+
     assert output_type == FileType.Directory
 
     # Read dataframe
     data_from_fs = sparkrepository.load()
 
-    assert data_from_fs.__orig_class__ == DataSet[DummyData]
+    assert isinstance(data_from_fs, DataSet)
+    assert data_from_fs.typedspark_schema is DummyData
 
     # Second load should get cached data
     data_from_fs_cached = sparkrepository.load()
@@ -111,6 +115,7 @@ def test_sparkrepository_partitioned(dataframe, parquet_config):
     # Validate partitions
     partitions = sparkrepository.list_partitions()
     output_type = fs.get_file_info(parquet_config.config.path).type
+
     assert output_type == FileType.Directory
 
     assert all([
@@ -127,7 +132,8 @@ def test_sparkrepository_partitioned(dataframe, parquet_config):
     # Read dataframe
     data_from_fs = sparkrepository.load_partitions(partitions)
 
-    assert getattr(data_from_fs, "__orig_class__") == DataSet[DummyData]
+    assert isinstance(data_from_fs, DataSet)
+    assert data_from_fs.typedspark_schema is DummyData
 
     # Compare with original dataframe
     assert (

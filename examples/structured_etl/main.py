@@ -1,14 +1,17 @@
+"""
+This is a full example of an ETL using PySetl
+"""
 from pyspark.sql import SparkSession
 from typedspark import DataSet, create_partially_filled_dataset
-from pysetl import PySetl
-from pysetl.workflow import Deliverable, Stage
 from etl.schemas import Citizen, City
 from etl.settings import SETTINGS
 from etl.factories import CitizensFactory, CitiesFactory, CitizenCountryFactory
 
+from pysetl import PySetl
+from pysetl.workflow import Deliverable, Stage
+
 
 spark = SparkSession.builder.getOrCreate()
-
 
 citizens = create_partially_filled_dataset(
     spark,

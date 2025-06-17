@@ -1,4 +1,7 @@
-"""CsvConnector module."""
+"""
+Provides the CsvConnector for reading and writing CSV files within the
+pysetl.connector package.
+"""
 from typing import Union
 from typing_extensions import Self
 from pysetl.config import CsvConfig, FileConfig

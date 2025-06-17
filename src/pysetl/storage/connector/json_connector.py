@@ -1,4 +1,7 @@
-"""JsonConnector module."""
+"""
+Provides the JsonConnector for reading and writing JSON files within the
+pysetl.connector package.
+"""
 from typing import Union
 from typing_extensions import Self
 from pysetl.config import JsonConfig, FileConfig

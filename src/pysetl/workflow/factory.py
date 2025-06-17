@@ -3,13 +3,14 @@ from __future__ import annotations
 from abc import abstractmethod, ABC
 from inspect import getmembers
 from typing import TypeVar, Generic, Optional, get_args, get_origin
-from typing_extensions import Self
-from pysetl.utils import pretty
+from typing_extensions import Self, get_original_bases
 from pysetl.utils.mixins import (
     HasLogger, IsIdentifiable, IsWritable
 )
 from pysetl.workflow.deliverable import Deliverable
 from pysetl.workflow.delivery import Delivery
+from pysetl.workflow.delivery_type import DeliveryType
+from pysetl.utils.pretty import pretty
 
 
 T = TypeVar("T")
@@ -37,35 +38,17 @@ class Factory(
         """Initialize UUID from IsIdentifiable."""
         IsIdentifiable.__init__(self)  # pragma: no cover
 
-    def not_aliased_delivery_type(
-            self: Self
-            ) -> tuple[Optional[type], Optional[type]]:
-        """
-        Not aliased delivery type.
-
-        Delivery type can be a _GenericAlias. This method always returns the
-        expected type and the type argument if exists.
-        """
-        if isinstance(self.delivery_type(), type):
-            return self.delivery_type(), None
-
-        origin = get_origin(self.delivery_type())
-        args = get_args(self.delivery_type())
-        arg = None if len(args) == 0 else args[0]
-
-        return origin, arg
-
     def __str__(self: Self) -> str:
         """Customize str method."""
         self_name = type(self).__name__
-        delivery_type_str = pretty(self.delivery_type())
+        delivery_type_str = pretty(self.delivery_type().tp)
 
         return f"{self_name} -> {delivery_type_str}"
 
     def __repr__(self: Self) -> str:
         """Customize repr method."""
         self_name = type(self).__name__
-        delivery_type_str = pretty(self.delivery_type())
+        delivery_type_str = pretty(self.delivery_type().tp)
 
         return f"{self_name} will produce a {delivery_type_str}"
 
@@ -86,9 +69,9 @@ class Factory(
         """Get returns output data to recicycle in other factories."""
 
     @classmethod
-    def delivery_type(cls) -> type:
+    def delivery_type(cls) -> DeliveryType:
         """Return delivery type."""
-        bases = getattr(cls, "__orig_bases__")
+        bases = get_original_bases(cls)
         base_factories = [
             base
             for base
@@ -96,13 +79,13 @@ class Factory(
             if get_origin(base) is Factory
         ]
 
-        if len(base_factories) == 0:
+        if not base_factories:
             raise NotImplementedError("Factory has no type parameter")
 
-        base_factory = base_factories[0] if len(base_factories) != 0 else None
-        factory_args = get_args(base_factory)
+        base_factory, *_ = base_factories
+        factory_delivery_type, *_ = get_args(base_factory)
 
-        return factory_args[0]
+        return DeliveryType(factory_delivery_type)
 
     @property
     def deliverable(self: Self) -> Deliverable:

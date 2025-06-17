@@ -1,6 +1,5 @@
 """NodeOutput module."""
 from __future__ import annotations
-from importlib import import_module
 from dataclasses import dataclass, is_dataclass, fields
 from typing import (  # type: ignore
     TYPE_CHECKING, get_origin, get_args, TypeVar,
@@ -10,7 +9,9 @@ from typing_extensions import Self
 from typedspark import DataSet
 from pydantic import BaseModel
 from pysetl.utils.mixins import HasDiagram
-from pysetl.utils import pretty
+from pysetl.utils.pretty import pretty
+from pysetl.utils.exceptions import BasePySetlException
+from pysetl.workflow.delivery_type import DeliveryType
 
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -28,6 +29,11 @@ class NodeOutput(HasDiagram):
     external: bool = False
 
     @property
+    def wrapped_delivery_type(self) -> DeliveryType:
+        """Wraps delivery type for easy comparison."""
+        return DeliveryType(self.delivery_type)
+
+    @property
     def diagram_id(self) -> str:
         """Digram identifier."""
         final_suffix = "Final" if self.final_output else ""
@@ -41,22 +47,11 @@ class NodeOutput(HasDiagram):
 
     def get_fields(self: Self) -> list[str]:
         """Get arguments from payload signature."""
-        def _pretty(tpe):
+        def _pretty(arg, tpe):
             return pretty(arg) if isinstance(tpe, TypeVar) else pretty(tpe)
 
         origin = get_origin(self.delivery_type)
         args = get_args(self.delivery_type)
-
-        if origin is DataSet and len(args) == 1:
-            (arg,) = args
-            module = import_module(arg.__module__)
-            real_targ = getattr(module, arg.__name__)
-
-            return [
-                f"    >{field.name}: {field.dataType.simpleString()}"
-                for field
-                in real_targ.get_structtype().fields
-            ]
 
         if (
             isinstance(self.delivery_type, _GenericAlias) and
@@ -65,9 +60,21 @@ class NodeOutput(HasDiagram):
             (arg,) = args
 
             return [
-                f"    >{field.name}: {_pretty(field.type)}"
+                f"    >{field.name}: {_pretty(arg, field.type)}"
                 for field
                 in fields(origin)
+            ]
+
+        if issubclass(self.delivery_type, DataSet):
+            schema = getattr(self.delivery_type, "_schema_annotations", None)
+
+            if not schema:
+                raise BasePySetlException("DataSet has no schema.")
+
+            return [
+                f"    >{field.name}: {field.dataType.simpleString()}"
+                for field
+                in schema.get_structtype().fields
             ]
 
         if is_dataclass(self.delivery_type):
