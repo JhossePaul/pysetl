@@ -22,7 +22,7 @@ Home = "https://github.com/JhossePaul/pysetl"
 Source = "https://github.com/JhossePaul/pysetl"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<4.0"
+python = ">=3.10,<3.13"
 typedspark = "^1.5.3"
 pyspark = {version = "^3.4", extras = ["pyspark"]}
 
