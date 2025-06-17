@@ -6,7 +6,6 @@ from typing import Generic, TypeVar
 
 import pytest
 
-
 from pysetl.utils import BenchmarkModifier, BenchmarkResult, pretty
 from pysetl.utils.get_signature import get_signature
 from pysetl.utils.mixins import (
@@ -68,6 +67,8 @@ def test_pretty():
     assert pretty(None) == ""
     assert pretty(type(GenericTest[int])) == "_GenericAlias"
     assert pretty(GenericTest[int]) == "GenericTest[int]"
+    assert pretty(GenericTest) == "GenericTest"
+    assert pretty(list) == "list"
     assert pretty(list[int]) == "list[int]"
     assert pretty("module.type") == "type"
 
