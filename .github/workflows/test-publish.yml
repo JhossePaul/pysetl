@@ -22,4 +22,4 @@ jobs:
         env:
           HATCH_INDEX_USER: __token__
           HATCH_INDEX_AUTH: ${{ secrets.TESTPYPI_TOKEN }}
-        run: hatch publish --repository testpypi
+        run: hatch publish --repo test
