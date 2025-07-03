@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'Nasalization';
+  src: url('../fonts/nasalization.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Apply custom font to the site name in the navbar */
+.md-header__title {
+  font-family: 'Nasalization', sans-serif !important;
+}
+
+/* Also apply to the site name in the sidebar */
+.md-nav__title {
+  font-family: 'Nasalization', sans-serif !important;
+}

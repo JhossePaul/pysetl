@@ -1,25 +1,38 @@
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
   - repo: local
     hooks:
+      - id: mypy
+        name: Type checking
+        entry: hatch run type:type
+        language: system
+        types: [python]
+        pass_filenames: false
 
-    - id: lint
-      name: Linting
-      entry: make
-      args: [lint]
-      language: system
+      - id: test
+        name: Run tests
+        entry: hatch run test:test
+        language: system
+        types: [python]
+        pass_filenames: false
 
-    - id: coverage
-      name: Test & Coverage
-      entry: make
-      args: [coverage]
-      language: system
-      types: [python]
-      pass_filenames: false
-
-    - id: tox
-      name: Linting, test and coverage over supported Python versions
-      entry: make
-      args: [tox]
-      language: system
-      types: [python]
-      pass_filenames: false
+      - id: docs
+        name: Build documentation
+        entry: hatch run docs:docs
+        language: system
+        pass_filenames: false

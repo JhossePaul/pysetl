@@ -12,11 +12,10 @@ build:
     python: "3.10"
   jobs:
     post_create_environment:
-      # Install poetry
-      # https://python-poetry.org/docs/#installing-manually
-      - pip install poetry
-      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
+      - pip install --upgrade hatch
+      - hatch env create docs
+      - hatch run docs:docs
 
-# Build documentation in the "docs/" directory with Sphinx
-sphinx:
-   configuration: 'docs/source/conf.py'
+# Build documentation in the "docs/" directory with MkDocs
+mkdocs:
+  configuration: mkdocs.yml
