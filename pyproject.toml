@@ -49,7 +49,9 @@ docs = [
     "mkdocs-glightbox",
     "mkdocs-include-markdown-plugin",
     "pymdown-extensions",
-    "mkdocs-mermaid2-plugin"
+]
+pyspark = [
+    "pyspark[sql]>=3.4,<4.0.0"
 ]
 
 [tool.hatch.version]
@@ -73,8 +75,7 @@ dependencies = [
     "coverage>=7.3.2,<8.0.0",
     "pytest>=8.3.5,<9.0.0",
     "pre-commit>=4.2.0,<5.0.0",
-    "coverage-conditional-plugin>=0.9.0,<1.0.0",
-    "pyspark[sql]>=3.4,<4.0.0"
+    "coverage-conditional-plugin>=0.9.0,<1.0.0"
 ]
 
 [tool.hatch.envs.test.scripts]
@@ -109,7 +110,6 @@ dependencies = [
     "mkdocs-glightbox",
     "mkdocs-include-markdown-plugin",
     "pymdown-extensions",
-    "mkdocs-mermaid2-plugin"
 ]
 [tool.hatch.envs.docs.scripts]
 docs = "mkdocs build"
