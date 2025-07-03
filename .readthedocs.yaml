@@ -8,23 +8,12 @@ build:
   tools:
     python: "3.10"
 
-# This section tells Read the Docs to create a base Python environment.
-python:
-  install:
-    # 1. Install Hatch into the Read the Docs base environment.
-    - method: pip
-      packages:
-        - hatch
-
-# Use jobs to explicitly control the build process.
-jobs:
-  build:
-    - commands:
-        # Create the 'docs' environment using Hatch.
-        - hatch env create docs
-
-        # Run the docs:docs command to build the documentation.
-        - hatch run docs:docs
+  jobs:
+    post_create_environment:
+      - pip install hatch
+    build:
+      # Run the docs:docs command to build the documentation.
+      - hatch run docs:docs
 
 # Tell Read the Docs where your mkdocs.yml is for metadata.
 mkdocs:
