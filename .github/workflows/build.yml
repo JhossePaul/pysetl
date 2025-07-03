@@ -12,25 +12,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
+
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Install Hatch
       run: pip install --upgrade hatch
 
-    - name: Run Hatch test suite (lint, type, test, coverage)
-      run: hatch run test:all
+    - name: Run Hatch test suite
+      run: hatch run +py=${{ matrix.python-version }} test:all
 
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      with:
+        flags: ${{ matrix.python-version }}
+        file: ${{ env.COVERAGE_FILE }}

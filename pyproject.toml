@@ -76,9 +76,10 @@ dependencies = [
 
 [tool.hatch.envs.test.scripts]
 lint = "ruff check src/pysetl"
-format = "ruff format src/pysetl"
 type = "mypy src/pysetl"
-test = "coverage erase && coverage run -m pytest && coverage combine && coverage report -m && coverage lcov"
+test = "coverage erase && coverage run -m pytest"
+format = "ruff format src/pysetl"
+lcov = "coverage combine && coverage report -m && coverage lcov"
 all = "hatch run test:lint && hatch run test:type && hatch run test:test"
 
 [[tool.hatch.envs.test.matrix]]
@@ -86,9 +87,9 @@ python = ["3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.test.overrides]
 matrix.python.env-vars = [
-  { key = "COVERAGE_FILE", value = ".coverage.py310", if = ["3.10"] },
-  { key = "COVERAGE_FILE", value = ".coverage.py311", if = ["3.11"] },
-  { key = "COVERAGE_FILE", value = ".coverage.py312", if = ["3.12"] }
+  { key = "COVERAGE_FILE", value = ".coverage.py3.10", if = ["3.10"] },
+  { key = "COVERAGE_FILE", value = ".coverage.py3.11", if = ["3.11"] },
+  { key = "COVERAGE_FILE", value = ".coverage.py3.12", if = ["3.12"] }
 ]
 
 [tool.hatch.envs.docs]
