@@ -12,7 +12,7 @@ build:
     python: "3.10"
   install:
     - method: pip
-      path: docs
+      path: .
       extra_requirements:
         - docs
 
