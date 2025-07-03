@@ -26,18 +26,23 @@ theme:
     - navigation.footer
   palette:
     - scheme: default
-      primary: blue
-      accent: light blue
-    - scheme: slate
-      primary: blue
-      accent: light blue
+      primary: '#377AB1'
+      accent: '#FAD745'
+      background: '#BCDAFF'
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
+    - scheme: slate
+      primary: '#003366'
+      accent: '#EE8D24'
+      background: '#377AB1'
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
   font:
-    text: Roboto
-    code: Roboto Mono
-
+    text: Roboto, Arial, sans-serif
+    code: Fira Mono, monospace
+    # Headings will be overridden in custom.css to use Nasalization
   logo: assets/images/logo.png
   favicon: assets/images/favicon.ico
 
@@ -57,17 +62,16 @@ nav:
       - pysetl.utils: api/utils.md
   - Contributing: contributing.md
   - Code of Conduct: code-of-conduct.md
-  - Changelog: changelog.md
 
 plugins:
   - include-markdown
   - search
   - autorefs
-  - literate-nav
   - git-revision-date-localized
   - git-authors
   - minify
   - awesome-pages
+  - literate-nav
   - glightbox
   - mkdocstrings:
       handlers:

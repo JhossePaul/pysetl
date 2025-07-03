@@ -1,3 +1,21 @@
+/* PySetl Brand Theme Custom CSS */
+
+/* Make the logo fill the header height */
+.md-header__button.md-logo img {
+  height: 2rem !important;   /* Increase as needed, e.g., 3.5rem or 4rem */
+  max-height: 100% !important;
+  width: auto !important;
+  margin: 0 !important;
+  /* Optional: vertically center if needed */
+  display: block;
+  align-self: center;
+}
+
+body > header > nav > div.md-header__title {
+  margin-left: 0 !important;
+}
+
+/* Import Nasalization font */
 @font-face {
   font-family: 'Nasalization';
   src: url('../fonts/nasalization.otf') format('opentype');
@@ -5,12 +23,48 @@
   font-style: normal;
 }
 
-/* Apply custom font to the site name in the navbar */
-.md-header__title {
-  font-family: 'Nasalization', sans-serif !important;
+/* Use Nasalization for headings and logo */
+.md-header__title, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Nasalization', 'Roboto', Arial, sans-serif;
+  letter-spacing: 0.02em;
 }
 
-/* Also apply to the site name in the sidebar */
-.md-nav__title {
-  font-family: 'Nasalization', sans-serif !important;
+/* Gradient header background */
+.md-header, .md-tabs {
+  background: linear-gradient(90deg, #377AB1 0%, #003366 100%) !important;
+}
+
+/* Accent elements (buttons, links) */
+.md-button, .md-typeset a, .md-nav__link--active {
+  color: #003366 !important;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.md-button:hover, .md-typeset a:hover {
+  background: linear-gradient(90deg, #EE8D24 0%, #FAD745 100%) !important;
+}
+
+/* Table header styling */
+.md-typeset table th {
+  background: linear-gradient(90deg, #377AB1 0%, #003366 100%);
+  color: #FAD745;
+}
+
+/* Highlighted text */
+mark, .md-typeset mark {
+  background: linear-gradient(90deg, #FAD745 0%, #EE8D24 100%);
+  color: #003366;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+}
+
+/* Improve contrast for dark mode */
+[data-md-color-scheme="slate"] .md-header, [data-md-color-scheme="slate"] .md-tabs {
+  background: linear-gradient(90deg, #003366 0%, #377AB1 100%) !important;
+}
+
+[data-md-color-scheme="slate"] .md-button, [data-md-color-scheme="slate"] .md-typeset a, [data-md-color-scheme="slate"] .md-nav__link--active {
+  color: #EE8D24!important;
+  font-weight: bold;
 }
