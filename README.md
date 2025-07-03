@@ -1,15 +1,12 @@
-# PySetl - A PySpark ETL Framework
+<p align="center">
+  <img src="./docs/assets/images/logo_name.png" alt="PySetl" width="200" />
+</p>
 
-[![PyPI](https://img.shields.io/pypi/v/pysetl)](https://pypi.org/project/pysetl)
-[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![PySpark](https://img.shields.io/badge/PySpark-3.4%2B-orange.svg?logo=apache-spark&logoColor=white)](https://spark.apache.org/docs/latest/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
-[![Build Status](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml/badge.svg)](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml)
-[![Code Coverage](https://codecov.io/gh/JhossePaul/pysetl/branch/main/graph/badge.svg)](https://codecov.io/gh/JhossePaul/pysetl)
-[![Documentation Status](https://readthedocs.org/projects/pysetl/badge/?version=latest)](https://pysetl.readthedocs.io/en/latest/?badge=latest)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Type checked with mypy](https://img.shields.io/badge/mypy-checked-blue.svg)](http://mypy-lang.org/)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Build Status](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml/badge.svg)](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml) [![Code Coverage](https://codecov.io/gh/JhossePaul/pysetl/branch/main/graph/badge.svg)](https://codecov.io/gh/JhossePaul/pysetl) [![Documentation Status](https://readthedocs.org/projects/pysetl/badge/?version=latest)](https://pysetl.readthedocs.io/en/latest/?badge=latest)
+
+[![PyPI](https://img.shields.io/pypi/v/pysetl)](https://pypi.org/project/pysetl) [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/) [![PySpark](https://img.shields.io/badge/PySpark-3.4%2B-orange.svg?logo=apache-spark&logoColor=white)](https://spark.apache.org/docs/latest/) [![Downloads](https://img.shields.io/pypi/dm/pysetl.svg?color=blue&label=Installs&logo=pypi&logoColor=gold)](https://pypi.org/project/pysetl)
+
+[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://github.com/JhossePaul/pysetl/blob/main/LICENSE) [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff) [![Type checked with mypy](https://img.shields.io/badge/mypy-checked-blue.svg)](http://mypy-lang.org/) [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 ## Overview
 
@@ -124,7 +121,8 @@ for details.
 ## License
 
 This project is licensed under the Apache License 2.0 - see the
-[LICENSE](LICENSE) file for details.
+[LICENSE](https://github.com/JhossePaul/pysetl/blob/main/LICENSE) file for
+details.
 
 ## Acknowledgments
 

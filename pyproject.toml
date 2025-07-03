@@ -51,7 +51,6 @@ docs = [
     "pymdown-extensions",
     "mkdocs-mermaid2-plugin"
 ]
-fancy-readme = ["hatch-fancy-pypi-readme"]
 
 [tool.hatch.version]
 source = "vcs"

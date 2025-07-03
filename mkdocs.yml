@@ -79,13 +79,16 @@ plugins:
           options:
             show_source: true
             docstring_style: google
-  - mermaid2
   - section-index
 
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed
   - pymdownx.inlinehilite
   - pymdownx.snippets

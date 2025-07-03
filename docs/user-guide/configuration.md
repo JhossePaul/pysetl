@@ -15,6 +15,23 @@ PySetl provides a modern, type-safe, and extensible configuration system for all
 
 ## Core Components
 
+
+``` mermaid
+graph LR
+    A[BaseConfig]
+    B[Config]
+    C[FileConfig]
+    D[ParquetConfig]
+    E[CsvConfig]
+    F[JsonConfig]
+
+    A --> B
+    B --> C
+    C --> D
+    C --> E
+    C --> F
+```
+
 ### BaseConfigModel
 All config models inherit from `BaseConfigModel`, which enforces a `storage` type and provides a foundation for validation.
 

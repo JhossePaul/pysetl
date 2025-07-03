@@ -15,6 +15,22 @@ The PySetl Data Access Layer (DAL) provides a high-level, type-safe, and extensi
 
 ## Core Components
 
+``` mermaid
+graph LR
+    A[BaseConnector]
+    B[Connector]
+    C[FileConnector]
+    D[ParquetConnector]
+    E[CsvConnector]
+    F[JsonConnector]
+
+    A --> B
+    B --> C
+    C --> D
+    C --> E
+    C --> F
+```
+
 ### Repositories
 - **BaseRepository[T]:** Abstract base for all repositories. Defines the interface for loading and saving typed datasets.
 - **SparkRepository[T]:** Concrete implementation for Spark, providing read-after-write consistency, partition management, and integration with connectors.
