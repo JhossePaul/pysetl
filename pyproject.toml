@@ -1,6 +1,9 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
 [project]
 name = "pysetl"
-version = "0.0.0"
 description = "A PySpark ETL Framework"
 readme = "README.md"
 license = {text = "Apache-2.0"}
@@ -29,19 +32,32 @@ dependencies = [
     "pydantic>=2.4.2,<3.0.0",
     "typing-extensions>=4.13.0,<5.0.0"
 ]
+dynamic = ["version"]
 
 [project.optional-dependencies]
 docs = [
-    "sphinx-watch>=0.1.2,<1.0.0",
-    "sphinx-rtd-theme"
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "mkdocs-autorefs",
+    "mkdocs-section-index",
+    "mkdocs-literate-nav",
+    "mkdocs-git-revision-date-localized-plugin",
+    "mkdocs-git-authors-plugin",
+    "mkdocs-minify-plugin",
+    "mkdocs-awesome-pages-plugin",
+    "mkdocs-glightbox",
+    "mkdocs-include-markdown-plugin",
+    "pymdown-extensions",
+    "mkdocs-mermaid2-plugin"
 ]
-pyspark = ["pyspark[sql]"]
 fancy-readme = ["hatch-fancy-pypi-readme"]
 
 [tool.hatch.version]
 source = "vcs"
 
 [tool.hatch.envs.default]
+installer = "uv"
 dependencies = [
     "ruff>=0.4.4,<1.0.0",
     "mypy>=1.6.1,<2.0.0",
@@ -50,7 +66,6 @@ dependencies = [
     "pre-commit>=4.2.0,<5.0.0",
     "coverage-conditional-plugin>=0.9.0,<1.0.0"
 ]
-installer = "uv"
 
 [tool.hatch.envs.test]
 dependencies = [
@@ -65,6 +80,7 @@ dependencies = [
 
 [tool.hatch.envs.test.scripts]
 lint = "ruff check src/pysetl"
+format = "ruff format src/pysetl"
 type = "mypy src/pysetl"
 test = "coverage erase && coverage run -m pytest && coverage combine && coverage report -m && coverage lcov"
 all = "hatch run test:lint && hatch run test:type && hatch run test:test"
@@ -74,22 +90,10 @@ python = ["3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.test.overrides]
 matrix.python.env-vars = [
-  { key = "COVERAGE_FILE", value = ".coverage.py39", if = ["3.9"] },
   { key = "COVERAGE_FILE", value = ".coverage.py310", if = ["3.10"] },
   { key = "COVERAGE_FILE", value = ".coverage.py311", if = ["3.11"] },
   { key = "COVERAGE_FILE", value = ".coverage.py312", if = ["3.12"] }
 ]
-
-[tool.hatch.envs.lint]
-dependencies = ["ruff>=0.4.4,<1.0.0"]
-installer = "uv"
-[tool.hatch.envs.lint.scripts]
-lint = "ruff format src/pysetl"
-
-[tool.hatch.envs.type]
-dependencies = ["mypy"]
-[tool.hatch.envs.type.scripts]
-type = "mypy src/pysetl"
 
 [tool.hatch.envs.docs]
 dependencies = [
@@ -111,17 +115,6 @@ dependencies = [
 [tool.hatch.envs.docs.scripts]
 docs = "mkdocs build"
 
-[tool.hatch.envs.pre-commit]
-dependencies = ["pre-commit"]
-[tool.hatch.envs.pre-commit.scripts]
-precommit = "pre-commit run --all-files"
-
-[tool.hatch.envs.coverage]
-dependencies = ["coverage", "coverage-conditional-plugin"]
-[tool.hatch.envs.coverage.scripts]
-report = "coverage report -m"
-lcov = "coverage lcov"
-
 [tool.hatch.envs.security]
 dependencies = [
     "bandit>=1.7.0,<2.0.0",
@@ -134,30 +127,11 @@ safety = "safety check"
 audit = "pip-audit"
 all = "hatch run security:bandit && hatch run security:safety && hatch run security:audit"
 
-[tool.hatch.envs.all]
-dependencies = [
-    "ruff", "mypy", "coverage", "pytest", "pre-commit", "coverage-conditional-plugin", "sphinx", "sphinx-rtd-theme", "sphinx-watch", "bandit", "safety", "pip-audit"
-]
-
-[tool.hatch.envs.pyspark]
-dependencies = ["pyspark[sql]"]
-
-[tool.hatch.envs.tasks]
-test = "hatch run test:test"
-lint = "hatch run lint:lint"
-format = "hatch run lint:format"
-type = "hatch run type:type"
-docs = "hatch run docs:docs"
-precommit = "hatch run pre-commit:precommit"
-report = "hatch run coverage:report"
-lcov = "hatch run coverage:lcov"
-security = "hatch run security:all"
-
 [tool.hatch.build.targets.sdist]
-include = ["src/**", "README.rst", "LICENSE"]
+include = ["src/**", "README.md", "LICENSE"]
 
 [tool.hatch.build.targets.wheel]
-include = ["src/**", "README.rst", "LICENSE"]
+include = ["src/**", "README.md", "LICENSE"]
 
 [tool.coverage.run]
 concurrency=["multiprocessing"]

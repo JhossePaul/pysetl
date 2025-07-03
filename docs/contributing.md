@@ -9,11 +9,12 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 ## Development Tech Stack
 - **Project Management:** [Hatch](https://hatch.pypa.io/) (build, test, envs)
 - **Dependency Management:** [uv](https://github.com/astral-sh/uv) (fast installer, works with pyproject.toml)
-- **Linting:** [Ruff](https://docs.astral.sh/ruff/)
+- **Linting & Formatting:** [Ruff](https://docs.astral.sh/ruff/)
 - **Type Checking:** [mypy](https://mypy-lang.org/)
 - **Pre-commit Hooks:** [pre-commit](https://pre-commit.com/)
-- **Docs:** [MkDocs](https://www.mkdocs.org/) with Material theme and plugins
-- **Tests:** [pytest](https://docs.pytest.org/)
+- **Testing:** [pytest](https://docs.pytest.org/) with coverage
+- **Security:** [bandit](https://bandit.readthedocs.io/), [safety](https://pyup.io/safety/), [pip-audit](https://pypi.org/project/pip-audit/)
+- **Documentation:** [MkDocs](https://www.mkdocs.org/) with Material theme and plugins
 
 ---
 
@@ -45,16 +46,13 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
   git checkout -b my-feature
   ```
 - Make your changes and commit with clear messages.
-- Run tests, lint, and type checks locally before pushing:
+- Run all checks locally before pushing:
   ```bash
-  hatch run lint
-  hatch run type
-  hatch run test
+  hatch run test:all
   ```
 - If you update docs, check them locally:
   ```bash
-  hatch run docs:serve
-  # Visit http://localhost:8000
+  hatch run docs:docs
   ```
 - Push your branch and open a Pull Request (PR) on GitHub.
 - Ensure all CI checks pass and respond to review feedback.
@@ -62,13 +60,18 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 ---
 
 ## Code Style & Quality
+
 - Code must pass **Ruff** (PEP8 + best practices):
   ```bash
-  hatch run lint
+  hatch run test:lint
+  ```
+- Code formatting with **Ruff**:
+  ```bash
+  hatch run test:format
   ```
 - Type annotations are required and checked with **mypy**:
   ```bash
-  hatch run type
+  hatch run test:type
   ```
 - All new code should include tests (pytest) and docstrings.
 - Use pre-commit to auto-format and catch issues before commit.
@@ -76,22 +79,54 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 ---
 
 ## Documentation
+
 - User and API docs are in `docs/` (Markdown, MkDocs).
-- To build and preview docs locally:
+- To build docs locally:
   ```bash
-  hatch run docs:serve
+  hatch run docs:docs
   ```
 - For API docs, use Google-style docstrings.
 
 ---
 
 ## Tests
+
 - All tests are in the `tests/` directory.
-- Run the full suite with:
+- Run the full test suite with:
   ```bash
-  hatch run test
+  hatch run test:test
   ```
-- Coverage and security checks are available via Hatch tasks.
+- Run all checks (lint, type, test) with:
+  ```bash
+  hatch run test:all
+  ```
+- Security checks are available:
+  ```bash
+  hatch run security:all
+  ```
+
+---
+
+## Project Structure
+
+### Hatch Environments
+
+The project uses Hatch environments for different development tasks:
+
+- **`default`**: Basic development tools (ruff, mypy, pytest, pre-commit, coverage)
+- **`test`**: Testing environment with PySpark for integration tests
+- **`docs`**: Documentation building tools
+- **`security`**: Security scanning tools (bandit, safety, pip-audit)
+
+### Available Commands
+
+- **`hatch run test:all`**: Run all checks (lint, type, test)
+- **`hatch run test:test`**: Run tests only
+- **`hatch run test:lint`**: Lint code with Ruff
+- **`hatch run test:format`**: Format code with Ruff
+- **`hatch run test:type`**: Type checking with mypy
+- **`hatch run docs:docs`**: Build documentation
+- **`hatch run security:all`**: Run all security checks
 
 ---
 

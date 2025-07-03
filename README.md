@@ -13,7 +13,10 @@
 
 ## Overview
 
-PySetl is a framework to improve the readability and structure of PySpark ETL projects. It is designed to take advantage of Python's typing syntax to reduce runtime errors through linting tools and verifying types at runtime, effectively enhancing stability for large ETL pipelines.
+PySetl is a framework to improve the readability and structure of PySpark ETL
+projects. It is designed to take advantage of Python's typing syntax to reduce
+runtime errors through linting tools and verifying types at runtime, effectively
+enhancing stability for large ETL pipelines.
 
 To accomplish this, we provide some tools:
 
@@ -21,9 +24,12 @@ To accomplish this, we provide some tools:
 - **`pysetl.storage`**: Agnostic and extensible data sources connections.
 - **`pysetl.workflow`**: Pipeline management and dependency injection.
 
-PySetl is designed with Python typing syntax at its core. We strongly suggest using [typedspark](https://typedspark.readthedocs.io/en/latest/) and [pydantic](https://docs.pydantic.dev/latest/) for development.
+PySetl is designed with Python typing syntax at its core. We strongly suggest
+using [typedspark](https://typedspark.readthedocs.io/en/latest/) and
+[pydantic](https://docs.pydantic.dev/latest/) for development.
 
 ## Why use PySetl?
+
 - Model complex data pipelines.
 - Reduce risks at production with type-safe development.
 - Improve large project structure and readability.
@@ -67,11 +73,21 @@ PySetl is available on PyPI:
 pip install pysetl
 ```
 
-PySetl doesn't list `pyspark` as a dependency since most environments have their own Spark environment. Nevertheless, you can install pyspark with:
+### Optional Dependencies
 
-```bash
-pip install "pysetl[pyspark]"
-```
+PySetl provides several optional dependencies for different use cases:
+
+- **PySpark**: For local development (most production environments come with
+their own Spark distribution)
+
+  ```bash
+  pip install "pysetl[pyspark]"
+  ```
+
+- **Documentation**: For building documentation locally
+  ```bash
+  pip install "pysetl[docs]"
+  ```
 
 ## Documentation
 
@@ -89,14 +105,29 @@ hatch shell
 pre-commit install
 ```
 
+### Development Commands
+
+- **Run all checks**: `hatch run test:all`
+- **Run tests only**: `hatch run test:test`
+- **Lint code**: `hatch run test:lint`
+- **Format code**: `hatch run test:format`
+- **Type checking**: `hatch run test:type`
+- **Build documentation**: `hatch run docs:docs`
+- **Security checks**: `hatch run security:all`
+
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](https://pysetl.readthedocs.io/en/latest/contributing.html) for details.
+We welcome contributions! Please see our
+[Contributing Guide](https://pysetl.readthedocs.io/en/latest/contributing.html)
+for details.
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the
+[LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-PySetl is a port from [SETL](https://setl-framework.github.io/setl/). We want to fully recognize this package is heavily inspired by the work of the SETL team. We just adapted things to work in Python.
+PySetl is a port from [SETL](https://setl-framework.github.io/setl/). We want to
+fully recognize this package is heavily inspired by the work of the SETL team.
+We just adapted things to work in Python.
