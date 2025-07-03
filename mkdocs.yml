@@ -56,9 +56,9 @@ nav:
       - Workflow: user-guide/workflow.md
   - API Reference:
       - pysetl: api/pysetl.md
-      - pysetl.workflow: api/workflow_api.md
+      - pysetl.workflow: api/workflow.md
       - pysetl.storage: api/storage.md
-      - pysetl.config: api/config_api.md
+      - pysetl.config: api/config.md
       - pysetl.utils: api/utils.md
   - Contributing: contributing.md
   - Code of Conduct: code-of-conduct.md
