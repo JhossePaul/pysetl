@@ -141,3 +141,7 @@ spark-warehouse/
 
 .DS_Store
 poetry.lock
+
+
+.hatch/
+.ruff_cache/

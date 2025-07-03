@@ -1,0 +1,117 @@
+site_name: PySetl
+site_description: "A modern, type-driven PySpark ETL Framework"
+site_author: "Jhosse Paul Marquez Ruiz"
+repo_url: https://github.com/JhossePaul/pysetl
+repo_name: JhossePaul/pysetl
+copyright: >
+  Copyright &copy; 2023–present Paul Marquez.<br>
+  PySetl was ported and adapted from <a href="https://github.com/SETL-Framework/setl" target="_blank">SETL</a> &copy; 2020 SETL-Developers.
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
+    - content.action.view
+    - toc.integrate
+    - toc.follow
+    - header.autohide
+    - navigation.footer
+  palette:
+    - scheme: default
+      primary: '#377AB1'
+      accent: '#FAD745'
+      background: '#BCDAFF'
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: '#003366'
+      accent: '#EE8D24'
+      background: '#377AB1'
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  font:
+    text: Roboto, Arial, sans-serif
+    code: Fira Mono, monospace
+    # Headings will be overridden in custom.css to use Nasalization
+  logo: assets/images/logo.png
+  favicon: assets/images/favicon.ico
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - User Guide:
+      - Configuration: user-guide/configuration.md
+      - Data Access Layer: user-guide/dal.md
+      - PySetl Context: user-guide/pysetl_context.md
+      - Workflow: user-guide/workflow.md
+  - API Reference:
+      - pysetl: api/pysetl.md
+      - pysetl.workflow: api/workflow.md
+      - pysetl.storage: api/storage.md
+      - pysetl.config: api/config.md
+      - pysetl.utils: api/utils.md
+  - Contributing: contributing.md
+  - Code of Conduct: code-of-conduct.md
+
+plugins:
+  - include-markdown
+  - search
+  - autorefs
+  - git-revision-date-localized
+  - git-authors
+  - minify
+  - awesome-pages
+  - literate-nav
+  - glightbox
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            docstring_style: google
+  - section-index
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji
+  - pymdownx.magiclink
+  - pymdownx.tasklist
+  - pymdownx.tilde
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.caret
+  - pymdownx.smartsymbols
+  - pymdownx.highlight
+  - pymdownx.arithmatex
+  - toc:
+      permalink: true
+
+extra_css:
+  - assets/css/custom.css
+extra_javascript: []
+
+edit_uri: "edit/main/docs/"
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/JhossePaul/pysetl

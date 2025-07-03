@@ -11,10 +11,8 @@ from typedspark import DataSet, Schema
 from typing_extensions import Self
 
 from pysetl.utils import pretty
-from pysetl.utils.mixins import (
-    HasLogger, HasSparkSession, CanPartition, CanDrop
-)
-from pysetl.storage.connector import Connector
+from pysetl.utils.mixins import HasLogger, HasSparkSession, CanPartition, CanDrop
+from pysetl.storage.connector.base_connector import BaseConnector
 from pysetl.utils.exceptions import InvalidConnectorException
 from .base_repository import BaseRepository
 
@@ -32,20 +30,17 @@ class SparkRepository(BaseRepository[T], HasLogger, HasSparkSession):
 
     def __init__(
         self,
-        connector: Connector,
+        connector: BaseConnector,
         cache: bool = False,
         flush: bool = False,
-        storage_level: StorageLevel = StorageLevel.MEMORY_AND_DISK
+        storage_level: StorageLevel = StorageLevel.MEMORY_AND_DISK,
     ) -> None:
         """Initialize SparkRepository."""
         self.__connector = connector
         self.__cache: bool = cache
         self.__flush: bool = flush
         self.__storage_level: StorageLevel = storage_level
-        self.__cached: DataFrame = self.spark.createDataFrame(
-            [],
-            StructType()
-        )
+        self.__cached: DataFrame = self.spark.createDataFrame([], StructType())
 
     @property
     def type_annotation(self: Self) -> _GenericAlias:
@@ -76,7 +71,7 @@ class SparkRepository(BaseRepository[T], HasLogger, HasSparkSession):
         return self
 
     @property
-    def connector(self: Self) -> Connector:
+    def connector(self: Self) -> BaseConnector:
         """Exposes repository connector."""
         return self.__connector
 
@@ -127,9 +122,7 @@ class SparkRepository(BaseRepository[T], HasLogger, HasSparkSession):
     def drop(self: Self) -> Self:
         """Drop the entire data. Drop table o remove FS directory."""
         if not isinstance(self.connector, CanDrop):
-            raise InvalidConnectorException(
-                "Current connector doesn't support drop"
-            )
+            raise InvalidConnectorException("Current connector doesn't support drop")
 
         self.connector.drop()
 

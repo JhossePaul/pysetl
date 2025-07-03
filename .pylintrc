@@ -1,6 +1,0 @@
-[DESIGN]
-max-parents=10
-exclude-too-few-public-methods=pydantic.*
-
-[MESSAGES CONTROL]
-disable=R0903,R0913,R0917
