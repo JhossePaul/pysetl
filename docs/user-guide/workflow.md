@@ -193,4 +193,4 @@ pipeline = (
 - Leverage external inputs for flexible pipeline entry points.
 - Extend Factory, Stage, and Pipeline for custom logic as needed.
 
-For more details, see the [API Reference](../api/workflow_api.md).
+For more details, see the [API Reference](../api/workflow.md).

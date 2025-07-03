@@ -159,4 +159,4 @@ class MyConfig(Config[MyConfigModel]):
 
 ---
 
-For more details, see the [API Reference](../api/config_api.md).
+For more details, see the [API Reference](../api/config.md).
