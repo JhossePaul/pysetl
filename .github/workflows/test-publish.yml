@@ -18,6 +18,9 @@ jobs:
       - name: Install Hatch
         run: pip install --upgrade hatch
 
+      - name: Build the package
+        run: hatch build
+
       - name: Build and publish to TestPyPI
         env:
           HATCH_INDEX_USER: __token__
