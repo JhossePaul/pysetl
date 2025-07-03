@@ -12,8 +12,8 @@ build:
     post_create_environment:
       - pip install hatch
     build:
-      # Run the docs:docs command to build the documentation.
-      - hatch run docs:docs
+      html:
+        - hatch run docs:docs
 
 # Tell Read the Docs where your mkdocs.yml is for metadata.
 mkdocs:
