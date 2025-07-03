@@ -38,4 +38,4 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         flags: ${{ matrix.python-version }}
-        file: .coverage.py${{ matrix.python-version }}
+        files: .coverage.py${{ matrix.python-version }}
