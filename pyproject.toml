@@ -80,7 +80,7 @@ type = "mypy src/pysetl"
 test = "coverage erase && coverage run -m pytest"
 format = "ruff format src/pysetl"
 lcov = "coverage combine && coverage report -m && coverage lcov"
-all = "hatch run test:lint && hatch run test:type && hatch run test:test"
+all = "ruff check src/pysetl && mypy src/pysetl && coverage erase && coverage run -m pytest && coverage combine"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["3.10", "3.11", "3.12"]
