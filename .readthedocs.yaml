@@ -7,7 +7,6 @@ version: 2
 mkdocs:
   configuration: mkdocs.yml
 
-
 build:
   os: ubuntu-22.04
   tools:
@@ -15,7 +14,7 @@ build:
 
 python:
   install:
-    - method: hatch
+    - method: pip
       path: .
       extra_requirements:
         - docs
