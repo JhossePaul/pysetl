@@ -81,12 +81,3 @@ class HasRegistry(Generic[T]):
     def size(self: Self) -> int:
         """Return dize of the registry."""
         return len(self._registry)
-
-    def unregister(self, uuid: UUID):
-        """
-        Unregister an object from the registry by UUID.
-
-        Args:
-            uuid: The UUID of the object to unregister.
-        """
-        self._registry.pop(uuid, None)

@@ -123,3 +123,43 @@ def test_has_registry():
     assert len(registry.get_registry()) == 3
     assert registry.clear_registry().size == 0
     assert not registry.last_registered_item
+
+
+def test_benchmark_modifier_times_fallback():
+    class Dummy:
+        def foo(self):
+            return 42
+
+    obj = Dummy()
+    bench = BenchmarkModifier(obj).get()
+
+    # Test case 1: Remove the 'times' attribute completely
+    delattr(bench, "times")
+    result = bench.foo()
+    assert result == 42
+    assert "foo" in bench.times  # type: ignore
+
+    # Test case 2: Set times to None to force the fallback
+    bench.times = None  # type: ignore
+    result = bench.foo()
+    assert result == 42
+    assert "foo" in bench.times  # type: ignore
+
+    # Test case 3: Set times to empty dict to ensure it's handled
+    bench.times = {}  # type: ignore
+    result = bench.foo()
+    assert result == 42
+    assert "foo" in bench.times  # type: ignore
+
+
+def test_benchmark_modifier_get_method():
+    """Test the get method specifically for coverage."""
+
+    class Dummy:
+        def foo(self):
+            return 42
+
+    obj = Dummy()
+    modifier = BenchmarkModifier(obj)
+    result = modifier.get()
+    assert result is obj

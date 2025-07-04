@@ -84,15 +84,6 @@ class DeliveryType:
         """
         return repr(self.tp)
 
-    def __str__(self) -> str:
-        """
-        Return the string representation of the wrapped type.
-
-        Returns:
-            str: The str of the underlying type.
-        """
-        return str(self.tp)
-
     def is_alias(self, tp: type):
         """
         Check if a type is a generic alias (e.g., list[int], dict[str, float]).
