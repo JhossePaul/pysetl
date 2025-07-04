@@ -1,8 +1,7 @@
 """
-CanPartition module.
+CanPartition mixin for PySetl.
 
-Connectors that inherit CanPartition should be able to partition the output by
-the given columns on the file system
+Provides an abstract mixin to add partition listing functionality to connectors.
 """
 from abc import ABC, abstractmethod
 from pyspark.sql import DataFrame
@@ -10,11 +9,23 @@ from typing_extensions import Self
 
 
 class CanPartition(ABC):
-    """CanPartition mixin class."""
+    """
+    Abstract mixin to add partition listing functionality to a connector.
+
+    This class cannot be instantiated directly.
+    """
 
     @abstractmethod
     def list_partitions(self: Self) -> list[str]:
-        """List all available partitions."""
+        """
+        Abstract method to list all partitions in the storage.
+
+        Returns:
+            list[str]: List of partition directory paths.
+
+        Raises:
+            NotImplementedError: If not implemented in a subclass.
+        """
 
     @abstractmethod
     def read_partitions(self, partitions: list[str]) -> DataFrame:

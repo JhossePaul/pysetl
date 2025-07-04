@@ -1,6 +1,8 @@
 """
-Defines the abstract base class for all connectors in the pysetl.connector
-package.
+Abstract base connector for PySetl.
+
+Defines the abstract base class for all connectors in the connector subpackage.
+All connectors should implement read and write operations for Spark DataFrames.
 """
 from abc import ABCMeta, abstractmethod
 from pyspark.sql import DataFrame
@@ -9,26 +11,32 @@ from typing_extensions import Self
 
 class BaseConnector(metaclass=ABCMeta):
     """
-    Abstract Connector.
+    Abstract base class for all data connectors.
 
-    A connector should implement read/write operations. These implementations
-    should be architecture and object-type specific
+    All connectors should implement read and write operations for Spark DataFrames.
+    This class cannot be instantiated directly.
     """
 
     @abstractmethod
     def read(self: Self) -> DataFrame:
         """
-        Read data into a DataFrame.
+        Abstract method to read data into a Spark DataFrame.
 
-        Read method should implement specific cases for spark connections in
-        order to read data
+        Returns:
+            DataFrame: The loaded Spark DataFrame.
+
+        Raises:
+            NotImplementedError: If not implemented in a subclass.
         """
 
     @abstractmethod
     def write(self: Self, data: DataFrame) -> None:
         """
-        Write data into a DataFrame.
+        Abstract method to write data from a Spark DataFrame.
 
-        Write method should implement specific cases for spark
-        connections in order to write data
+        Args:
+            data (DataFrame): The Spark DataFrame to write.
+
+        Raises:
+            NotImplementedError: If not implemented in a subclass.
         """

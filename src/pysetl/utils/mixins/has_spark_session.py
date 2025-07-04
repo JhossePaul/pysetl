@@ -1,11 +1,24 @@
-"""HasSparkSession module."""
+"""
+HasSparkSession mixin for PySetl.
+
+Provides an abstract mixin to add SparkSession functionality to classes.
+"""
 from pyspark.sql import SparkSession
 
 
 class HasSparkSession:
-    """Provide current spark session property."""
+    """
+    Abstract mixin to add SparkSession functionality to a class.
+
+    This class cannot be instantiated directly.
+    """
 
     @property
     def spark(self):
-        """Returns current spark session."""
+        """
+        Get the SparkSession instance.
+
+        Returns:
+            SparkSession: The SparkSession instance.
+        """
         return SparkSession.Builder().getOrCreate()

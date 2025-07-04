@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/images/logo_name.png" alt="PySetl" width="200" />
+  <img src="https://raw.githubusercontent.com/JhossePaul/pysetl/main/docs/assets/images/logo_name.png" alt="PySetl" width="200" />
 </p>
 
 [![Build Status](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml/badge.svg)](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml) [![Code Coverage](https://codecov.io/gh/JhossePaul/pysetl/branch/main/graph/badge.svg)](https://codecov.io/gh/JhossePaul/pysetl) [![Documentation Status](https://readthedocs.org/projects/pysetl/badge/?version=latest)](https://pysetl.readthedocs.io/en/latest/?badge=latest)
@@ -88,10 +88,10 @@ their own Spark distribution)
 
 ## Documentation
 
-- 📖 [User Guide](https://pysetl.readthedocs.io/en/latest/user-guide/configuration.html)
-- 🔧 [API Reference](https://pysetl.readthedocs.io/en/latest/api/pysetl.html)
-- 🚀 [Getting Started](https://pysetl.readthedocs.io/en/latest/getting-started.html)
-- 🤝 [Contributing](https://pysetl.readthedocs.io/en/latest/contributing.html)
+- 📖 [User Guide](https://pysetl.readthedocs.io/en/latest/user-guide/configuration/)
+- 🔧 [API Reference](https://pysetl.readthedocs.io/en/latest/api/pysetl/)
+- 🚀 [Getting Started](https://pysetl.readthedocs.io/en/latest/getting-started/)
+- 🤝 [Contributing](https://pysetl.readthedocs.io/en/latest/contributing/)
 
 ## Development
 
@@ -110,17 +110,15 @@ pre-commit install
 - **Format code**: `hatch run format`
 - **Run tests (default environment only)**: `hatch test`
 - **Run all test matrix**: `hatch test --all`
-- **Run tests with coverage (all matrix)**: `hatch test --cover`
+- **Run tests with coverage (all matrix)**: `hatch test --cover --all`
 - **Build documentation**: `hatch run docs:docs`
 - **Serve documentation**: `hatch run docs:serve`
 - **Security checks**: `hatch run security:all`
 
-> **Note:** `hatch test` runs tests only on the default environment. Use `hatch test --all` to run tests across all environments in the test matrix, and `hatch test --cover` to run all tests with coverage reporting.
-
 ## Contributing
 
 We welcome contributions! Please see our
-[Contributing Guide](https://pysetl.readthedocs.io/en/latest/contributing.html)
+[Contributing Guide](https://pysetl.readthedocs.io/en/latest/contributing/)
 for details.
 
 ## License
@@ -137,7 +135,7 @@ We just adapted things to work in Python.
 
 ## Supported Python Versions
 
-pysetl supports Python 3.9, 3.10, 3.11, and 3.12. The typing system and all
+pysetl supports Python 3.9, 3.10, 3.11, 3.12, and 3.13. The typing system and all
 features are compatible across these versions. Recent updates have improved
 compatibility with Python 3.9, especially regarding advanced typing and
 generics.

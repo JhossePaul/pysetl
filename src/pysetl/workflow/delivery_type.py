@@ -1,5 +1,11 @@
 """
-Wrapper for factory type comparison.
+DeliveryType module for PySetl.
+
+Provides a utility wrapper to simplify and standardize type comparison for
+pipeline delivery types.
+
+This is used internally to make type-based dependency resolution and DAG
+construction easier.
 """
 from __future__ import annotations
 from types import GenericAlias
@@ -9,23 +15,38 @@ from typedspark import DataSet
 
 class DeliveryType:
     """
-    A wrapper to easily compare delivery types from factories.
+    Utility wrapper for comparing delivery types in the pipeline.
+
+    This class exists solely to make type comparison (including generics and
+    typedspark DataSet subclasses) easier and more robust for pipeline
+    dependency resolution. It is not intended for any other use.
     """
+
     def __init__(self, tp):
         """
-        tp: any Python type representaion:
-            - common classes (int, str, MyClass)
-            - typing (List[int], Dict[str, float], ...)
-            - GenericAlias (list[int], dict[str, int], ...)
-            - subclass of typedspark.DataSet (DataSet[Citizen], etc.)
+        Initialize a DeliveryType wrapper.
+
+        Args:
+            tp: Any Python type representation, including:
+                - Common classes (int, str, MyClass)
+                - Typing generics (List[int], Dict[str, float], ...)
+                - GenericAlias (list[int], dict[str, int], ...)
+                - Subclass of typedspark.DataSet (DataSet[Citizen], etc.)
         """
         self.tp = tp if not isinstance(tp, DeliveryType) else tp.tp
 
     def __eq__(self, other) -> bool:
+        """
+        Compare this DeliveryType to another for equality.
+
+        Args:
+            other: Another DeliveryType or type to compare against.
+
+        Returns:
+            bool: True if the types are considered equivalent for delivery purposes, False otherwise.
+        """
         other_delivery_type = (
-            other
-            if isinstance(other, DeliveryType)
-            else DeliveryType(other)
+            other if isinstance(other, DeliveryType) else DeliveryType(other)
         )
         t1 = self.tp
         t2 = other_delivery_type.tp
@@ -41,7 +62,7 @@ class DeliveryType:
             return (o1 is o2) and (a1 == a2)
 
         # 2) One type is alias and the other is not.
-        if (t1_alias or t2_alias):
+        if t1_alias or t2_alias:
             return False
 
         # 3) Both types are subclasses of DataSet (typedspark)
@@ -55,13 +76,22 @@ class DeliveryType:
         return t1 is t2
 
     def __repr__(self):
-        return repr(self.tp)
+        """
+        Return the string representation of the wrapped type.
 
-    def __str__(self) -> str:
-        return str(self.tp)
+        Returns:
+            str: The repr of the underlying type.
+        """
+        return repr(self.tp)
 
     def is_alias(self, tp: type):
         """
-        Check if type is an alias.
+        Check if a type is a generic alias (e.g., list[int], dict[str, float]).
+
+        Args:
+            tp (type): The type to check.
+
+        Returns:
+            bool: True if the type is a generic alias, False otherwise.
         """
         return isinstance(tp, (GenericAlias, _GenericAlias))

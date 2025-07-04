@@ -1,6 +1,8 @@
 """
+ConnectorBuilder module for PySetl.
+
 Provides the ConnectorBuilder for constructing specific connector instances
-within the pysetl.connector package.
+based on configuration.
 """
 from typing import Optional
 from typing_extensions import Self
@@ -15,15 +17,31 @@ from .connector import Connector
 
 
 class ConnectorBuilder(Builder[Connector]):
-    """Build a connector based only on the configuration."""
+    """
+    Builder for constructing connector instances based on configuration.
+
+    Attributes:
+        config (FileConfig): The file configuration for the connector.
+        connector (Optional[Connector]): The constructed connector instance.
+    """
 
     def __init__(self: Self, config: FileConfig):
-        """Initialize ConnectorBuilder."""
+        """
+        Initialize the ConnectorBuilder.
+
+        Args:
+            config (FileConfig): The file configuration for the connector.
+        """
         self.config = config
         self.connector: Optional[Connector] = None
 
     def build(self) -> Self:
-        """Create a connector based on the declared storage."""
+        """
+        Create a connector instance based on the declared storage type in the configuration.
+
+        Returns:
+            Self: The builder instance with the connector set.
+        """
         storage = self.config.config.storage
 
         if storage == FileStorage.CSV:
@@ -36,7 +54,15 @@ class ConnectorBuilder(Builder[Connector]):
         return self
 
     def get(self: Self) -> Connector:
-        """Return the right connector based on the configutration."""
+        """
+        Return the constructed connector instance based on the configuration.
+
+        Returns:
+            Connector: The constructed connector instance.
+
+        Raises:
+            BuilderException: If the connector has not been built yet.
+        """
         if not self.connector:
             raise BuilderException("Connector is not defined")
 

@@ -8,7 +8,7 @@ This guide will help you get up and running quickly with PySetl.
 
 ## Installation
 
-PySetl requires Python 3.9+ and a working Spark environment.
+PySetl requires Python 3.9–3.13 and a working Spark environment.
 
 ```bash
 pip install pysetl
