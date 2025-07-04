@@ -20,14 +20,14 @@ repos:
     hooks:
       - id: mypy
         name: Type checking
-        entry: hatch run type:type
+        entry: hatch run type
         language: system
         types: [python]
         pass_filenames: false
 
       - id: test
         name: Run tests
-        entry: hatch run test:test
+        entry: hatch run test --all
         language: system
         types: [python]
         pass_filenames: false

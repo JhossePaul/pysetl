@@ -4,9 +4,7 @@ from abc import abstractmethod, ABC
 from inspect import getmembers
 from typing import TypeVar, Generic, Optional, get_args, get_origin
 from typing_extensions import Self, get_original_bases
-from pysetl.utils.mixins import (
-    HasLogger, IsIdentifiable, IsWritable
-)
+from pysetl.utils.mixins import HasLogger, IsIdentifiable, IsWritable
 from pysetl.workflow.deliverable import Deliverable
 from pysetl.workflow.delivery import Delivery
 from pysetl.workflow.delivery_type import DeliveryType
@@ -16,13 +14,7 @@ from pysetl.utils.pretty import pretty
 T = TypeVar("T")
 
 
-class Factory(
-    IsIdentifiable,
-    Generic[T],
-    HasLogger,
-    IsWritable,
-    ABC
-):
+class Factory(IsIdentifiable, Generic[T], HasLogger, IsWritable, ABC):
     """
     A Factory is a structured object to ETL data.
 
@@ -72,12 +64,7 @@ class Factory(
     def delivery_type(cls) -> DeliveryType:
         """Return delivery type."""
         bases = get_original_bases(cls)
-        base_factories = [
-            base
-            for base
-            in bases
-            if get_origin(base) is Factory
-        ]
+        base_factories = [base for base in bases if get_origin(base) is Factory]
 
         if not base_factories:
             raise NotImplementedError("Factory has no type parameter")
@@ -90,15 +77,13 @@ class Factory(
     @property
     def deliverable(self: Self) -> Deliverable:
         """Return the deliverable from this factory."""
-        __type = self.delivery_type()
+        __type = self.delivery_type().tp
 
-        return (
-            Deliverable[__type](  # type: ignore
-                payload=self.get(),
-                producer=type(self),
-                consumers=self.consumers,
-                delivery_id=self.delivery_id
-            )
+        return Deliverable[__type](  # type: ignore
+            payload=self.get(),
+            producer=type(self),
+            consumers=self.consumers,
+            delivery_id=self.delivery_id,
         )
 
     @classmethod
@@ -106,6 +91,7 @@ class Factory(
         """Return a list of the expected deliveries for the factory."""
         return [
             delivery.set_consumer(cls)
-            for (_, delivery)
-            in list(getmembers(cls, lambda _: isinstance(_, Delivery)))
+            for (_, delivery) in list(
+                getmembers(cls, lambda _: isinstance(_, Delivery))
+            )
         ]
