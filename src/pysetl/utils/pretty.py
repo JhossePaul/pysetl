@@ -30,7 +30,7 @@ def _(alias: _GenericAlias):
 
 
 @pretty.register
-def _(tpe: GenericAlias) -> str:  # pragma: py-gt-310
+def _(tpe: GenericAlias) -> str:  # pragma: py-lt-311
     origin = get_origin(tpe)
     args = get_args(tpe)
     origin_str = pretty(origin)

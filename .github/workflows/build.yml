@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v4
@@ -30,7 +30,7 @@ jobs:
       run: pip install --upgrade hatch
 
     - name: Run Hatch test suite
-      run: hatch run +py=${{ matrix.python-version }} test:all
+      run: hatch test -py ${{ matrix.python-version }} --cover
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
@@ -38,4 +38,5 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         flags: ${{ matrix.python-version }}
-        files: .coverage.py${{ matrix.python-version }}
+        files: lcov.info
+        disable_search: true

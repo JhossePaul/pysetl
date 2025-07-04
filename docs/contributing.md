@@ -28,8 +28,9 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 
 2. **Set Up the Dev Environment**
    ```bash
-   hatch shell
    # (All dependencies are managed via pyproject.toml)
+   hatch shell
+   hatch env show
    ```
 
 3. **Install Pre-commit Hooks**
@@ -48,11 +49,14 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 - Make your changes and commit with clear messages.
 - Run all checks locally before pushing:
   ```bash
-  hatch run test:all
+  hatch run type
+  hatch run lint
+  hatch run format
+  hatch test  --all
   ```
 - If you update docs, check them locally:
   ```bash
-  hatch run docs:docs
+  hatch run docs:serve
   ```
 - Push your branch and open a Pull Request (PR) on GitHub.
 - Ensure all CI checks pass and respond to review feedback.
@@ -63,15 +67,15 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 
 - Code must pass **Ruff** (PEP8 + best practices):
   ```bash
-  hatch run test:lint
+  hatch run lint
   ```
 - Code formatting with **Ruff**:
   ```bash
-  hatch run test:format
+  hatch run format
   ```
 - Type annotations are required and checked with **mypy**:
   ```bash
-  hatch run test:type
+  hatch run type
   ```
 - All new code should include tests (pytest) and docstrings.
 - Use pre-commit to auto-format and catch issues before commit.
@@ -92,13 +96,17 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 ## Tests
 
 - All tests are in the `tests/` directory.
-- Run the full test suite with:
+- Run the test suite (default environment only):
   ```bash
-  hatch run test:test
+  hatch test
   ```
-- Run all checks (lint, type, test) with:
+- Run all test matrix:
   ```bash
-  hatch run test:all
+  hatch test --all
+  ```
+- Run all tests with coverage (all matrix):
+  ```bash
+  hatch test --cover --all
   ```
 - Security checks are available:
   ```bash
@@ -120,13 +128,15 @@ The project uses Hatch environments for different development tasks:
 
 ### Available Commands
 
-- **`hatch run test:all`**: Run all checks (lint, type, test)
-- **`hatch run test:test`**: Run tests only
-- **`hatch run test:lint`**: Lint code with Ruff
-- **`hatch run test:format`**: Format code with Ruff
-- **`hatch run test:type`**: Type checking with mypy
+- **`hatch run type`**: Type checking with mypy
+- **`hatch run lint`**: Lint code with Ruff
+- **`hatch run format`**: Format code with Ruff
 - **`hatch run docs:docs`**: Build documentation
+- **`hatch run docs:serve`**: Serve documentation locally
 - **`hatch run security:all`**: Run all security checks
+- **`hatch test`**: Run tests (default environment only)
+- **`hatch test --all`**: Run all test matrix
+- **`hatch test --cover --all`**: Run all test matrix with coverage
 
 ---
 

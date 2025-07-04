@@ -4,7 +4,7 @@
 
 [![Build Status](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml/badge.svg)](https://github.com/JhossePaul/pysetl/actions/workflows/build.yml) [![Code Coverage](https://codecov.io/gh/JhossePaul/pysetl/branch/main/graph/badge.svg)](https://codecov.io/gh/JhossePaul/pysetl) [![Documentation Status](https://readthedocs.org/projects/pysetl/badge/?version=latest)](https://pysetl.readthedocs.io/en/latest/?badge=latest)
 
-[![PyPI](https://img.shields.io/pypi/v/pysetl)](https://pypi.org/project/pysetl) [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/) [![PySpark](https://img.shields.io/badge/PySpark-3.4%2B-orange.svg?logo=apache-spark&logoColor=white)](https://spark.apache.org/docs/latest/) [![Downloads](https://img.shields.io/pypi/dm/pysetl.svg?color=blue&label=Installs&logo=pypi&logoColor=gold)](https://pypi.org/project/pysetl)
+[![PyPI](https://img.shields.io/pypi/v/pysetl)](https://pypi.org/project/pysetl) [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/) [![PySpark](https://img.shields.io/badge/PySpark-3.4%2B-orange.svg?logo=apache-spark&logoColor=white)](https://spark.apache.org/docs/latest/) [![Downloads](https://img.shields.io/pypi/dm/pysetl.svg?color=blue&label=Installs&logo=pypi&logoColor=gold)](https://pypi.org/project/pysetl)
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://github.com/JhossePaul/pysetl/blob/main/LICENSE) [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff) [![Type checked with mypy](https://img.shields.io/badge/mypy-checked-blue.svg)](http://mypy-lang.org/) [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
@@ -98,19 +98,24 @@ their own Spark distribution)
 ```bash
 git clone https://github.com/JhossePaul/pysetl.git
 cd pysetl
+hatch env show  # Shows available environments and scripts
 hatch shell
 pre-commit install
 ```
 
 ### Development Commands
 
-- **Run all checks**: `hatch run test:all`
-- **Run tests only**: `hatch run test:test`
-- **Lint code**: `hatch run test:lint`
-- **Format code**: `hatch run test:format`
-- **Type checking**: `hatch run test:type`
+- **Type checking**: `hatch run type`
+- **Lint code**: `hatch run lint`
+- **Format code**: `hatch run format`
+- **Run tests (default environment only)**: `hatch test`
+- **Run all test matrix**: `hatch test --all`
+- **Run tests with coverage (all matrix)**: `hatch test --cover`
 - **Build documentation**: `hatch run docs:docs`
+- **Serve documentation**: `hatch run docs:serve`
 - **Security checks**: `hatch run security:all`
+
+> **Note:** `hatch test` runs tests only on the default environment. Use `hatch test --all` to run tests across all environments in the test matrix, and `hatch test --cover` to run all tests with coverage reporting.
 
 ## Contributing
 
@@ -129,3 +134,10 @@ details.
 PySetl is a port from [SETL](https://setl-framework.github.io/setl/). We want to
 fully recognize this package is heavily inspired by the work of the SETL team.
 We just adapted things to work in Python.
+
+## Supported Python Versions
+
+pysetl supports Python 3.9, 3.10, 3.11, and 3.12. The typing system and all
+features are compatible across these versions. Recent updates have improved
+compatibility with Python 3.9, especially regarding advanced typing and
+generics.

@@ -16,8 +16,11 @@ pip install pysetl
 
 Or, for development:
 ```bash
+pip install hatch
 git clone https://github.com/JhossePaul/pysetl.git
 cd pysetl
+hatch env create  # Set up the default environment
+hatch env show    # See available scripts
 hatch shell
 ```
 
@@ -72,6 +75,20 @@ print(pipeline.get_last_output())
 - Explore the [User Guide](user-guide/configuration.md) for in-depth tutorials and concepts.
 - Dive into the [API Reference](api/pysetl.md) for details on every class and function.
 - Check out the [examples](https://github.com/JhossePaul/pysetl/tree/main/examples) for real-world usage.
+
+---
+
+## Running Checks
+
+- Type checking: `hatch run type`
+- Lint code: `hatch run lint`
+- Format code: `hatch run format`
+- Run tests (default environment only): `hatch test`
+- Run all test matrix: `hatch test --all`
+- Run all tests with coverage (all matrix): `hatch test --cover --all`
+- Build docs: `hatch run docs:docs`
+- Serve docs: `hatch run docs:serve`
+- Security checks: `hatch run security:all`
 
 ---
 

@@ -1,18 +1,5 @@
-[build-system]
-requires = ["hatchling", "hatch-vcs"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.sdist]
-include = ["src/pysetl", "README.md", "LICENSE"]
-
-[tool.hatch.build.targets.wheel]
-include = ["src/pysetl", "README.md", "LICENSE"]
-
-[tool.hatch.build]
-packages = ["src/pysetl"]
-dev-mode-dirs = ["src"]
-
 [project]
+dynamic = ["version"]
 name = "pysetl"
 description = "A PySpark ETL Framework"
 readme = "README.md"
@@ -20,7 +7,25 @@ license = {text = "Apache-2.0"}
 authors = [
   {name = "Jhosse Paul Marquez Ruiz", email = "jpaul.marquez.ruiz@gmail.com"}
 ]
-keywords = ["spark", "aws", "etl"]
+keywords = [
+    "pyspark",
+    "spark",
+    "etl",
+    "data engineering",
+    "data pipeline",
+    "data processing",
+    "workflow",
+    "type-safe",
+    "python",
+    "big data",
+    "data analysis",
+    "data science",
+    "configuration",
+    "pipeline",
+    "framework",
+    "automation",
+    "analytics"
+]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -34,6 +39,7 @@ classifiers = [
     "Topic :: Utilities",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -46,66 +52,60 @@ classifiers = [
 ]
 urls = { Home = "https://github.com/JhossePaul/pysetl", Source = "https://github.com/JhossePaul/pysetl" }
 
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.9,<3.13"
 dependencies = [
     "typedspark>=1.5.3,<2.0.0",
     "pyarrow>=15.0.0,<21.0.0",
-    "numpy>=1.26,<3.0.0",
     "pydantic>=2.4.2,<3.0.0",
     "typing-extensions>=4.13.0,<5.0.0"
 ]
-dynamic = ["version"]
 
 [project.optional-dependencies]
 pyspark = [
     "pyspark[sql]>=3.4,<4.0.0"
 ]
 
-[tool.hatch.version]
-source = "vcs"
-
 [tool.hatch.envs.default]
+description = """
+Default development environment.
+"""
 installer = "uv"
+features = [ "pyspark" ]
 dependencies = [
-    "pyspark[sql]>=3.4,<4.0.0",
+    "pre-commit>=4.2.0,<5.0.0",
     "ruff>=0.4.4,<1.0.0",
     "mypy>=1.6.1,<2.0.0",
-    "coverage>=7.3.2,<8.0.0",
-    "pytest>=8.3.5,<9.0.0",
-    "pre-commit>=4.2.0,<5.0.0",
-    "coverage-conditional-plugin>=0.9.0,<1.0.0"
 ]
 
-[tool.hatch.envs.test]
-dependencies = [
-    "pyspark[sql]>=3.4,<4.0.0",
-    "ruff>=0.4.4,<1.0.0",
-    "mypy>=1.6.1,<2.0.0",
-    "coverage>=7.3.2,<8.0.0",
-    "pytest>=8.3.5,<9.0.0",
-    "pre-commit>=4.2.0,<5.0.0",
-    "coverage-conditional-plugin>=0.9.0,<1.0.0"
-]
-
-[tool.hatch.envs.test.scripts]
-lint = "ruff check src/pysetl"
+[tool.hatch.envs.default.scripts]
 type = "mypy src/pysetl"
-test = "coverage erase && coverage run -m pytest"
+lint = "ruff check src/pysetl"
 format = "ruff format src/pysetl"
-lcov = "coverage combine && coverage report -m && coverage lcov"
-all = "ruff check src/pysetl && mypy src/pysetl && coverage erase && coverage run -m pytest && coverage combine"
 
-[[tool.hatch.envs.test.matrix]]
-python = ["3.10", "3.11", "3.12"]
-
-[tool.hatch.envs.test.overrides]
-matrix.python.env-vars = [
-  { key = "COVERAGE_FILE", value = ".coverage.py3.10", if = ["3.10"] },
-  { key = "COVERAGE_FILE", value = ".coverage.py3.11", if = ["3.11"] },
-  { key = "COVERAGE_FILE", value = ".coverage.py3.12", if = ["3.12"] }
+[tool.hatch.envs.hatch-test]
+description = """
+Testing tools over multiple Python versions.
+"""
+installer = "uv"
+features = [ "pyspark" ]
+extra-dependencies = [
+    "coverage-conditional-plugin>=0.9.0,<1.0.0",
 ]
+
+[tool.hatch.envs.hatch-test.scripts]
+run = "pytest{env:HATCH_TEST_ARGS:} {args}"
+run-cov = "coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}"
+cov-combine = "coverage combine && coverage lcov"
+cov-report = "coverage report -m"
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.docs]
+description = """
+Documentation builder.
+"""
+installer = "uv"
 dependencies = [
     "mkdocs",
     "mkdocs-material",
@@ -121,20 +121,42 @@ dependencies = [
     "mkdocs-include-markdown-plugin",
     "pymdown-extensions",
 ]
+
 [tool.hatch.envs.docs.scripts]
 docs = "mkdocs build"
+serve = "mkdocs serve"
 
 [tool.hatch.envs.security]
+description = """
+Security tools.
+"""
+installer = "uv"
+detached = true
 dependencies = [
     "bandit>=1.7.0,<2.0.0",
     "safety>=3.0.0,<4.0.0",
     "pip-audit>=2.6.1,<3.0.0"
 ]
+
 [tool.hatch.envs.security.scripts]
-bandit = "bandit -r src/pysetl"
-safety = "safety check"
-audit = "pip-audit"
-all = "hatch run security:bandit && hatch run security:safety && hatch run security:audit"
+all = "bandit -r src/pysetl && safety scan && security && audit"
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/pysetl", "README.md", "LICENSE"]
+
+[tool.hatch.build.targets.wheel]
+include = ["src/pysetl", "README.md", "LICENSE"]
+
+[tool.hatch.build]
+packages = ["src/pysetl"]
+dev-mode-dirs = ["src"]
 
 [tool.coverage.run]
 concurrency=["multiprocessing"]
@@ -148,6 +170,7 @@ omit=[
 
 [tool.coverage.coverage_conditional_plugin.rules]
 py-gt-310 = "sys_version_info > (3, 10)"
+py-lt-311 = "sys_version_info < (3, 11)"
 
 [tool.coverage.report]
 skip_covered=true
