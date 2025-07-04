@@ -30,7 +30,7 @@ jobs:
       run: pip install --upgrade hatch
 
     - name: Run Hatch test suite
-      run: hatch test --py ${{ matrix.python-version }} --cover
+      run: hatch test -py ${{ matrix.python-version }} --cover
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
