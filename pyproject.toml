@@ -52,7 +52,7 @@ classifiers = [
 ]
 urls = { Home = "https://github.com/JhossePaul/pysetl", Source = "https://github.com/JhossePaul/pysetl" }
 
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.9,<3.14"
 dependencies = [
     "typedspark>=1.5.3,<2.0.0",
     "pyarrow>=15.0.0,<21.0.0",
@@ -99,7 +99,7 @@ cov-combine = "coverage combine && coverage lcov"
 cov-report = "coverage report -m"
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.9", "3.10", "3.11", "3.12"]
+python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
 [tool.hatch.envs.docs]
 description = """

@@ -2,7 +2,15 @@ from enum import Enum
 
 
 class FileStorage(Enum):
-    """Available general file storage options."""
+    """
+    Enumeration of available general file storage options.
+
+    Attributes:
+        CSV: CSV file storage.
+        PARQUET: Parquet file storage.
+        JSON: JSON file storage.
+        GENERIC: Generic file storage.
+    """
 
     CSV = "csv"
     PARQUET = "parquet"
@@ -12,7 +20,14 @@ class FileStorage(Enum):
 
 class DbStorage(Enum):
     """
-    Available general DB storage options
+    Enumeration of available general database storage options.
+
+    Attributes:
+        JDBC: JDBC database storage.
+        DELTA: Delta Lake storage.
+        CASSANDRA: Cassandra database storage.
+        DYNAMODB: DynamoDB storage.
+        HUDI: Hudi storage.
     """
 
     JDBC = "JDBC"

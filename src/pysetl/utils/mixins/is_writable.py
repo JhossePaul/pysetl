@@ -1,9 +1,17 @@
-"""Writable Mixin."""
+"""
+IsWritable mixin for PySetl.
+
+Provides an abstract mixin to add writability to classes.
+"""
 from typing_extensions import Self
 
 
 class IsWritable:
-    """Indicate that users can activate or deactivate write of the class."""
+    """
+    Abstract mixin to add writability to a class.
+
+    This class cannot be instantiated directly.
+    """
 
     _write: bool = True
 

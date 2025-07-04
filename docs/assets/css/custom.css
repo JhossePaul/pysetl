@@ -45,12 +45,6 @@ body > header > nav > div.md-header__title {
   background: linear-gradient(90deg, #EE8D24 0%, #FAD745 100%) !important;
 }
 
-/* Table header styling */
-.md-typeset table th {
-  background: linear-gradient(90deg, #377AB1 0%, #003366 100%);
-  color: #FAD745;
-}
-
 /* Highlighted text */
 mark, .md-typeset mark {
   background: linear-gradient(90deg, #FAD745 0%, #EE8D24 100%);
@@ -64,7 +58,95 @@ mark, .md-typeset mark {
   background: linear-gradient(90deg, #003366 0%, #377AB1 100%) !important;
 }
 
+.md-tabs__item--active {
+  font-weight: bold;
+}
+
 [data-md-color-scheme="slate"] .md-button, [data-md-color-scheme="slate"] .md-typeset a, [data-md-color-scheme="slate"] .md-nav__link--active {
   color: #EE8D24!important;
   font-weight: bold;
+}
+
+/* Custom styles for PySetl documentation */
+
+/* API Reference specific styles */
+[data-md-component="navigation"] .md-nav__list .md-nav__list .md-nav__list {
+    /* Reduce nesting for API pages */
+    margin-left: 0.5rem;
+}
+
+/* Better TOC styling for API pages */
+.md-content__inner .md-typeset__table {
+    width: 100%;
+}
+
+/* API class documentation improvements */
+.md-typeset .doc-contents {
+    /* Better spacing for API documentation */
+    margin-top: 1rem;
+}
+
+/* Code block improvements */
+.md-typeset pre {
+    border-radius: 4px;
+}
+
+/* API method signatures */
+.md-typeset .doc-function {
+    border-left: 4px solid #377AB1;
+    padding-left: 1rem;
+    margin: 1rem 0;
+}
+
+/* API class headers */
+.md-typeset .doc-class {
+    border-bottom: 2px solid #377AB1;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Better table styling */
+.md-typeset table {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.md-typeset table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+/* Navigation improvements */
+.md-nav__title {
+    font-weight: 600;
+}
+
+/* API section specific navigation */
+.md-nav--primary .md-nav__list .md-nav__list .md-nav__list {
+    /* Reduce indentation for deeply nested API items */
+    margin-left: 0.25rem;
+}
+
+/* Better search results */
+.md-search-result__article {
+    border-radius: 4px;
+}
+
+/* Code highlighting improvements */
+.md-typeset code {
+    background-color: #f8f9fa;
+    border-radius: 3px;
+    padding: 0.2em 0.4em;
+}
+
+/* API overview page specific styles */
+.api-overview .md-typeset h2 {
+    color: #377AB1;
+    border-bottom: 2px solid #377AB1;
+    padding-bottom: 0.5rem;
+}
+
+.api-overview .md-typeset h3 {
+    color: #555;
+    margin-top: 2rem;
 }

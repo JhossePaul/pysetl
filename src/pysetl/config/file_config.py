@@ -1,4 +1,8 @@
-"""FileConnectorConfig module."""
+"""
+FileConnectorConfig module for PySetl.
+
+Defines configuration models and validation for file-based data connectors.
+"""
 from typing import Optional
 from typing_extensions import Self
 from pyspark.sql.types import StructType
@@ -9,13 +13,20 @@ from .config import Config, BaseConfigModel
 
 
 class FileConfigModel(BaseConfigModel):
-    """Validator for file configurations."""
+    """
+    Validator for file connector configurations.
+
+    Attributes:
+        storage (FileStorage): The file storage backend type.
+        path (str): Path to the file or directory.
+        partition_by (list[str]): List of columns to partition by.
+        savemode (SaveMode): Save mode for writing files.
+        data_schema (Optional[StructType]): Optional Spark schema for the data.
+        aws_credentials (Optional[AwsCredentials]): Optional AWS credentials for S3 or similar.
+    """
 
     model_config = ConfigDict(
-        extra="allow",
-        frozen=True,
-        strict=True,
-        arbitrary_types_allowed=True
+        extra="allow", frozen=True, strict=True, arbitrary_types_allowed=True
     )
 
     storage: FileStorage
@@ -27,29 +38,42 @@ class FileConfigModel(BaseConfigModel):
 
 
 class FileConfig(Config[FileConfigModel]):
-    """Configuration for file connectors."""
+    """
+    Configuration for file connectors.
+
+    Provides validated configuration and reader/writer options for file-based data sources.
+    """
 
     @property
     def config(self: Self) -> FileConfigModel:
-        """Returns validated configuration."""
+        """
+        Returns the validated file connector configuration.
+
+        Returns:
+            FileConfigModel: The validated configuration model.
+        """
         return FileConfigModel(**self.params)
 
     @property
     def reader_config(self: Self) -> dict:
-        """Configurations passed to DataFrameReader."""
+        """
+        Returns the configuration dictionary for DataFrameReader.
+
+        Returns:
+            dict: Reader configuration options.
+        """
         return {
-            k: v
-            for k, v
-            in self.config
-            if k not in FileConfigModel.model_fields.keys()
+            k: v for k, v in self.config if k not in FileConfigModel.model_fields.keys()
         }
 
     @property
     def writer_config(self) -> dict:
-        """Configurations passed to DataFrameWriter."""
+        """
+        Returns the configuration dictionary for DataFrameWriter.
+
+        Returns:
+            dict: Writer configuration options.
+        """
         return {
-            k: v
-            for k, v
-            in self.config
-            if k not in FileConfigModel.model_fields.keys()
+            k: v for k, v in self.config if k not in FileConfigModel.model_fields.keys()
         }

@@ -1,6 +1,11 @@
 """
-The pysetl.connector package. Provides connectors for various data sources and
-formats.
+Connector subpackage for PySetl.
+
+Provides connectors for various data sources and formats, including CSV, JSON,
+Parquet, and generic files.
+
+Exposes BaseConnector, Connector, FileConnector, CsvConnector, JsonConnector,
+ParquetConnector, and ConnectorBuilder for use throughout the framework.
 """
 from .connector import Connector
 from .csv_connector import CsvConnector
@@ -18,5 +23,5 @@ __all__ = [
     "CsvConnector",
     "JsonConnector",
     "ParquetConnector",
-    "ConnectorBuilder"
+    "ConnectorBuilder",
 ]

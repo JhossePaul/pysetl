@@ -1,10 +1,18 @@
-"""IsIdentifiable module."""
+"""
+IsIdentifiable mixin for PySetl.
+
+Provides an abstract mixin to add identifiability to classes.
+"""
 from uuid import UUID, uuid4
 from pysetl.utils import pretty
 
 
 class IsIdentifiable:
-    """Mixin class to provide an UUID to child object."""
+    """
+    Abstract mixin to add identifiability to a class.
+
+    This class cannot be instantiated directly.
+    """
 
     def __init__(self) -> None:
         self.uuid: UUID = uuid4()

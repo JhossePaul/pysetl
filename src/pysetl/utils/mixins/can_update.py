@@ -1,16 +1,26 @@
-"""CanUpdateMixin module."""
+"""
+CanUpdate mixin for PySetl.
+
+Provides an abstract mixin to add update functionality to connectors.
+"""
 from abc import abstractmethod, ABC
-from pyspark.sql import DataFrame
 
 
 class CanUpdate(ABC):
-    """Abstract mixin to add update functionality to a connector."""
+    """
+    Abstract mixin to add update functionality to a connector.
+
+    This class cannot be instantiated directly.
+    """
 
     @abstractmethod
-    def update(self, dataframe: DataFrame, columns) -> None:
+    def update(self, query: str) -> None:
         """
-        Update storage data.
+        Abstract method to update objects in storage based on a query.
 
-        All matching data given some columns will be updated. Otherwise, will
-        be created
+        Args:
+            query (str): The query or condition for updating.
+
+        Raises:
+            NotImplementedError: If not implemented in a subclass.
         """

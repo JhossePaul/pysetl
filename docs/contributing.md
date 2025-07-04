@@ -122,7 +122,7 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 The project uses Hatch environments for different development tasks:
 
 - **`default`**: Basic development tools (ruff, mypy, pytest, pre-commit, coverage)
-- **`test`**: Testing environment with PySpark for integration tests
+- **`test`**: Testing environment with PySpark for integration tests (Python 3.9–3.13)
 - **`docs`**: Documentation building tools
 - **`security`**: Security scanning tools (bandit, safety, pip-audit)
 

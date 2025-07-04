@@ -2,35 +2,53 @@
 
 
 class BasePySetlException(Exception):
-    """Throw a PySetl Exception."""
+    """
+    Base exception for all PySetl-specific errors.
+
+    All custom exceptions in PySetl should inherit from this class.
+    """
 
 
 class AlreadyExistsException(BasePySetlException):
-    """Throw an exception for an already registered object."""
+    """
+    Raised when an object is already registered or exists in the registry.
+    """
 
 
 class PySparkException(BasePySetlException):
-    """Throw an exception if issue is related with PySpark."""
+    """
+    Raised for errors related to PySpark operations or integration.
+    """
 
 
 class InvalidConnectorException(BasePySetlException):
-    """Throw an exception if connector does not satisfies requirements."""
+    """
+    Raised when a connector does not satisfy the required interface or conditions.
+    """
 
 
 class InvalidConfigException(BasePySetlException):
-    """Throw an exception if configuration has an error."""
+    """
+    Raised when a configuration is invalid or contains errors.
+    """
 
 
 class InvalidDeliveryException(BasePySetlException):
-    """Throw an exception if delivery is duplicated or not found."""
+    """
+    Raised when a delivery is duplicated or not found in the workflow.
+    """
 
 
 class PipelineException(BasePySetlException):
-    """Throw an exception if Pipeline fails."""
+    """
+    Raised when a pipeline operation fails.
+    """
 
 
 class BuilderException(BaseException):
-    """Throw if builder fails."""
+    """
+    Raised when a builder operation fails.
+    """
 
 
 __all__ = [
@@ -38,5 +56,5 @@ __all__ = [
     "PySparkException",
     "InvalidConnectorException",
     "InvalidConfigException",
-    "PipelineException"
+    "PipelineException",
 ]

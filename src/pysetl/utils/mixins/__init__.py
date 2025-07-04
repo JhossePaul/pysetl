@@ -1,8 +1,12 @@
 """
-utils.mixins module.
+Mixins subpackage for PySetl.
 
-Collection of class mixins to add functionalities to base
-package classes
+Provides a collection of class mixins to add modular functionalities to base
+package classes.
+
+Exposes mixins for creation, deletion, partitioning, updating, waiting,
+benchmarking, diagrams, logging, reading, registry, Spark session, writing,
+configurability, identifiability, and writability.
 """
 from .can_create import CanCreate
 from .can_delete import CanDelete
@@ -38,5 +42,5 @@ __all__ = [
     "HasWriter",
     "IsConfigurable",
     "IsIdentifiable",
-    "IsWritable"
+    "IsWritable",
 ]

@@ -1,4 +1,8 @@
-"""HasRegistryMixin module."""
+"""
+HasRegistry mixin for PySetl.
+
+Provides a mixin to add registry functionality to classes, allowing registration and retrieval by UUID.
+"""
 from typing import TypeVar, Generic, Optional
 from uuid import UUID
 from typing_extensions import Self
@@ -10,7 +14,11 @@ T = TypeVar("T", bound=IsIdentifiable)
 
 
 class HasRegistry(Generic[T]):
-    """Mixin class to give child a registry of unique objects."""
+    """
+    Mixin to add registry functionality to a class.
+
+    Provides methods to register, retrieve, and manage objects by UUID.
+    """
 
     def __init__(self) -> None:
         self._registry: dict[UUID, T] = {}
@@ -33,7 +41,12 @@ class HasRegistry(Generic[T]):
         return self
 
     def register(self, item: T):
-        """Register an item."""
+        """
+        Register an object in the registry.
+
+        Args:
+            item: The object to register.
+        """
         if self.is_registered(item):
             raise AlreadyExistsException(
                 f"The item {item.uuid} of type {item.name()} already exists"
@@ -44,7 +57,12 @@ class HasRegistry(Generic[T]):
         return self
 
     def get_registry(self) -> dict[UUID, T]:
-        """Expose the registry."""
+        """
+        Get the registry dictionary.
+
+        Returns:
+            dict: The registry mapping UUIDs to objects.
+        """
         return self._registry
 
     def get_item(self, uuid: UUID) -> Optional[T]:
@@ -63,3 +81,12 @@ class HasRegistry(Generic[T]):
     def size(self: Self) -> int:
         """Return dize of the registry."""
         return len(self._registry)
+
+    def unregister(self, uuid: UUID):
+        """
+        Unregister an object from the registry by UUID.
+
+        Args:
+            uuid: The UUID of the object to unregister.
+        """
+        self._registry.pop(uuid, None)
