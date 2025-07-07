@@ -29,17 +29,17 @@ theme:
     - header.autohide         # Automatically hide the header when scrolling down
     - content.code.copy       # Add a copy button to code blocks
   palette:
-    - scheme: default
-      primary: '#377AB1'
-      accent: '#FAD745'
-      # background: '#BCDAFF' # Background is typically controlled by the theme's overall scheme
+    - scheme: default # Light mode
+      primary: '#377AB1' # Mid-tone Blue
+      accent: '#FAD745'  # Bright Yellow
+      # background: '#BCDAFF' # Light Blue (commented out, but was there)
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
-    - scheme: slate
-      primary: '#003366'
-      accent: '#EE8D24'
-      # background: '#377AB1' # Background is typically controlled by the theme's overall scheme
+    - scheme: slate # Dark mode
+      primary: '#003366' # Dark Blue / Deep Navy
+      accent: '#EE8D24'  # Orange
+      # background: '#377AB1' # Mid-tone Blue (commented out, but was there)
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
@@ -127,9 +127,9 @@ markdown_extensions:
   - pymdownx.tabbed        # Allows creating tabbed content blocks in Markdown
   - pymdownx.inlinehilite  # Enables inline code highlighting (e.g., `#!python some_code`)
   - pymdownx.snippets      # Allows including snippets from other files in Markdown
-  - pymdownx.emoji:        # Adds support for emoji shortcodes (e.g., `:smile:`)
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  # - pymdownx.emoji:        # Adds support for emoji shortcodes (e.g., `:smile:`)
+  #     emoji_index: !!python/name:material.extensions.emoji.twemoji
+  #     emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.magiclink     # Automatically converts URLs and email addresses into clickable links
   - pymdownx.tasklist      # Renders GitHub-style task lists (checkboxes)
   - pymdownx.tilde         # Enables strikethrough text using `~~text~~`
@@ -137,9 +137,9 @@ markdown_extensions:
   - pymdownx.mark          # Highlights text using `==text==`
   - pymdownx.caret         # Enables insert (`^^text^^`) and delete (`--text--`) markup
   - pymdownx.smartsymbols  # Converts ASCII sequences to typographic symbols (e.g., `---` to em-dash)
-  - pymdownx.highlight:    # Enhances code block highlighting
-      anchor_linenums: true # Makes line numbers in code blocks linkable
-      linenums: true        # Displays line numbers in code blocks
+  - pymdownx.highlight    # Enhances code block highlighting
+      # anchor_linenums: true # Makes line numbers in code blocks linkable
+      # linenums: true        # Displays line numbers in code blocks
   - pymdownx.arithmatex:   # Adds support for LaTeX math rendering (requires MathJax/KaTeX)
       generic: true
   - pymdownx.superfences:  # Improves nested code blocks and allows custom fences

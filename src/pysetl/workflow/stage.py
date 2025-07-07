@@ -51,7 +51,7 @@ class Stage(HasRegistry[Factory], HasLogger, HasBenchmark, IsWritable, IsIdentif
         Initialize a new Stage.
 
         Args:
-            benckmark: Whether to enable benchmarking for factories in this stage.
+            benchmark: Whether to enable benchmarking for factories in this stage.
                       Defaults to False.
         """
         super().__init__()
