@@ -236,6 +236,6 @@ examples/
 
 ## Next Steps
 
-- 🚀 [QuickStart](index.md) - Run your first pipeline
+- 🚀 [QuickStart](quickstart.md) - Run your first pipeline
 - 📚 [User Guide](../user-guide/index.md) - Learn PySetl concepts
 - 🔧 [Configuration](../user-guide/configuration.md) - Configure your environment

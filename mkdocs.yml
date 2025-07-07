@@ -60,6 +60,16 @@ nav:
       - Data Access Layer: user-guide/dal.md
       - Workflow: user-guide/workflow.md
       - PySetl Context: user-guide/pysetl_context.md
+  - Advanced Usage:
+      - Overview: advanced-usage/index.md
+      - Config Builder: advanced-usage/config-builder.md
+      - Custom Config: advanced-usage/custom-config.md
+      - Custom Connectors: advanced-usage/custom-connectors.md
+      - Custom Factories: advanced-usage/custom-factories.md
+      - Pipelines: advanced-usage/pipelines.md
+      - Dispatcher: advanced-usage/dispatcher.md
+      - Modularization: advanced-usage/modularization.md
+      - Performance: advanced-usage/performance.md
   - API Reference:
       - Overview: api/overview.md
       - pysetl: api/pysetl.md

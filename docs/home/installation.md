@@ -128,6 +128,6 @@ hatch run security:all  # Run all security checks
 
 ## Next Steps
 
-- 🚀 [QuickStart](index.md) - Run your first PySetl pipeline
+- 🚀 [QuickStart](quickstart.md) - Run your first PySetl pipeline
 - 📚 [Examples](examples.md) - See real-world usage patterns
 - 🔧 [Configuration](../user-guide/configuration.md) - Learn about PySetl configuration
