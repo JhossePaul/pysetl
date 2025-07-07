@@ -4,6 +4,16 @@ PySetl provides a modern, type-safe, and extensible configuration system for all
 
 ---
 
+## How Configuration Fits Into a PySetl Workflow
+
+- **User Code**: Defines configuration objects (e.g., CsvConfig, FileConfig)
+- **Config**: Validates and holds all settings for data sources, sinks, and connectors
+- **Connector/Repository**: Receives config, uses it to read/write data
+- **Factory/Stage/Pipeline**: Use repositories and configs to build ETL logic
+- **PySetl**: Orchestrates the entire workflow
+
+---
+
 ## Philosophy & Design
 
 - **Type Safety:** All configurations are validated using Pydantic models, ensuring correctness at runtime.
@@ -14,7 +24,6 @@ PySetl provides a modern, type-safe, and extensible configuration system for all
 ---
 
 ## Core Components
-
 
 ``` mermaid
 graph LR
@@ -33,10 +42,15 @@ graph LR
 ```
 
 ### BaseConfigModel
-All config models inherit from `BaseConfigModel`, which enforces a `storage` type and provides a foundation for validation.
+
+All config models inherit from `BaseConfigModel`, which enforces a `storage`
+type and provides a foundation for validation.
 
 ### Config[T]
-The main configuration class, parameterized by a Pydantic model. Provides methods to set/get/validate config values, and exposes validated config via the `.config` property.
+
+The main configuration class, parameterized by a Pydantic model. Provides
+methods to set/get/validate config values, and exposes validated config via the
+`.config` property.
 
 #### Key Methods & Properties
 - `set(key, value)`: Set a config value
@@ -49,12 +63,62 @@ The main configuration class, parameterized by a Pydantic model. Provides method
 
 ---
 
+## How Configs Are Used with Connectors and Repositories
+
+Configs are passed directly to connectors and repositories, which use them to
+read and write data. This ensures that all data access is type-safe and
+validated.
+
+```python
+from pysetl.config import CsvConfig
+from pysetl.storage.connector.csv_connector import CsvConnector
+
+# Create a validated config
+csv_config = CsvConfig(path="/data/input.csv", header="true")
+
+# Pass config to connector
+connector = CsvConnector(csv_config)
+df = connector.read()  # Uses config for all options
+```
+
+**In a pipeline, configs are often managed by the PySetl context and injected automatically into repositories and factories.**
+
+---
+
+## Type Safety and Error Handling
+
+PySetl's configuration system uses Pydantic for validation, so errors are caught early and clearly reported.
+
+```python
+from pysetl.config import CsvConfig
+
+try:
+    # Missing required 'path' field
+    config = CsvConfig(header="true")
+except Exception as e:
+    print("Config validation error:", e)
+```
+
+**Output:**
+```
+Config validation error: 1 validation error for CsvConfigModel
+path
+  Field required [type=missing, ...]
+```
+
+- All config errors are explicit and easy to debug
+- IDEs provide autocomplete and type checking for config fields
+- You can always access the validated config via `.config`
+
+---
+
 ## Built-in Config Types
 
 ### FileConfig
 For file-based storage (CSV, JSON, Parquet, etc.).
 
 **Fields:**
+
 - `storage`: FileStorage (CSV, JSON, PARQUET, ...)
 - `path`: str
 - `partition_by`: list[str] (optional)
@@ -63,6 +127,7 @@ For file-based storage (CSV, JSON, Parquet, etc.).
 - `aws_credentials`: Optional[AwsCredentials]
 
 ### CsvConfig
+
 Specializes FileConfig for CSV files.
 
 **Additional Fields:**
@@ -71,13 +136,17 @@ Specializes FileConfig for CSV files.
 - `delimiter`: str (default: ",")
 
 ### JsonConfig
+
 Specializes FileConfig for JSON files.
 
 ### ParquetConfig
+
 Specializes FileConfig for Parquet files.
 
 ### AwsCredentials
+
 Pydantic model for AWS S3 credentials.
+
 - `access_key`: str
 - `secret_key`: str
 - `session_token`: str
@@ -88,6 +157,7 @@ Pydantic model for AWS S3 credentials.
 ## Usage Examples
 
 ### 1. Creating a FileConfig
+
 ```python
 from pysetl.config import FileConfig
 
@@ -109,6 +179,7 @@ print(csv_config.config)
 ```
 
 ### 3. AWS Credentials
+
 ```python
 from pysetl.config import AwsCredentials
 
@@ -121,6 +192,7 @@ creds = AwsCredentials(
 ```
 
 ### 4. Accessing Reader/Writer Configs
+
 ```python
 from pysetl.config import CsvConfig
 
@@ -133,7 +205,8 @@ writer_conf = config.writer_config
 
 ## Extending the Config System
 
-To create your own config type, subclass `BaseConfigModel` and `Config`, then add your fields and logic. Example:
+To create your own config type, subclass `BaseConfigModel` and `Config`, then
+add your fields and logic. Example:
 
 ```python
 from pysetl.config import BaseConfigModel, Config
@@ -158,5 +231,11 @@ class MyConfig(Config[MyConfigModel]):
 - Leverage Pydantic validation for custom logic.
 
 ---
+
+## Next Steps
+
+- [Data Access Layer](dal.md): See how configs are used with repositories and connectors
+- [Workflow Guide](workflow.md): Learn how to build ETL workflows using your configs
+- [PySetl Context](pysetl_context.md): Understand advanced dependency injection and config management
 
 For more details, see the [API Reference](../api/config.md).

@@ -1,21 +1,126 @@
 # PySetl Context: Putting it all together
 
-The `pysetl.PySetl` class is the main entrypoint and context manager for orchestrating Spark ETL workflows in PySetl. It encapsulates the Spark session, configuration, external inputs, and pipeline management, making it easy to build, configure, and execute complex data pipelines.
+The `pysetl.PySetl` class is the main entrypoint and context manager for
+orchestrating Spark ETL workflows in PySetl. It encapsulates the Spark session,
+configuration, external inputs, and pipeline management, making it easy to
+build, configure, and execute complex data pipelines.
+
+---
+
+## How PySetl Context Ties Everything Together
+
+- **Central Orchestration:** PySetl context manages the Spark session,
+configuration registry, repositories, external inputs, and pipelines.
+- **Dependency Injection:** Automatically injects configs and repositories into
+factories and pipelines, reducing boilerplate and errors.
+- **Lifecycle Management:** Handles setup, execution, and teardown (including
+Spark shutdown) for the entire ETL workflow.
+- **Reproducibility:** Ensures all resources and dependencies are registered and
+available before pipeline execution.
+
+---
+
+## Dependency Injection and Context Management
+
+PySetl context makes it easy to inject repositories and configs into factories
+and pipelines. This enables modular, testable, and maintainable workflows.
+
+```python
+from pysetl import PySetl
+from pysetl.config import CsvConfig
+from pysetl.storage.repository import SparkRepository
+from pysetl.workflow import Factory, Delivery
+from typedspark import DataSet, Schema, Column
+from pyspark.sql.types import StringType
+
+class MySchema(Schema):
+    name: Column[StringType]
+
+class MyFactory(Factory[DataSet[MySchema]]):
+    repo_delivery = Delivery[SparkRepository[MySchema]]()
+    def read(self):
+        repo = self.repo_delivery.get()  # Injected automatically by PySetl context
+        self.data = repo.load()
+        return self
+    # ...
+
+config = {"mydata": CsvConfig(path="/data/input.csv")}
+pysetl = PySetl.builder().set_config(config).getOrCreate()
+pysetl.set_spark_repository_from_config(MySchema, "mydata")
+
+# Now, when you build a pipeline, the repository is injected into the factory
+```
+
+---
+
+## Error Handling and Type Safety
+
+PySetl context validates that all required configs and repositories are
+registered before pipeline execution. If something is missing, you get a clear
+error.
+
+```python
+from pysetl import PySetl
+from pysetl.workflow import Factory, Delivery
+from typedspark import DataSet, Schema, Column
+from pyspark.sql.types import StringType
+
+class MySchema(Schema):
+    name: Column[StringType]
+
+class MyFactory(Factory[DataSet[MySchema]]):
+    repo_delivery = Delivery[SparkRepository[MySchema]]()
+    def read(self):
+        repo = self.repo_delivery.get()
+        self.data = repo.load()
+        return self
+    # ...
+
+pysetl = PySetl.builder().getOrCreate()  # No config or repository registered
+
+try:
+    # This will fail because the repository is missing
+    pipeline = pysetl.new_pipeline().add_stage_from_type(MyFactory).run()
+except Exception as e:
+    print("Context error:", e)
+```
+
+**Output:**
+```
+Context error: No deliverable found for Delivery[SparkRepository[MySchema]]
+```
+
+- All missing dependency errors are explicit and easy to debug
+- IDEs provide autocomplete and type checking for configs and repositories
+- PySetl context ensures reproducibility and reliability
+
+---
 
 ## What is the PySetl Context?
-- **Spark Session Management:** Holds and manages the active `SparkSession` for all operations.
-- **Configuration Registry:** Accepts a dictionary of validated config objects (see the configuration guide).
-- **External Inputs:** Manages external deliverables (e.g., pre-built repositories or data sources) that can be injected into pipelines.
-- **Pipeline Management:** Create and register pipelines, set up pipelines with external inputs, and retrieve/manage pipelines by UUID.
-- **Repository Management:** Build and register SparkRepository objects from config, and retrieve repositories for use as external pipeline inputs.
-- **Builder Pattern:** The `PySetlBuilder` class provides a fluent interface for constructing a `PySetl` context, including Spark config, session, and benchmarking options.
-- **Graceful Shutdown:** Provides a `stop()` method to cleanly stop the Spark session.
+- **Spark Session Management:** Holds and manages the active `SparkSession` for
+all operations.
+- **Configuration Registry:** Accepts a dictionary of validated config objects
+(see the configuration guide).
+- **External Inputs:** Manages external deliverables (e.g., pre-built
+repositories or data sources) that can be injected into pipelines.
+- **Pipeline Management:** Create and register pipelines, set up pipelines with
+external inputs, and retrieve/manage pipelines by UUID.
+- **Repository Management:** Build and register SparkRepository objects from
+config, and retrieve repositories for use as external pipeline inputs.
+- **Builder Pattern:** The `PySetlBuilder` class provides a fluent interface for
+constructing a `PySetl` context, including Spark config, session, and
+benchmarking options.
+- **Graceful Shutdown:** Provides a `stop()` method to cleanly stop the Spark
+session.
 
 ---
 
 ## Full Example
 
-Below is a fully functional example that demonstrates how to use the PySetl context, configuration, repositories, factories, stages, and pipelines together. For a full example, see the [structured example](https://github.com/JhossePaul/pysetl/tree/main/examples):
+Below is a fully functional example that demonstrates how to use the PySetl
+context, configuration, repositories, factories, stages, and pipelines together.
+For a full example, see the
+[structured example](https://github.com/JhossePaul/pysetl/tree/main/examples):
 
 ```python
 from typing_extensions import Self
@@ -180,5 +285,13 @@ print(pipeline.to_diagram())
 - Register all configs and external inputs before creating pipelines.
 - Use `pysetl.new_pipeline()` to ensure all external inputs are injected.
 - Always call `pysetl.stop()` at the end of your workflow to release Spark resources.
+
+---
+
+## Next Steps
+
+- [Configuration Guide](configuration.md): Learn how to create and validate configs for your data sources
+- [Data Access Layer](dal.md): See how repositories and connectors fit into your workflow
+- [Workflow Guide](workflow.md): See how to build and execute pipelines using the context
 
 For more details, see the [API Reference](../api/pysetl.md).

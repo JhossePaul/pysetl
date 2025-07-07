@@ -48,13 +48,18 @@ theme:
   favicon: assets/images/favicon.ico
 
 nav:
-  - Home: index.md
-  - Getting Started: getting-started.md
+  - Home:
+      - Overview: index.md
+      - QuickStart: home/quickstart.md
+      - Installation: home/installation.md
+      - Examples: home/examples.md
   - User Guide:
+      - Motivation: user-guide/index.md
+      - Philosophy & Concepts: user-guide/philosophy.md
       - Configuration: user-guide/configuration.md
       - Data Access Layer: user-guide/dal.md
-      - PySetl Context: user-guide/pysetl_context.md
       - Workflow: user-guide/workflow.md
+      - PySetl Context: user-guide/pysetl_context.md
   - API Reference:
       - Overview: api/overview.md
       - pysetl: api/pysetl.md
@@ -62,16 +67,16 @@ nav:
       - pysetl.storage: api/storage.md
       - pysetl.config: api/config.md
       - pysetl.utils: api/utils.md
-  - Contributing: contributing.md
-  - Code of Conduct: code-of-conduct.md
   - Development:
-      - Overview: development/README.md
+      - Contributing: development/index.md
+      - Roadmap: development/roadmap.md
       - Critical Priority: development/critical-priority.md
       - High Priority: development/high-priority.md
       - Medium Priority: development/medium-priority.md
       - Low Priority: development/low-priority.md
       - Very Low Priority: development/very-low-priority.md
       - Completed Work: development/completed-work.md
+      - Code of Conduct: development/code-of-conduct.md
 
 plugins:
   - include-markdown

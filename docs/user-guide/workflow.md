@@ -1,6 +1,8 @@
 # Workflow System
 
-The PySetl workflow system enables the construction, validation, and execution of complex, type-safe, and modular data pipelines using a Directed Acyclic Graph (DAG) of stages and factories.
+The PySetl workflow system enables the construction, validation, and execution
+of complex, type-safe, and modular data pipelines using a Directed Acyclic Graph
+(DAG) of stages and factories.
 
 ---
 
@@ -11,6 +13,81 @@ The PySetl workflow system enables the construction, validation, and execution o
 - **DAG Execution:** The workflow is represented as a DAG, ensuring correct data flow and dependency resolution.
 - **Extensibility:** Easily add new computation units (factories) and stages.
 - **Validation:** All dependencies are checked before execution, preventing runtime errors.
+
+---
+
+## How Factories, Stages, and Pipelines Interact
+
+Factories are the atomic units of computation. Stages group related factories
+for sequential execution. Pipelines orchestrate the execution of stages, manage
+dependencies, and validate the workflow.
+
+```python
+from pysetl.workflow import Factory, Stage, Pipeline
+from typedspark import DataSet, Schema, Column
+from pyspark.sql.types import StringType
+
+# 1. Define a factory
+class MySchema(Schema):
+    name: Column[StringType]
+
+class MyFactory(Factory[DataSet[MySchema]]):
+    ...
+
+# 2. Add factory to a stage
+stage = Stage().add_factory_from_type(MyFactory)
+
+# 3. Add stage to a pipeline and run
+pipeline = Pipeline()
+pipeline.add_stage(stage)
+pipeline.run()
+```
+
+- **Factories**: Declare dependencies and implement ETL logic.
+- **Stages**: Group factories for sequential execution.
+- **Pipelines**: Orchestrate stages, manage dependencies, and validate the workflow.
+
+---
+
+## Type Safety and Error Handling
+
+PySetl validates all dependencies and the DAG before execution. If a dependency
+is missing or ambiguous, you get a clear error before any data is processed.
+
+```python
+from pysetl.workflow import Factory, Stage, Pipeline, Delivery
+from typedspark import DataSet, Schema, Column
+from pyspark.sql.types import StringType
+
+class MySchema(Schema):
+    name: Column[StringType]
+
+class ConsumerFactory(Factory[DataSet[MySchema]]):
+    # Declares a dependency that is not provided
+    input_delivery = Delivery[DataSet[MySchema]]()
+    def read(self):
+        self.data = self.input_delivery.get()
+        return self
+    # ...
+
+stage = Stage().add_factory_from_type(ConsumerFactory)
+pipeline = Pipeline().add_stage(stage)
+
+try:
+    pipeline.run()
+except Exception as e:
+    print("Workflow error:", e)
+```
+
+**Output:**
+
+```
+Workflow error: No deliverable found for Delivery[MySchema]
+```
+
+- All dependency errors are explicit and easy to debug
+- The DAG inspector validates the workflow before execution
+- IDEs provide autocomplete and type checking for factories and deliveries
 
 ---
 
@@ -53,6 +130,8 @@ Factories are the computation units. Each factory declares its inputs (Deliverie
 
 ```python
 from pysetl.workflow import Factory, Delivery, Deliverable
+from typedspark import Schema, Column
+from pyspark.sql.types import StringType, IntegerType
 
 class Citizen(Schema):
     name: Column[StringType]
@@ -138,10 +217,18 @@ output = pipeline.get_output(CitizensFactory)
 
 ### Dependency Injection
 
-By default, a Factory will produce a `Deliverable[T]` and the Pipeline will register each available deliverable produced by the factories. You can take advantage of this deliverable pool with a `Delivery[T]` declaration inside your factory and the Pipeline dispatcher will try to solve the dependency by searching for a `Deliverable` of the same type. If ambiguity occurs you can pass a deliverable_id or explicitly state the expected producer class. Finally, you can register external deliverables into the Pipeline.
+By default, a Factory will produce a `Deliverable[T]` and the Pipeline will
+register each available deliverable produced by the factories. You can take
+advantage of this deliverable pool with a `Delivery[T]` declaration inside your
+factory and the Pipeline dispatcher will try to solve the dependency by
+searching for a `Deliverable` of the same type. If ambiguity occurs you can pass
+a deliverable_id or explicitly state the expected producer class. Finally, you
+can register external deliverables into the Pipeline.
 
 ```python
 from pysetl.workflow import Delivery, Deliverable
+from typedspark import Schema, Column
+from pyspark.sql.types import StringType, IntegerType
 
 class City(Schema):
     city: Column[StringType]
@@ -187,10 +274,17 @@ pipeline = (
 ---
 
 ## Best Practices
+
 - Declare all dependencies explicitly using Deliveries.
 - Organize related factories into stages for clarity and modularity.
 - Use benchmarking and diagrams to optimize and document your workflow.
 - Leverage external inputs for flexible pipeline entry points.
 - Extend Factory, Stage, and Pipeline for custom logic as needed.
+
+## Next Steps
+
+- [Configuration Guide](configuration.md): Learn how to create and validate configs for your data sources
+- [Data Access Layer](dal.md): See how repositories and connectors fit into your workflow
+- [PySetl Context](pysetl_context.md): Understand advanced dependency injection and workflow management
 
 For more details, see the [API Reference](../api/workflow.md).
