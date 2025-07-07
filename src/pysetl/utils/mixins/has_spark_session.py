@@ -14,7 +14,7 @@ class HasSparkSession:
     """
 
     @property
-    def spark(self):
+    def spark(self) -> SparkSession:
         """
         Get the SparkSession instance.
 

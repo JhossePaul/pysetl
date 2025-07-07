@@ -9,35 +9,37 @@ copyright: >
 
 theme:
   name: material
+  custom_dir: docs/assets # Point to your custom assets directory for theme overrides (e.g., custom templates)
   features:
-    - navigation.instant
-    - navigation.top
-    - navigation.footer
-    - navigation.breadcrumbs
-    - navigation.tabs
-    - navigation.sections
-    - navigation.expand
-    - toc.integrate
-    - toc.follow
-    - search.suggest
-    - search.highlight
-    - content.code.annotate
-    - content.tabs.link
-    - content.action.edit
-    - content.action.view
-    - header.autohide
+    - navigation.instant      # Enable instant loading of pages for faster navigation
+    - navigation.top          # Show a "Back to top" button in the footer
+    - navigation.footer       # Display next/previous page links in the footer
+    - navigation.breadcrumbs  # Show breadcrumbs at the top of the content area
+    - navigation.tabs         # Use tabs for top-level navigation items (if you have many)
+    - navigation.sections     # Group navigation items by sections in the left sidebar
+    - navigation.expand       # Expand all navigation sections in the left sidebar by default
+    # - toc.integrate         # Integrates the Table of Contents into the right sidebar (currently commented out)
+    - toc.follow              # Makes the right-hand TOC highlight the current heading as you scroll
+    - search.suggest          # Enable search suggestions as the user types
+    - search.highlight        # Highlight search results on the page
+    - content.code.annotate   # Allow inline annotations for code blocks (e.g., `#! (1)`)
+    - content.tabs.link       # Make tabs linkable (e.g., you can link directly to a specific tab)
+    - content.action.edit     # Show an "Edit this page" button (requires `edit_uri`)
+    - content.action.view     # Show a "View source" button (requires `repo_url`)
+    - header.autohide         # Automatically hide the header when scrolling down
+    - content.code.copy       # Add a copy button to code blocks
   palette:
     - scheme: default
       primary: '#377AB1'
       accent: '#FAD745'
-      background: '#BCDAFF'
+      # background: '#BCDAFF' # Background is typically controlled by the theme's overall scheme
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - scheme: slate
       primary: '#003366'
       accent: '#EE8D24'
-      background: '#377AB1'
+      # background: '#377AB1' # Background is typically controlled by the theme's overall scheme
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
@@ -71,11 +73,12 @@ nav:
       - Modularization: advanced-usage/modularization.md
       - Performance: advanced-usage/performance.md
   - API Reference:
-      - Overview: api/overview.md
+      - Overview: api/index.md
       - pysetl: api/pysetl.md
-      - pysetl.workflow: api/workflow.md
-      - pysetl.storage: api/storage.md
+      - pysetl.enums: api/enums.md
       - pysetl.config: api/config.md
+      - pysetl.storage: api/storage.md
+      - pysetl.workflow: api/workflow.md
       - pysetl.utils: api/utils.md
   - Development:
       - Contributing: development/index.md
@@ -89,53 +92,70 @@ nav:
       - Code of Conduct: development/code-of-conduct.md
 
 plugins:
-  - include-markdown
-  - search
-  - autorefs
-  - git-revision-date-localized
-  - git-authors
-  - minify
-  - awesome-pages
-  - literate-nav
-  - glightbox
-  - mkdocstrings:
+  - include-markdown       # Allows embedding content from other Markdown files using `!include`
+  - search                 # Provides the search functionality for your documentation
+  - autorefs               # Automatically creates cross-references between pages and headings
+  - git-revision-date-localized # Displays the last modification date of a page, localized
+  - git-authors            # Shows the Git authors who contributed to a page
+  - minify                 # Minifies HTML, CSS, and JS to reduce page load times
+  - awesome-pages          # Extends navigation capabilities, allowing more flexible page ordering and grouping
+  - literate-nav           # Allows defining navigation directly in Markdown files (e.g., `.pages` files)
+  - glightbox              # Enables a lightbox effect for images, allowing them to be viewed in a modal overlay
+  - mkdocstrings:          # Generates API documentation from Python docstrings.
       handlers:
         python:
+          paths: [src] # Explicitly tells mkdocstrings where your Python source code is located.
           options:
-            show_source: true
-            docstring_style: google
-  - section-index
+            show_source: true             # Show the source code for documented members.
+            docstring_style: google       # Specify the style of docstrings (e.g., Google, NumPy, Sphinx).
+            show_root_heading: true       # Display the module/class name as a heading for its documentation.
+            show_if_no_docstring: false   # Do not show members that do not have a docstring.
+            separate_signature: true      # Display the function/method signature on a separate line.
+            show_signature_annotations: true # Show type annotations in function/method signatures.
+            members_order: "alphabetical" # Order members alphabetically; can also be "source" to match file order.
+            # Filters to hide magic methods (dunder methods)
+            # The default filter is ["! ^_[^_]"], which hides private but shows magic methods.
+            # To hide magic methods, we add an explicit negative filter for them.
+            filters: ["!^__(str|repr)__$"] # Excludes all methods starting and ending with double underscores.
+                                   # If you wanted to keep __init__ but hide others, you'd need a more complex filter.
+  - section-index          # Automatically creates index pages for sections, listing their sub-pages.
+
 
 markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.tabbed
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.emoji
-  - pymdownx.magiclink
-  - pymdownx.tasklist
-  - pymdownx.tilde
-  - pymdownx.keys
-  - pymdownx.mark
-  - pymdownx.caret
-  - pymdownx.smartsymbols
-  - pymdownx.highlight
-  - pymdownx.arithmatex
-  - pymdownx.superfences:
+  - admonition             # Enables special "admonition" blocks (e.g., `!!! note`, `!!! warning`)
+  - pymdownx.details       # Adds support for collapsible `<details>` and `<summary>` tags
+  - pymdownx.tabbed        # Allows creating tabbed content blocks in Markdown
+  - pymdownx.inlinehilite  # Enables inline code highlighting (e.g., `#!python some_code`)
+  - pymdownx.snippets      # Allows including snippets from other files in Markdown
+  - pymdownx.emoji:        # Adds support for emoji shortcodes (e.g., `:smile:`)
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.magiclink     # Automatically converts URLs and email addresses into clickable links
+  - pymdownx.tasklist      # Renders GitHub-style task lists (checkboxes)
+  - pymdownx.tilde         # Enables strikethrough text using `~~text~~`
+  - pymdownx.keys          # Renders keyboard keys (e.g., `<kbd>Ctrl</kbd>`)
+  - pymdownx.mark          # Highlights text using `==text==`
+  - pymdownx.caret         # Enables insert (`^^text^^`) and delete (`--text--`) markup
+  - pymdownx.smartsymbols  # Converts ASCII sequences to typographic symbols (e.g., `---` to em-dash)
+  - pymdownx.highlight:    # Enhances code block highlighting
+      anchor_linenums: true # Makes line numbers in code blocks linkable
+      linenums: true        # Displays line numbers in code blocks
+  - pymdownx.arithmatex:   # Adds support for LaTeX math rendering (requires MathJax/KaTeX)
+      generic: true
+  - pymdownx.superfences:  # Improves nested code blocks and allows custom fences
       custom_fences:
-        - name: mermaid
+        - name: mermaid    # Defines a custom fence for Mermaid diagrams
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - toc:
-      permalink: true
-      toc_depth: 3
+  - toc:                   # Generates a Table of Contents for each page
+      permalink: true      # Adds a link icon next to each heading in the TOC
+      toc_depth: 4         # Controls which heading levels appear in the TOC (up to H4)
 
 extra_css:
   - assets/css/custom.css
 extra_javascript: []
 
-edit_uri: "edit/main/docs/"
+edit_uri: "edit/main/docs/" # The base URL for the "Edit this page" button on GitHub
 
 extra:
   social:

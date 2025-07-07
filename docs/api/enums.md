@@ -1,0 +1,3 @@
+# pysetl.enums
+
+::: pysetl.enums
