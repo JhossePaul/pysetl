@@ -118,7 +118,7 @@ pre-commit install
 ## Contributing
 
 We welcome contributions! Please see our
-[Contributing Guide](https://pysetl.readthedocs.io/en/latest/contributing/)
+[Contributing Guide](https://pysetl.readthedocs.io/en/latest/development/)
 for details.
 
 ## License
