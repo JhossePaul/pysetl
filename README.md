@@ -88,10 +88,10 @@ their own Spark distribution)
 
 ## Documentation
 
-- 📖 [User Guide](https://pysetl.readthedocs.io/en/latest/user-guide/configuration/)
-- 🔧 [API Reference](https://pysetl.readthedocs.io/en/latest/api/pysetl/)
-- 🚀 [Getting Started](https://pysetl.readthedocs.io/en/latest/getting-started/)
-- 🤝 [Contributing](https://pysetl.readthedocs.io/en/latest/contributing/)
+- 📖 [User Guide](https://pysetl.readthedocs.io/en/latest/user-guide/)
+- 🔧 [API Reference](https://pysetl.readthedocs.io/en/latest/api/)
+- 🚀 [Getting Started](https://pysetl.readthedocs.io/en/latest/home/quickstart/)
+- 🤝 [Contributing](https://pysetl.readthedocs.io/en/latest/development/)
 
 ## Development
 
