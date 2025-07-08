@@ -1,6 +1,7 @@
 # Development Documentation
 
-This directory contains comprehensive development documentation, technical investigations, and TODO items for PySetl.
+This directory contains comprehensive development documentation, technical
+investigations, and TODO items for PySetl.
 
 ## 📋 Priority definitions
 

@@ -46,17 +46,17 @@ class Stage(HasRegistry[Factory], HasLogger, HasBenchmark, IsWritable, IsIdentif
     TODO: Implement clearJobGroup functionality (requires PySpark API investigation)
     """
 
-    def __init__(self, benckmark: bool = False) -> None:
+    def __init__(self, benchmark: bool = False) -> None:
         """
         Initialize a new Stage.
 
         Args:
-            benckmark: Whether to enable benchmarking for factories in this stage.
+            benchmark: Whether to enable benchmarking for factories in this stage.
                       Defaults to False.
         """
         super().__init__()
         IsIdentifiable.__init__(self)
-        self.benchmarked = benckmark
+        self.benchmarked = benchmark
         self.__end: bool = True
         self.__stage_id: int = 0
         self.__deliverable: list[Deliverable] = []

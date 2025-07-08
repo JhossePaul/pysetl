@@ -2,11 +2,14 @@
 
 Thank you for your interest in contributing to PySetl! 🎉
 
-We welcome contributions of all kinds: bug reports, feature requests, code, documentation, and more. This guide will help you get started as a PySetl contributor.
+We welcome contributions of all kinds: bug reports, feature requests, code,
+documentation, and more. This guide will help you get started as a PySetl
+contributor.
 
 ---
 
 ## Development Tech Stack
+
 - **Project Management:** [Hatch](https://hatch.pypa.io/) (build, test, envs)
 - **Dependency Management:** [uv](https://github.com/astral-sh/uv) (fast installer, works with pyproject.toml)
 - **Linting & Formatting:** [Ruff](https://docs.astral.sh/ruff/)
@@ -20,20 +23,18 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 
 ## Getting Started
 
+First, set up your development environment by following the
+[Installation Guide](docs/home/installation.md#development-installation).
+
+Then:
+
 1. **Fork and Clone**
    ```bash
    git clone https://github.com/JhossePaul/pysetl.git
    cd pysetl
    ```
 
-2. **Set Up the Dev Environment**
-   ```bash
-   # (All dependencies are managed via pyproject.toml)
-   hatch shell
-   hatch env show
-   ```
-
-3. **Install Pre-commit Hooks**
+2. **Install Pre-commit Hooks**
    ```bash
    pre-commit install
    ```
@@ -117,31 +118,14 @@ We welcome contributions of all kinds: bug reports, feature requests, code, docu
 
 ## Project Structure
 
-### Hatch Environments
-
-The project uses Hatch environments for different development tasks:
-
-- **`default`**: Basic development tools (ruff, mypy, pytest, pre-commit, coverage)
-- **`test`**: Testing environment with PySpark for integration tests (Python 3.9–3.13)
-- **`docs`**: Documentation building tools
-- **`security`**: Security scanning tools (bandit, safety, pip-audit)
-
-### Available Commands
-
-- **`hatch run type`**: Type checking with mypy
-- **`hatch run lint`**: Lint code with Ruff
-- **`hatch run format`**: Format code with Ruff
-- **`hatch run docs:docs`**: Build documentation
-- **`hatch run docs:serve`**: Serve documentation locally
-- **`hatch run security:all`**: Run all security checks
-- **`hatch test`**: Run tests (default environment only)
-- **`hatch test --all`**: Run all test matrix
-- **`hatch test --cover --all`**: Run all test matrix with coverage
+For detailed information about Hatch environments and available commands, see
+the [Installation Guide](docs/home/installation.md#development-installation).
 
 ---
 
 ## Community & Support
-- Please be respectful and follow our [Code of Conduct](code-of-conduct.md).
+
+- Please be respectful and follow our [Code of Conduct](https://github.com/JhossePaul/pysetl/blob/main/CODE_OF_CONDUCT.md).
 - Open issues for bugs, questions, or feature requests.
 - Join discussions on GitHub for ideas and feedback.
 

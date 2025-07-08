@@ -1,10 +1,11 @@
 """
 Delivery module for PySetl.
 
-Defines the Delivery class, which represents a typed, declarative input slot for a factory.
-A Delivery is not a data container, but a placeholder for a value of type T that will be
-injected at runtime by the dispatcher. Deliveries are used to declare dependencies between
-factories, enabling the construction of the DAG by searching for type dependencies.
+Defines the Delivery class, which represents a typed, declarative input slot for
+a factory. A Delivery is not a data container, but a placeholder for a value of
+type T that will be injected at runtime by the dispatcher. Deliveries are used
+to declare dependencies between factories, enabling the construction of the DAG
+by searching for type dependencies.
 """
 from __future__ import annotations
 from typing import TYPE_CHECKING, Generic, TypeVar, Optional, Union, get_args

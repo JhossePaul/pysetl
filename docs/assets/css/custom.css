@@ -1,19 +1,64 @@
 /* PySetl Brand Theme Custom CSS */
 
-/* Make the logo fill the header height */
-.md-header__button.md-logo img {
-  height: 2rem !important;   /* Increase as needed, e.g., 3.5rem or 4rem */
-  max-height: 100% !important;
-  width: auto !important;
-  margin: 0 !important;
-  /* Optional: vertically center if needed */
-  display: block;
-  align-self: center;
+/* -------------------------------------------------------------------------- */
+/* 1. Core Brand Colors & Material for MkDocs Variable Overrides              */
+/* Define PySetl's brand colors as CSS variables for easy reuse.           */
+/* Then, override Material for MkDocs's default palette variables.         */
+/* -------------------------------------------------------------------------- */
+
+:root { /* Light Mode (default scheme) */
+  --pysetl-blue-mid: #377AB1;
+  --pysetl-blue-light: #BCDAFF;
+  --pysetl-blue-dark: #003366;
+  --pysetl-yellow: #FAD745;
+  --pysetl-orange: #EE8D24;
+
+  /* Material for MkDocs palette overrides for light scheme */
+  --md-primary-fg-color: var(--pysetl-blue-mid); /* Main header, sidebar active, primary buttons */
+  --md-primary-fg-color--light: var(--pysetl-blue-light); /* Lighter shades of primary */
+  --md-primary-fg-color--dark: var(--pysetl-blue-dark);   /* Darker shades of primary */
+
+  --md-accent-fg-color: var(--pysetl-yellow);    /* Accent elements: links, highlighted text, some buttons */
+  --md-accent-fg-color--transparent: hsla(47, 94%, 63%, 0.1); /* Transparent version for hover/focus states */
+
+  --md-default-fg-color: hsla(0, 0%, 0%, 0.87); /* Default text color */
+  --md-default-fg-color--light: hsla(0, 0%, 0%, 0.54); /* Lighter text color */
+  --md-default-fg-color--lighter: hsla(0, 0%, 0%, 0.32); /* Even lighter text color */
+  --md-default-bg-color: hsla(0, 0%, 100%, 1); /* Default background color */
+  --md-default-bg-color--light: hsla(0, 0%, 100%, 0.7); /* Lighter background for elements like code blocks */
 }
 
-body > header > nav > div.md-header__title {
-  margin-left: 0 !important;
+[data-md-color-scheme="slate"] { /* Dark Mode (slate scheme) */
+  /* Material for MkDocs palette overrides for dark scheme */
+  --md-primary-fg-color: var(--pysetl-blue-dark);   /* Main header, sidebar active, primary buttons */
+  --md-primary-fg-color--light: var(--pysetl-blue-mid); /* Lighter shades of primary */
+  --md-primary-fg-color--dark: var(--pysetl-blue-dark);   /* Darker shades of primary */
+
+  --md-accent-fg-color: var(--pysetl-orange);    /* Accent elements: links, highlighted text, some buttons */
+  --md-accent-fg-color--transparent: hsla(33, 93%, 54%, 0.1); /* Transparent version for hover/focus states */
+
+  --md-default-fg-color: hsla(0, 0%, 100%, 0.87); /* Default text color */
+  --md-default-fg-color--light: hsla(0, 0%, 100%, 0.7); /* Lighter text color */
+  --md-default-fg-color--lighter: hsla(0, 0%, 100%, 0.54); /* Even lighter text color */
+  --md-default-bg-color: hsla(200, 40%, 15%, 1); /* Dark background (adjust if you want a specific brand blue as background) */
+  --md-default-bg-color--light: hsla(200, 40%, 15%, 0.7); /* Lighter dark background for elements */
+
+  /* Override header gradient for dark mode */
+  .md-header, .md-tabs {
+      background: linear-gradient(90deg, var(--pysetl-blue-dark) 0%, var(--pysetl-blue-mid) 100%) !important;
+  }
+
+  /* Fix: Table header text color for dark mode */
+  .md-typeset table th {
+      color: var(--md-default-fg-color) !important; /* Ensure light text on dark header */
+  }
 }
+
+
+/* -------------------------------------------------------------------------- */
+/* 2. Typography & Fonts                                                      */
+/* Apply Nasalization for headings as per brand guide.                     */
+/* -------------------------------------------------------------------------- */
 
 /* Import Nasalization font */
 @font-face {
@@ -23,130 +68,278 @@ body > header > nav > div.md-header__title {
   font-style: normal;
 }
 
-/* Use Nasalization for headings and logo */
-.md-header__title, h1, h2, h3, h4, h5, h6 {
+/* Apply Nasalization for headings and site title */
+.md-header__title,
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Nasalization', 'Roboto', Arial, sans-serif;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.02em; /* Slightly increase letter spacing for headings */
+  font-weight: normal; /* Nasalization might not have bold variants, keep normal */
 }
 
-/* Gradient header background */
+/* Ensure body text remains readable with standard fonts */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. Header & Navigation Styling                                             */
+/* Apply gradients and ensure consistent branding for top bar and sidebar. */
+/* -------------------------------------------------------------------------- */
+
+/* Gradient header background for light mode */
 .md-header, .md-tabs {
-  background: linear-gradient(90deg, #377AB1 0%, #003366 100%) !important;
+  background: linear-gradient(90deg, var(--pysetl-blue-mid) 0%, var(--pysetl-blue-dark) 100%) !important;
+  box-shadow: var(--md-shadow-z1); /* Keep Material's shadow for depth */
 }
 
-/* Accent elements (buttons, links) */
-.md-button, .md-typeset a, .md-nav__link--active {
-  color: #003366 !important;
+/* Logo adjustments */
+.md-header__button.md-logo img {
+  height: 2.5rem !important; /* Slightly larger logo for presence */
+  max-height: 100% !important;
+  width: auto !important;
+  margin: 0 !important;
+  display: block;
+  align-self: center;
+}
+
+/* Adjust header title margin to align with logo */
+.md-header__title {
+  margin-left: 0.5rem !important; /* Small margin for spacing */
+}
+
+/* Active tab in header */
+.md-tabs__item--active {
   font-weight: bold;
-  transition: background 0.3s;
+  color: var(--md-accent-fg-color); /* Use accent color for active tab text */
+  border-bottom: 2px solid var(--md-accent-fg-color); /* Underline with accent */
 }
 
-.md-button:hover, .md-typeset a:hover {
-  background: linear-gradient(90deg, #EE8D24 0%, #FAD745 100%) !important;
+/* Left sidebar navigation links */
+.md-nav__link--active {
+  color: var(--md-accent-fg-color) !important; /* Active link text color */
+  font-weight: 600; /* Slightly bolder for active state */
+  background-color: var(--md-accent-fg-color--transparent); /* Subtle background for active state */
+  border-radius: 4px; /* Rounded corners for active state */
 }
 
-/* Highlighted text */
+.md-nav__link:hover {
+  color: var(--md-accent-fg-color); /* Hover color */
+  background-color: var(--md-accent-fg-color--transparent); /* Subtle background on hover */
+  border-radius: 4px;
+}
+
+/* Reduce nesting for API pages in left sidebar */
+/* This targets deeply nested lists, common in API auto-generated docs */
+.md-nav--primary .md-nav__list .md-nav__list .md-nav__list {
+  margin-left: 0.25rem; /* Less indentation for better use of space */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Main Content Area Styling                                               */
+/* General improvements for links, highlighted text, and overall spacing.  */
+/* -------------------------------------------------------------------------- */
+
+/* Links within content */
+.md-typeset a {
+  color: var(--pysetl-orange); /* Using orange for links in light mode */
+  text-decoration: none; /* No underline by default */
+  transition: color 0.2s ease-in-out;
+}
+
+.md-typeset a:hover {
+  color: var(--pysetl-blue-dark); /* Change color on hover to a darker blue for contrast */
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Highlighted text (mark tag) */
 mark, .md-typeset mark {
-  background: linear-gradient(90deg, #FAD745 0%, #EE8D24 100%);
-  color: #003366;
+  background: linear-gradient(90deg, var(--pysetl-yellow) 0%, var(--pysetl-orange) 100%);
+  color: var(--pysetl-blue-dark); /* Dark blue text on yellow/orange gradient for contrast */
   padding: 0.1em 0.3em;
   border-radius: 4px;
 }
 
-/* Improve contrast for dark mode */
-[data-md-color-scheme="slate"] .md-header, [data-md-color-scheme="slate"] .md-tabs {
-  background: linear-gradient(90deg, #003366 0%, #377AB1 100%) !important;
+/* Admonitions (Note, Warning, etc.) */
+.md-typeset .admonition {
+  border-left: 4px solid var(--md-primary-fg-color);
+  border-radius: 4px;
+  background-color: var(--md-default-bg-color--light); /* Lighter background for subtle effect */
+  padding: 1rem;
+  margin: 1.5rem 0;
 }
 
-.md-tabs__item--active {
-  font-weight: bold;
-}
+.md-typeset .admonition.note { border-left-color: var(--pysetl-blue-mid); }
+.md-typeset .admonition.warning { border-left-color: var(--pysetl-orange); }
+.md-typeset .admonition.tip { border-left-color: var(--pysetl-yellow); }
+.md-typeset .admonition.info { border-left-color: var(--pysetl-blue-light); }
 
-[data-md-color-scheme="slate"] .md-button, [data-md-color-scheme="slate"] .md-typeset a, [data-md-color-scheme="slate"] .md-nav__link--active {
-  color: #EE8D24!important;
-  font-weight: bold;
-}
+/* -------------------------------------------------------------------------- */
+/* 5. Code Block Styling                                                      */
+/* Ensure code is readable and visually appealing.                         */
+/* -------------------------------------------------------------------------- */
 
-/* Custom styles for PySetl documentation */
-
-/* API Reference specific styles */
-[data-md-component="navigation"] .md-nav__list .md-nav__list .md-nav__list {
-    /* Reduce nesting for API pages */
-    margin-left: 0.5rem;
-}
-
-/* Better TOC styling for API pages */
-.md-content__inner .md-typeset__table {
-    width: 100%;
-}
-
-/* API class documentation improvements */
-.md-typeset .doc-contents {
-    /* Better spacing for API documentation */
-    margin-top: 1rem;
-}
-
-/* Code block improvements */
 .md-typeset pre {
-    border-radius: 4px;
+  border-radius: 8px; /* More rounded corners for code blocks */
+  background-color: var(--md-default-bg-color--light); /* Use a slightly lighter background */
+  box-shadow: var(--md-shadow-z1); /* Subtle shadow for depth */
+  border: 1px solid hsla(0, 0%, 0%, 0.07); /* Light border */
+  padding: 1rem; /* Consistent padding */
 }
 
-/* API method signatures */
-.md-typeset .doc-function {
-    border-left: 4px solid #377AB1;
-    padding-left: 1rem;
-    margin: 1rem 0;
+/* Inline code */
+.md-typeset code {
+  background-color: var(--md-default-bg-color--light);
+  border-radius: 4px;
+  padding: 0.1em 0.3em;
+  font-size: 0.85em; /* Slightly smaller for inline */
+  color: var(--md-default-fg-color--light); /* Slightly muted color */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. Table Styling                                                           */
+/* Make tables clean and easy to read.                                     */
+/* -------------------------------------------------------------------------- */
+
+.md-typeset table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9em;
+  border-radius: 8px; /* Rounded corners for the entire table */
+  overflow: hidden; /* Ensures rounded corners are visible */
+  box-shadow: var(--md-shadow-z1); /* Subtle shadow */
+}
+
+.md-typeset table th {
+  background-color: var(--md-primary-fg-color); /* Header background with primary color */
+  color: var(--md-default-bg-color); /* This will be white in light mode */
+  padding: 0.8em 1em;
+  text-align: left;
+  font-weight: 600;
+}
+
+.md-typeset table td {
+  padding: 0.7em 1em;
+  border-bottom: 1px solid var(--md-default-fg-color--lighter); /* Light separator */
+}
+
+.md-typeset table tr:nth-child(even) {
+  background-color: var(--md-default-bg-color--light); /* Zebra striping for readability */
+}
+
+.md-typeset table tr:hover {
+  background-color: var(--md-accent-fg-color--transparent); /* Subtle hover effect */
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. Button Styling                                                          */
+/* Consistent look for buttons.                                            */
+/* -------------------------------------------------------------------------- */
+
+.md-button {
+  border-radius: 24px; /* Pill-shaped buttons */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.8em 1.5em;
+  transition: all 0.3s ease-in-out;
+  box-shadow: var(--md-shadow-z1);
+}
+
+.md-button--primary {
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-default-bg-color);
+}
+
+.md-button--primary:hover {
+  background-color: var(--md-primary-fg-color--dark);
+  box-shadow: var(--md-shadow-z2);
+}
+
+.md-button--accent {
+  background-color: var(--md-accent-fg-color);
+  color: var(--pysetl-blue-dark); /* Dark blue text on accent yellow/orange */
+}
+
+.md-button--accent:hover {
+  background-color: var(--pysetl-orange); /* Deeper orange on hover */
+  box-shadow: var(--md-shadow-z2);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. API Reference Specific Styling (mkdocstrings output)                    */
+/* Improve the visual separation and readability of API documentation.     */
+/* -------------------------------------------------------------------------- */
+
+/* General spacing for API content */
+.md-typeset .doc-contents {
+  margin-top: 1.5rem;
 }
 
 /* API class headers */
 .md-typeset .doc-class {
-    border-bottom: 2px solid #377AB1;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
+  border-bottom: 2px solid var(--md-primary-fg-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  margin-top: 2rem; /* More space above classes */
 }
 
-/* Better table styling */
-.md-typeset table {
-    border-radius: 4px;
-    overflow: hidden;
+/* API method/function signatures */
+.md-typeset .doc-function,
+.md-typeset .doc-attribute,
+.md-typeset .doc-property {
+  border-left: 4px solid var(--md-accent-fg-color); /* Accent line for methods/attributes */
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  background-color: var(--md-default-bg-color--light); /* Light background for code blocks */
+  border-radius: 4px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
-.md-typeset table th {
-    background-color: #f5f5f5;
-    font-weight: 600;
+/* Headings within API docs (e.g., "Arguments", "Returns") */
+.md-typeset .doc-section-heading {
+  color: var(--md-primary-fg-color);
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Navigation improvements */
-.md-nav__title {
-    font-weight: 600;
+/* Lists within API sections (e.g., arguments list) */
+.md-typeset .doc-section-list {
+  margin-left: 1rem;
+  padding-left: 0;
 }
 
-/* API section specific navigation */
-.md-nav--primary .md-nav__list .md-nav__list .md-nav__list {
-    /* Reduce indentation for deeply nested API items */
-    margin-left: 0.25rem;
-}
-
-/* Better search results */
-.md-search-result__article {
-    border-radius: 4px;
-}
-
-/* Code highlighting improvements */
-.md-typeset code {
-    background-color: #f8f9fa;
-    border-radius: 3px;
-    padding: 0.2em 0.4em;
-}
-
-/* API overview page specific styles */
+/* API overview page specific styles (if you keep the overview.md) */
 .api-overview .md-typeset h2 {
-    color: #377AB1;
-    border-bottom: 2px solid #377AB1;
-    padding-bottom: 0.5rem;
+  color: var(--md-primary-fg-color);
+  border-bottom: 2px solid var(--md-primary-fg-color);
+  padding-bottom: 0.5rem;
 }
 
 .api-overview .md-typeset h3 {
-    color: #555;
-    margin-top: 2rem;
+  color: var(--md-default-fg-color); /* Use default text color for sub-headings */
+  margin-top: 2rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 9. Scrollbar Styling (Optional, for a more custom feel)                    */
+/* -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--md-default-bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-primary-fg-color--light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-primary-fg-color);
 }
