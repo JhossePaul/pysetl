@@ -109,6 +109,50 @@ class DeepInheritedFactory(InheritedCustomFactory):
     pass
 
 
+class MalformedFactory(Factory):
+    """A factory that inherits from Factory without type parameters - should cause issues."""
+
+    def read(self: Self) -> Self:
+        return self
+
+    def process(self: Self) -> Self:
+        return self
+
+    def write(self: Self) -> Self:
+        return self
+
+    def get(self: Self):
+        return None
+
+
+class MalformedInheritedFactory(MalformedFactory):
+    """This should trigger the infinite recursion at line 147."""
+
+    pass
+
+
+class TrickyFactory(Factory[DataSet[Citizen]]):
+    """A factory that has proper type parameters but will cause issues in inheritance."""
+
+    def read(self: Self) -> Self:
+        return self
+
+    def process(self: Self) -> Self:
+        return self
+
+    def write(self: Self) -> Self:
+        return self
+
+    def get(self: Self):
+        return None
+
+
+class TrickyInheritedFactory(TrickyFactory):
+    """This should trigger the infinite recursion at line 147 because it's a concrete class."""
+
+    pass
+
+
 def test_factory():
     """Test a Factory."""
     first_factory = FirstFactory().read().process().write()
