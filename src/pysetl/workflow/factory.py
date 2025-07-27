@@ -141,10 +141,12 @@ class Factory(IsIdentifiable, Generic[T], HasLogger, IsWritable, ABC):
             return True
 
         # Case 4: Raw Factory class (no type parameter)
-        # elif base is Factory and not base_origin:
-        raise NotImplementedError(
-            f"{cls.__name__} factory does not have a type parameter"
-        )
+        elif base is Factory and not base_origin:
+            raise NotImplementedError(
+                f"{cls.__name__} factory does not have a type parameter"
+            )
+
+        return False
 
     @classmethod
     def __extract_type_from_base(cls, base) -> DeliveryType:
