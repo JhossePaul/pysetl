@@ -121,6 +121,53 @@ class Factory(IsIdentifiable, Generic[T], HasLogger, IsWritable, ABC):
         """
 
     @classmethod
+    def __is_factory_base(cls, base) -> bool:
+        """Check if a base class is a Factory or Factory subclass."""
+        base_origin = get_origin(base)
+        base_args = get_args(base)
+
+        # Case 1: Direct Factory[T] inheritance
+        if base_origin and base_args and base_origin is Factory:
+            return True
+
+        # Case 2: Raw Factory class (no type parameter)
+        elif base is Factory and not base_origin:
+            raise NotImplementedError(
+                f"{cls.__name__} factory does not have a type parameter"
+            )
+
+        # Case 3: Simple inheritance
+        elif base_origin and issubclass(base_origin, Factory) and base_args:
+            return True
+
+        # Case 4: Deep inheritance for concrete factories
+        elif (
+            isinstance(base, type) and issubclass(base, Factory) and base is not Factory
+        ):
+            return True
+
+        return False
+
+    @classmethod
+    def __extract_type_from_base(cls, base) -> DeliveryType:
+        """Extract type parameter from a Factory base class."""
+        base_origin = get_origin(base)
+        base_args = get_args(base)
+
+        # Case 1: Direct Factory[T] inheritance
+        if base_origin and base_args and base_origin is Factory:
+            return DeliveryType(base_args[0])
+
+        # Case 3: Simple inheritance
+        elif base_origin and issubclass(base_origin, Factory) and base_args:
+            return DeliveryType(base_args[0])
+
+        # Case 4: Deep inheritance for concrete factories
+        # This should be the right implementation but I needed a default return.
+        # elif isinstance(base, type) and issubclass(base, Factory) and base is not Factory:
+        return base.delivery_type()
+
+    @classmethod
     def delivery_type(cls) -> DeliveryType:
         """
         Return the declared output type of this factory (for dependency resolution).
@@ -132,12 +179,14 @@ class Factory(IsIdentifiable, Generic[T], HasLogger, IsWritable, ABC):
             NotImplementedError: If the factory does not declare a type parameter.
         """
         bases = get_original_bases(cls)
-        base_factories = [base for base in bases if get_origin(base) is Factory]
-        if not base_factories:
-            raise NotImplementedError("Factory has no type parameter")
-        base_factory, *_ = base_factories
-        factory_delivery_type, *_ = get_args(base_factory)
-        return DeliveryType(factory_delivery_type)
+
+        # Filter: Find Factory bases
+        factory_base = next(base for base in bases if cls.__is_factory_base(base))
+
+        # Map: Extract type from the first valid Factory base
+        delivery_type = cls.__extract_type_from_base(factory_base)
+
+        return delivery_type
 
     @property
     def deliverable(self: Self) -> Deliverable:

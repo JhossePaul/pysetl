@@ -75,6 +75,7 @@ dependencies = [
     "pre-commit>=4.2.0,<5.0.0",
     "ruff>=0.4.4,<1.0.0",
     "mypy>=1.6.1,<2.0.0",
+    "pytest>=7.4.0,<8.0.0",
 ]
 
 [tool.hatch.envs.default.scripts]
@@ -95,8 +96,8 @@ extra-dependencies = [
 [tool.hatch.envs.hatch-test.scripts]
 run = "pytest{env:HATCH_TEST_ARGS:} {args}"
 run-cov = "coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}"
-cov-combine = "coverage combine && coverage lcov"
-cov-report = "coverage report -m"
+cov-combine = "coverage combine"
+cov-report = "coverage report --show-missing --skip-covered && coverage lcov"
 
 [[tool.hatch.envs.hatch-test.matrix]]
 python = ["3.9", "3.10", "3.11", "3.12", "3.13"]

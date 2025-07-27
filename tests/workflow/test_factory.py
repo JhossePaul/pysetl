@@ -2,11 +2,14 @@
 from typing import Optional
 import pytest
 from pydantic import BaseModel
-from typing_extensions import Self
+from typing_extensions import Self, TypeVar
 from typedspark import DataSet, Column, Schema
 from pyspark.sql.types import StringType, IntegerType
 from pysetl.workflow import Factory, Delivery
 from pysetl.workflow.external import External
+
+
+T = TypeVar("T", bound=DataSet)
 
 
 class CitizenModel(BaseModel):
@@ -62,15 +65,9 @@ class SecondFactory(Factory[DataSet[Citizen]]):
         """Take citizens and create a dataaset."""
         first_citizen = self.first_citizen.get()
 
-        __unsafe_data = [
-            first_citizen,
-            CitizenModel(name="Gerardo", age=28)
-        ]
+        __unsafe_data = [first_citizen, CitizenModel(name="Gerardo", age=28)]
         __data: list[CitizenModel] = [
-            c
-            for c
-            in __unsafe_data
-            if isinstance(c, CitizenModel)
+            c for c in __unsafe_data if isinstance(c, CitizenModel)
         ]
 
         return self
@@ -82,6 +79,34 @@ class SecondFactory(Factory[DataSet[Citizen]]):
     def get(self: Self) -> Optional[DataSet[Citizen]]:
         """Return a DataSet[Citizen]."""
         return self.output
+
+
+class CustomFactory(Factory[T]):
+    """Custom factory should return a deilvery_type."""
+
+
+class InheritedCustomFactory(CustomFactory[DataSet[Citizen]]):
+    """Inherited custom factory should return a deilvery_type."""
+
+    output: Optional[DataSet[Citizen]] = None
+
+    def read(self: Self) -> Self:
+        return self
+
+    def process(self: Self) -> Self:
+        return self
+
+    def write(self: Self) -> Self:
+        return self
+
+    def get(self: Self) -> Optional[DataSet[Citizen]]:
+        return self.output
+
+
+class DeepInheritedFactory(InheritedCustomFactory):
+    """Test deeper inheritance chain."""
+
+    pass
 
 
 def test_factory():
@@ -98,24 +123,15 @@ def test_factory():
     assert str(first_factory) == "FirstFactory -> CitizenModel"
     assert str(second_factory) == "SecondFactory -> DataSet[Citizen]"
     assert repr(first_factory) == "FirstFactory will produce a CitizenModel"
-    assert (
-        repr(second_factory) ==
-        "SecondFactory will produce a DataSet[Citizen]"
-    )
-    assert (
-        first_factory.deliverable.payload ==
-        CitizenModel(name="Gerardo", age=28)
-    )
+    assert repr(second_factory) == "SecondFactory will produce a DataSet[Citizen]"
+    assert first_factory.deliverable.payload == CitizenModel(name="Gerardo", age=28)
     assert [
-        delivery.payload_type
-        for delivery
-        in second_factory.expected_deliveries()
+        delivery.payload_type for delivery in second_factory.expected_deliveries()
     ] == [CitizenModel, CitizenModel]
-    assert [
-        delivery.producer
-        for delivery
-        in second_factory.expected_deliveries()
-    ] == [External, FirstFactory]
+    assert [delivery.producer for delivery in second_factory.expected_deliveries()] == [
+        External,
+        FirstFactory,
+    ]
 
 
 class NoTypeFactory(Factory):
@@ -144,4 +160,24 @@ def test_no_type_factory():
     with pytest.raises(NotImplementedError) as error:
         no_type_factory.delivery_type()
 
-    assert str(error.value) == "Factory has no type parameter"
+    assert str(error.value) == "NoTypeFactory factory does not have a type parameter"
+
+
+def test_inherited_custom_factory():
+    """Test that inherited custom factories can extract their type parameter correctly."""
+    inherited_factory = InheritedCustomFactory()
+
+    delivery_type = inherited_factory.delivery_type()
+
+    assert delivery_type == DataSet[Citizen]
+
+
+def test_deep_inherited_factory():
+    """Test that deeply inherited factories can extract their type parameter correctly."""
+    deep_factory = DeepInheritedFactory()
+
+    # This should work with deeper inheritance
+    delivery_type = deep_factory.delivery_type()
+
+    # Check that we get the correct type (DataSet[Citizen])
+    assert delivery_type == DataSet[Citizen]
