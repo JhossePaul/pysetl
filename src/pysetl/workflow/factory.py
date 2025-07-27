@@ -130,21 +130,21 @@ class Factory(IsIdentifiable, Generic[T], HasLogger, IsWritable, ABC):
         if base_origin and base_args and base_origin is Factory:
             return True
 
-        # Case 2: Raw Factory class (no type parameter)
-        elif base is Factory and not base_origin:
-            raise NotImplementedError(
-                f"{cls.__name__} factory does not have a type parameter"
-            )
-
-        # Case 3: Simple inheritance
+        # Case 2: Simple inheritance
         elif base_origin and issubclass(base_origin, Factory) and base_args:
             return True
 
-        # Case 4: Deep inheritance for concrete factories
+        # Case 3: Deep inheritance for concrete factories
         elif (
             isinstance(base, type) and issubclass(base, Factory) and base is not Factory
         ):
             return True
+
+        # Case 4: Raw Factory class (no type parameter)
+        elif base is Factory and not base_origin:
+            raise NotImplementedError(
+                f"{cls.__name__} factory does not have a type parameter"
+            )
 
         return False
 
