@@ -62,7 +62,7 @@ dependencies = [
 
 [project.optional-dependencies]
 pyspark = [
-    "pyspark[sql]>=3.4,<4.0.0"
+    "pyspark[sql]>=3.4,<5.0.0"
 ]
 
 [tool.hatch.envs.default]
