@@ -129,7 +129,7 @@ class FileConnector(Connector, HasReader, HasWriter, CanDrop, CanPartition):
                 allow_bucket_deletion=True,
             )
 
-        fs, _ = FileSystem.from_uri(uri=self.uri.geturl())  # type: ignore
+        fs, _ = FileSystem.from_uri(self.uri.geturl())  # type: ignore
 
         return fs
 
